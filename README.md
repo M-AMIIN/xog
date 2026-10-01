@@ -2,7 +2,7 @@
 
 **Live site:** https://m-amiin.github.io/xog/
 
-Xog is a research archive of Somali history, from around 2500 BCE to the present, built around one editorial rule: every claim on the site traces to a primary source that is published on the site itself. It is written for readers who want the Somali side of events that the international record usually tells from outside.
+Xog is a research archive of Somali history, from around 2500 BCE to the present where sources on the site traces to a primary source that is published on the site itself. It is written for readers who want the Somali side of events with more to offer.
 
 ## What's on the site
 
