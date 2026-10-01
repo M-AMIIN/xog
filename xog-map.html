@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xog — Territorial History of the Horn</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+/* ── DARK CARTOGRAPHIC THEME ────────────────────────────────── */
+:root {
+  --bg:         #080B12;
+  --surface:    #0E1219;
+  --card:       #141A24;
+  --raised:     #1A2030;
+  --border:     rgba(196,154,60,0.10);
+  --border-mid: rgba(196,154,60,0.20);
+  --gold:       #C49A3C;
+  --gold-dim:   rgba(196,154,60,0.45);
+  --gold-glow:  rgba(196,154,60,0.12);
+  --rust:       #D4956A;
+  --text:       #E8DCC8;
+  --text-bright:#F4EDE0;
+  --muted:      #8A7E6A;
+  --faint:      #5A5040;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { height: 100%; overflow: hidden; }
+body {
+  height: 100%;
+  overflow: hidden;
+  font-family: 'DM Mono', monospace;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  padding-top: 56px;
+}
+
+#xog-footer { display: none !important; }
+
+/* ── MAP LAYOUT ── */
+.map-wrap { flex: 1; position: relative; overflow: hidden; min-height: 0; }
+
+/*
+  position: relative + z-index: 0 creates an isolation stacking context.
+  This confines all of Leaflet's internal z-indices (200–700) inside #map-div.
+  The info panel and controls (z-index: 10) then sit cleanly above the map.
+  Without this, Leaflet's overlay pane (z-index 400) covers the UI elements.
+*/
+#map-div {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 0;
+}
+
+/* ── LEAFLET DARK OVERRIDES ── */
+.leaflet-container { background: #060A14 !important; font-family: 'DM Mono', monospace; }
+.leaflet-pane svg { overflow: visible; }
+.leaflet-control-zoom        { display: none; }
+.leaflet-control-attribution { display: none; }
+
+/* Territory pulse */
+@keyframes tPulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+.terr-pulse { animation: none; }
+
+/* Horn ring pulse */
+@keyframes hornPulse { 0%,100%{stroke-opacity:.3} 50%{stroke-opacity:.7} }
+.horn-ring-path { animation: none; }
+
+/* Territory hover tooltip */
+.leaflet-tooltip.terr-tip {
+  background: rgba(6,4,2,0.95);
+  border: 1px solid rgba(196,154,60,0.25);
+  border-radius: 2px;
+  padding: .5rem .8rem;
+  font-family: 'DM Mono', monospace;
+  font-size: .68rem;
+  color: #E8DCC8;
+  letter-spacing: .03em;
+  box-shadow: 0 4px 16px rgba(0,0,0,.4);
+  pointer-events: none;
+}
+.leaflet-tooltip.terr-tip::before { display: none; }
+
+/* City label tooltips */
+.leaflet-tooltip.city-tip {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: #E8DCC8;
+  text-shadow:
+    -2px -2px 4px rgba(6,10,20,.95),
+     2px -2px 4px rgba(6,10,20,.95),
+    -2px  2px 4px rgba(6,10,20,.95),
+     2px  2px 4px rgba(6,10,20,.95);
+  white-space: nowrap;
+  padding: 2px 0;
+}
+.leaflet-tooltip.city-tip::before { display: none; }
+
+.i-citynotes {
+  margin-top: .8rem; padding-top: .8rem;
+  border-top: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: .32rem;
+}
+.i-citynotes strong {
+  font-size: .58rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--gold);
+  display: block; margin-bottom: .15rem;
+}
+.i-citynotes .cn {
+  font-size: .63rem; color: var(--muted); line-height: 1.45;
+}
+.city-tip.future {
+  color: rgba(232,220,200,0.52);
+}
+.capital-tip {
+  font-size: 10px;
+  color: #f3e4c0;
+}
+.world-tip {
+  font-size: 9px;
+  color: #9ed0e0;
+}
+.place-label {
+  display: inline-block;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  line-height: 1;
+  padding-left: 8px;
+  text-shadow:
+    -2px -2px 4px rgba(6,10,20,.98),
+     2px -2px 4px rgba(6,10,20,.98),
+    -2px  2px 4px rgba(6,10,20,.98),
+     2px  2px 4px rgba(6,10,20,.98);
+}
+.place-label.somali-live { color: #6ee08d; }
+.place-label.somali-future { color: rgba(190,98,98,.88); }
+.place-label.world-city { color: #9ed0e0; font-size: 8.5px; }
+.place-label.era-capital { color: #f0d28c; font-size: 9px; }
+.leaflet-tooltip.info-tip {
+  background: rgba(8,11,18,0.96);
+  border: 1px solid rgba(196,154,60,0.22);
+  color: #e8dcc8;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  line-height: 1.45;
+  padding: .45rem .55rem;
+  box-shadow: 0 6px 16px rgba(0,0,0,.45);
+}
+.leaflet-tooltip.info-tip::before { display:none; }
+
+
+/* Divicon labels */
+.ocean-lbl {
+  font-family: 'Source Serif 4', serif;
+  font-style: italic;
+  letter-spacing: .18em;
+  color: rgba(100,140,180,0.35);
+  font-size: 10px;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  transform: translateX(-50%);
+  display: block;
+}
+.ctry-lbl {
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: rgba(196,154,60,0.25);
+  font-size: 7.5px;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  transform: translateX(-50%);
+  display: block;
+}
+
+/* ── LOADER ── */
+.loader {
+  position: absolute; inset: 0; background: var(--bg);
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 1.2rem; z-index: 500;
+  transition: opacity .6s;
+}
+.loader.gone { opacity: 0; pointer-events: none; }
+.loader-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3.2rem; font-weight: 300;
+  color: var(--gold); letter-spacing: .12em;
+}
+.loader-txt {
+  font-size: .62rem; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--muted);
+}
+.loader-bar {
+  width: 120px; height: 1px; background: var(--border);
+  position: relative; overflow: hidden;
+}
+.loader-bar::after {
+  content: ''; position: absolute; left: 0; top: 0; height: 1px;
+  background: var(--gold);
+  animation: lb 1.4s ease-in-out infinite;
+}
+@keyframes lb { 0%{width:0;left:0} 50%{width:100%;left:0} 100%{width:0;left:100%} }
+
+/* ── INFO PANEL ── */
+.info {
+  position: absolute; top: 1rem; left: 1rem;
+  width: 310px; max-height: calc(100% - 2rem);
+  overflow-y: auto; overflow-x: hidden;
+  background: rgba(10, 14, 22, 0.93);
+  border: 1px solid rgba(196,154,60,0.12);
+  border-radius: 3px;
+  padding: 1.4rem 1.5rem;
+  z-index: 10;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+.info::-webkit-scrollbar { width: 4px; }
+.info::-webkit-scrollbar-track { background: transparent; }
+.info::-webkit-scrollbar-thumb { background: rgba(196,154,60,0.2); border-radius: 2px; }
+.info::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+}
+.i-era {
+  font-size: .62rem; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--rust); margin-bottom: .5rem;
+}
+.i-year {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.4rem; font-weight: 300;
+  color: var(--gold); line-height: 1; margin-bottom: .5rem;
+}
+.i-year small { font-size: 1rem; opacity: .6; }
+.i-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem; font-weight: 600;
+  color: var(--text-bright); line-height: 1.35; margin-bottom: .8rem;
+}
+.i-desc {
+  font-family: 'Source Serif 4', serif;
+  font-size: .78rem; color: var(--muted); line-height: 1.8;
+  border-top: 1px solid var(--border); padding-top: .8rem;
+}
+.i-legend {
+  margin-top: .8rem; padding-top: .8rem;
+  border-top: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: .38rem;
+}
+.li {
+  display: flex; align-items: center; gap: .5rem;
+  font-size: .62rem; color: var(--muted);
+}
+.lsw { width: 22px; height: 8px; flex-shrink: 0; border-radius: 1px; }
+.i-sel {
+  margin-top: .8rem; padding-top: .8rem;
+  border-top: 1px solid var(--border); display: none;
+}
+.i-sel strong {
+  font-size: .58rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--gold);
+  display: block; margin-bottom: .3rem;
+}
+.i-sel span { font-size: .72rem; color: var(--text); }
+
+/* ── CONTROLS ── */
+.map-ctrls {
+  position: absolute; top: 1rem; right: 1rem;
+  z-index: 10; display: flex; flex-direction: column; gap: .4rem;
+}
+.mc {
+  background: rgba(10,14,22,0.88);
+  border: 1px solid rgba(196,154,60,0.12);
+  border-radius: 2px;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  font-size: .62rem; letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: .45rem .8rem;
+  cursor: pointer; transition: all .2s; white-space: nowrap;
+}
+.mc:hover, .mc.on {
+  border-color: rgba(196,154,60,0.35);
+  color: var(--gold);
+  background: rgba(196,154,60,0.06);
+}
+
+/* ── TIMELINE ── */
+.tl-bar {
+  flex-shrink: 0; background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: .85rem 2rem .7rem; z-index: 10;
+}
+.era-track {
+  display: flex; align-items: center; position: relative;
+  margin-bottom: .6rem;
+}
+.era-track::before {
+  content: ''; position: absolute; top: 50%; left: 0; right: 0;
+  height: 1px; background: rgba(196,154,60,0.1);
+  transform: translateY(-50%); pointer-events: none;
+}
+.era-btn {
+  position: relative; flex: 1; background: none; border: none;
+  cursor: pointer; display: flex; flex-direction: column;
+  align-items: center; gap: .3rem; padding: .2rem 0;
+}
+.era-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--card);
+  border: 1.5px solid rgba(196,154,60,0.18);
+  transition: all .3s; z-index: 1;
+}
+.era-btn:hover .era-dot, .era-btn.active .era-dot {
+  background: var(--gold);
+  border-color: var(--gold);
+  box-shadow: 0 0 12px rgba(196,154,60,0.4);
+}
+.era-yr {
+  font-size: .5rem; color: rgba(196,154,60,0.3);
+  white-space: nowrap; text-align: center; transition: color .2s;
+  line-height: 1.3;
+}
+.era-btn.active .era-yr, .era-btn:hover .era-yr { color: var(--gold); }
+.tl-ctrls {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.c-btn {
+  background: none;
+  border: 1px solid rgba(196,154,60,0.12);
+  border-radius: 2px;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem; letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: .3rem .75rem; cursor: pointer; transition: all .2s;
+}
+.c-btn:hover { border-color: rgba(196,154,60,0.35); color: var(--gold); }
+.p-btn {
+  background: rgba(196,154,60,0.06);
+  border: 1px solid rgba(196,154,60,0.22);
+  border-radius: 2px;
+  color: var(--gold);
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem; letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: .3rem .9rem; cursor: pointer; transition: all .2s;
+}
+.p-btn.playing { border-color: rgba(212,149,106,0.3); color: var(--rust); }
+.caveat {
+  font-size: .52rem; color: rgba(196,154,60,0.28);
+  letter-spacing: .04em; text-align: center; flex: 1;
+  padding: 0 1rem;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .info { width: 240px; padding: 1rem 1.1rem; }
+  .i-year { font-size: 1.8rem; }
+  .i-title { font-size: 1rem; }
+  .i-desc { font-size: .72rem; }
+  .map-ctrls { top: auto; bottom: 1rem; right: .6rem; flex-direction: row; }
+  .tl-bar { padding: .7rem 1rem .5rem; }
+  .era-yr { font-size: .42rem; }
+  .caveat { display: none; }
+}
+@media (max-width: 480px) {
+  .info { width: 200px; left: .5rem; top: .5rem; padding: .8rem; }
+  .i-desc { font-size: .66rem; line-height: 1.65; }
+}
+</style>
+<link rel="stylesheet" href="xog-nav.css">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23111929'/%3E%3Cpath d='M32 8 L36.5 27.5 L56 32 L36.5 36.5 L32 56 L27.5 36.5 L8 32 L27.5 27.5 Z' fill='%23C49A3C'/%3E%3Ccircle cx='32' cy='32' r='3.4' fill='%23FDFAF5'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<div class="map-wrap">
+  <div id="map-div"></div>
+  <div class="loader" id="loader">
+    <div class="loader-logo">Xog</div>
+    <div class="loader-txt">Loading territorial history</div>
+    <div class="loader-bar"></div>
+  </div>
+
+  <div class="info">
+    <div class="i-era"    id="i-era"></div>
+    <div class="i-year"   id="i-year"></div>
+    <div class="i-title"  id="i-title"></div>
+    <div class="i-desc"   id="i-desc"></div>
+    <div class="i-legend" id="i-legend"></div>
+    <div class="i-sel" id="i-sel">
+      <strong>Selected</strong>
+      <span id="i-sel-name"></span>
+    </div>
+    <div class="i-citynotes" id="i-citynotes"></div>
+  </div>
+
+  <div class="map-ctrls">
+    <button class="mc on" id="btn-horn">Horn focus</button>
+    <button class="mc"    id="btn-world">World view</button>
+    <button class="mc"    id="btn-zi">+ Zoom in</button>
+    <button class="mc"    id="btn-zo">- Zoom out</button>
+    <button class="mc"    id="btn-reset">Reset</button>
+    <button class="mc"    id="btn-capitals">Era capitals</button>
+    <button class="mc"    id="btn-worldcaps">World capitals</button>
+    <button class="mc"    id="btn-cities">Somali cities</button>
+    <button class="mc"    id="btn-somaliweyn">Somaliweyn</button>
+
+  </div>
+</div>
+
+<div class="tl-bar">
+  <div class="era-track" id="era-track"></div>
+  <div class="tl-ctrls">
+    <button class="c-btn" id="prev-btn">&larr; Prev</button>
+    <span class="caveat">Ancient & medieval layers are conservative reconstructions &middot; where evidence is contested, boundaries favor the Somali reading &middot; colonial layers follow supplied historical maps &middot; click any territory for detail</span>
+    <button class="p-btn" id="play-btn">&#9654; Play</button>
+    <button class="c-btn" id="next-btn">Next &rarr;</button>
+  </div>
+</div>
+
+<script>
+
+// ═══════════════════════════════════════════════════════════════
+// XOG TERRITORIAL MAP — REWORKED ILLUSTRATIVE EDITION
+// Wider-source reconstruction: scholarly works, archival maps,
+// forum/hobby maps, and user-supplied reference images.
+// ═══════════════════════════════════════════════════════════════
+
+const P = coords => ({type:'Feature', geometry:{type:'Polygon', coordinates:[coords]}});
+
+const ERAS = [{"id": "punt", "refYear": -1470, "year": "~2500", "suffix": "BCE", "era": "Ancient", "title": "The Land of Punt", "desc": "Egyptian temple reliefs at Deir el-Bahri record Hatshepsut's expedition to Punt around 1470 BCE, listing gold, myrrh, ebony, ivory, and living animals. Earlier contact under Pharaoh Sahure dates to about 2500 BCE. Isotope analysis of mummified baboons from Egyptian tombs points to the Eritrea and Somalia corridor. The three drawn zones are the probable African core, the coastal corridor, and the rival Arabian shore hypothesis, because the sources support a sphere of exchange, not a surveyed frontier. This is the first documented contact between the Horn and a Mediterranean power, and it was Punt that had what Egypt wanted.", "territories": [{"name": "Punt — African core", "color": "#d8b56a", "pulse": false, "dashed": false, "fillOpacity": 0.2, "coords": [[38.7, 16.8], [39.5, 16.2], [40.4, 15.2], [41.2, 14.2], [42.0, 13.2], [42.8, 12.4], [43.3, 11.6], [43.1, 11.0], [42.3, 10.8], [41.5, 11.0], [40.7, 11.5], [40.0, 12.4], [39.2, 13.6], [38.7, 14.9], [38.5, 16.0], [38.7, 16.8]]}, {"name": "Punt — Somaliland corridor hypothesis", "color": "#d4956a", "pulse": false, "dashed": true, "fillOpacity": 0.1, "coords": [[43.1, 11.0], [44.0, 10.8], [45.2, 10.6], [46.6, 10.5], [48.0, 10.6], [49.1, 10.8], [50.1, 11.0], [50.1, 10.5], [49.4, 10.1], [48.2, 9.8], [46.8, 9.7], [45.4, 9.8], [44.2, 10.1], [43.4, 10.5], [43.1, 11.0]]}, {"name": "Punt — Arabian shore hypothesis", "color": "#9c6d50", "pulse": false, "dashed": true, "fillOpacity": 0.08, "coords": [[43.1, 13.2], [44.2, 13.6], [45.5, 13.9], [46.8, 14.0], [48.0, 13.7], [47.6, 13.0], [46.5, 12.7], [45.0, 12.6], [43.8, 12.7], [43.1, 13.2]]}], "capitals": [{"n": "Puntite court (unknown)", "lo": 42.5, "la": 12.1, "uncertain": true, "note": "Court location unknown; plotted inside the strongest African hypothesis."}, {"n": "Zeila littoral", "lo": 43.47, "la": 11.35, "uncertain": true, "note": "Useful anchor for the western Gulf of Aden hypothesis."}], "cityNotes": ["World capitals in this era are shown as royal courts and major ancient centres, because modern capital logic does not yet apply cleanly.", "Zeila-class and Hafun-class littorals matter as anchors; Mogadishu belongs to a much later age.", "Every label this early should be read as c. / approximate unless the tooltip says otherwise."], "worldCapitals": [{"n": "Thebes", "lo": 32.64, "la": 25.69, "note": "New Kingdom royal capital of Egypt."}, {"n": "Memphis", "lo": 31.25, "la": 29.85, "note": "Ancient Egyptian royal centre."}, {"n": "Babylon", "lo": 44.42, "la": 32.54, "note": "Major Mesopotamian royal city."}, {"n": "Hattusa", "lo": 34.61, "la": 40.02, "note": "Hittite imperial capital."}, {"n": "Knossos", "lo": 25.16, "la": 35.3, "note": "Aegean palace centre."}, {"n": "Avaris", "lo": 31.83, "la": 30.79, "note": "Delta power centre of the eastern Mediterranean world."}, {"n": "Anyang", "lo": 114.3, "la": 36.1, "note": "Late Shang royal centre in North China."}, {"n": "Ugarit", "lo": 35.78, "la": 35.6, "note": "Levantine palace-city of the Late Bronze Age."}, {"n": "Mycenae", "lo": 22.75, "la": 37.73, "note": "Aegean palace centre of the Mycenaean world."}, {"n": "Assur", "lo": 43.25, "la": 35.46, "note": "Assyrian royal city in Upper Mesopotamia."}, {"n": "Napata", "lo": 32.6, "la": 18.53, "note": "Early Kushite sacred-political centre in Nubia."}]}, {"id": "macrobians", "refYear": -530, "year": "~530", "suffix": "BCE", "era": "Ancient", "title": "The Macrobians", "desc": "Herodotus describes the Macrobians in the context of Cambyses II's Persian expansion: extraordinarily tall, long-lived, and contemptuous of Persian power. They sent Cambyses a bow and told him to return when a Persian could draw it. Their burial customs inverted Persian values entirely. Scholars place the Macrobians among the Cushitic ancestors of the Somali people. The drawn zone is a low-confidence reconstruction of a literary ethnography, kept deliberately broad.", "territories": [{"name": "Macrobian zone — northeastern Horn reconstruction", "color": "#C49A3C", "pulse": false, "dashed": true, "fillOpacity": 0.12, "coords": [[42.7, 11.6], [44.0, 11.4], [45.5, 11.2], [47.0, 11.1], [48.7, 11.2], [50.4, 11.5], [51.2, 11.3], [51.0, 10.3], [50.2, 9.3], [49.2, 8.6], [48.0, 8.2], [46.5, 8.1], [45.0, 8.3], [43.8, 8.8], [42.9, 9.8], [42.6, 10.8], [42.7, 11.6]]}], "capitals": [{"n": "Macrobians (no fixed capital known)", "lo": 47.0, "la": 10.1, "uncertain": true, "note": "Placed centrally inside the reconstruction for orientation only."}, {"n": "Opone / Hafun coast", "lo": 51.27, "la": 10.44, "uncertain": true, "note": "Later classical port often used to anchor the far east of ancient Somali reconstructions."}], "cityNotes": ["This is a remembered people, not a surveyed kingdom; the line is therefore suggestive rather than declarative.", "Zeila and Hafun anchor the coast, but no recoverable Macrobian capital can be named with confidence.", "Most of the later Somali city-world still lies centuries ahead."], "worldCapitals": [{"n": "Pasargadae", "lo": 53.19, "la": 30.2, "note": "Early Achaemenid royal centre."}, {"n": "Babylon", "lo": 44.42, "la": 32.54, "note": "Imperial city of Mesopotamia."}, {"n": "Memphis", "lo": 31.25, "la": 29.85, "note": "Major centre of Egypt."}, {"n": "Carthage", "lo": 10.33, "la": 36.85, "note": "Phoenician capital in North Africa."}, {"n": "Athens", "lo": 23.73, "la": 37.98, "note": "Major Greek city-state."}, {"n": "Pataliputra", "lo": 85.14, "la": 25.61, "note": "Gangetic royal centre."}, {"n": "Luoyang", "lo": 112.45, "la": 34.62, "note": "Eastern Zhou political centre."}, {"n": "Sparta", "lo": 22.43, "la": 37.08, "note": "Major Greek polis of the classical age."}, {"n": "Persepolis", "lo": 52.89, "la": 29.94, "note": "Ceremonial Achaemenid capital."}, {"n": "Meroe", "lo": 33.73, "la": 16.94, "note": "Kushite royal city."}, {"n": "Susa", "lo": 48.25, "la": 32.19, "note": "Achaemenid imperial residence."}, {"n": "Varanasi", "lo": 83.0, "la": 25.32, "note": "Ancient north Indian urban centre."}, {"n": "Alesia", "lo": 4.49, "la": 47.54, "note": "Gallic oppidum standing for Iron Age western Europe."}]}, {"id": "periplus", "refYear": 100, "year": "~100", "suffix": "CE", "era": "Ancient", "title": "Periplus of the Erythraean Sea", "desc": "A Greek-Egyptian merchant's manual from the 1st century CE documents the Somali coast port by port: Opone at Ras Hafun, the easternmost point of Africa, Mosylon near Bosaso, Malao at Berbera, Mundus near Heis. Cinnamon, frankincense, and tortoiseshell left these harbours for Rome, Arabia, India, and East Africa at once. The Periplus records a coast of origin ports, so the layer follows the attested littoral and claims no inland empire.", "territories": [{"name": "Attested Periplus port littoral", "color": "#9ed0e0", "pulse": false, "dashed": false, "fillOpacity": 0.12, "coords": [[43.3, 11.5], [44.2, 11.4], [45.3, 11.3], [46.4, 11.2], [47.7, 11.15], [49.0, 11.2], [50.2, 11.35], [51.25, 11.4], [51.3, 11.0], [50.3, 10.8], [49.1, 10.7], [47.8, 10.65], [46.5, 10.7], [45.1, 10.8], [44.0, 10.95], [43.4, 11.2], [43.3, 11.5]]}], "capitals": [{"n": "Malao (Berbera)", "lo": 45.02, "la": 10.44, "note": "Attested emporium in the Periplus."}, {"n": "Mosylon", "lo": 49.8, "la": 11.35, "note": "Attested frankincense port in the Periplus."}, {"n": "Opone", "lo": 51.27, "la": 10.44, "note": "Major eastern emporium in the Periplus."}, {"n": "Heis / Mundus", "lo": 44.08, "la": 10.89, "note": "Western frankincense port often identified with the Periplus Mundus."}], "cityNotes": ["This layer is a coast of ports and pilotage, not a territorial monarchy.", "Hafun/Opone, Heis/Mosylon, Berbera/Malao, and Zeila carry more evidentiary weight than inland labels.", "World capitals are included for orientation so the Somali coast can be read against the wider Old World."], "worldCapitals": [{"n": "Rome", "lo": 12.5, "la": 41.9, "note": "Capital of the Roman Empire."}, {"n": "Alexandria", "lo": 29.92, "la": 31.2, "note": "Capital of Egypt in the Hellenistic and Roman age."}, {"n": "Ctesiphon", "lo": 44.58, "la": 33.1, "note": "Parthian imperial capital."}, {"n": "Aksum", "lo": 38.72, "la": 14.12, "note": "Aksumite capital."}, {"n": "Pataliputra", "lo": 85.14, "la": 25.61, "note": "Major imperial centre of northern India."}, {"n": "Luoyang", "lo": 112.45, "la": 34.62, "note": "Eastern Han capital."}, {"n": "Meroe", "lo": 33.73, "la": 16.94, "note": "Kushite capital."}, {"n": "Petra", "lo": 35.44, "la": 30.33, "note": "Nabataean capital and caravan metropolis."}, {"n": "Antioch", "lo": 36.2, "la": 36.16, "note": "Major Roman eastern capital city."}, {"n": "Mathura", "lo": 77.67, "la": 27.49, "note": "North Indian state city on inland trade routes."}, {"n": "Teotihuacan", "lo": -98.84, "la": 19.69, "note": "Great urban centre of ancient Mesoamerica."}, {"n": "Tikal", "lo": -89.62, "la": 17.22, "note": "Classic Maya royal city."}, {"n": "Anuradhapura", "lo": 80.4, "la": 8.35, "note": "Sri Lankan royal capital."}]}, {"id": "benadir", "refYear": 1200, "year": "900–1300", "suffix": "CE", "era": "Medieval", "title": "Mogadishu & the Benadir Coast", "desc": "By the 10th century Mogadishu was one of the wealthiest city-states in the Indian Ocean world. Ibn Battuta visited in 1331 and described stone architecture, a sultanate with formal court protocol, and merchants trading with India, China, and the Swahili coast. Mogadishu, Merca, and Barawa minted their own currency and sent ambassadors to foreign courts. The layer draws the city-state belt and the maritime littoral their trade commanded.", "territories": [{"name": "Benadir city-state belt", "color": "#d8b56a", "pulse": false, "dashed": false, "fillOpacity": 0.2, "coords": [[42.4, -0.6], [43.2, 0.1], [44.0, 0.7], [44.8, 1.2], [45.4, 1.8], [45.6, 2.6], [45.3, 3.2], [44.7, 3.5], [43.8, 3.5], [42.9, 3.0], [42.5, 2.2], [42.3, 1.2], [42.3, 0.2], [42.4, -0.6]]}, {"name": "Benadir maritime littoral", "color": "#6ab8c8", "pulse": false, "dashed": true, "fillOpacity": 0.08, "coords": [[41.9, -1.1], [42.8, -0.4], [43.7, 0.4], [44.7, 1.0], [45.4, 1.8], [45.8, 2.7], [45.7, 3.6], [45.0, 4.0], [43.9, 4.1], [42.8, 3.7], [42.1, 2.8], [41.8, 1.6], [41.8, 0.3], [41.9, -1.1]]}], "capitals": [{"n": "Mogadishu", "lo": 45.35, "la": 2.04, "note": "Primary city-state capital of the Benadir world."}, {"n": "Merca", "lo": 44.77, "la": 1.72, "note": "Important Benadir port city."}, {"n": "Barawa", "lo": 44.02, "la": 1.11, "note": "Southern Benadir node."}, {"n": "Warsheikh", "lo": 45.48, "la": 2.3, "note": "Northern Benadir town with deep medieval connections."}], "cityNotes": ["Mogadishu is the leading city of this layer, but the Benadir only makes sense as a chain of ports.", "Warsheikh, Merca, and Barawa are kept visible because the coastal network matters more than modern admin rank.", "Selected world capitals show what the Benadir was trading with, not what ruled it."], "worldCapitals": [{"n": "Cairo", "lo": 31.24, "la": 30.04, "note": "Founded in 969 and major capital of the eastern Mediterranean world."}, {"n": "Mecca", "lo": 39.83, "la": 21.42, "note": "Capital of the Hejaz in the medieval period."}, {"n": "Constantinople", "lo": 28.98, "la": 41.01, "note": "Byzantine imperial capital."}, {"n": "Baghdad", "lo": 44.37, "la": 33.31, "note": "Abbasid capital."}, {"n": "Delhi", "lo": 77.23, "la": 28.61, "note": "North Indian imperial centre."}, {"n": "Hangzhou", "lo": 120.15, "la": 30.27, "note": "Southern Song capital."}, {"n": "Kilwa Kisiwani", "lo": 39.52, "la": -8.96, "note": "Swahili coast capital."}, {"n": "Bergen", "lo": 5.32, "la": 60.39, "note": "Capital of Norway in the thirteenth century."}, {"n": "Cusco", "lo": -71.97, "la": -13.52, "note": "Inca dynastic capital in the Andes."}, {"n": "Cahokia", "lo": -90.06, "la": 38.66, "note": "Mississippian urban centre in North America."}, {"n": "Niani", "lo": -9.58, "la": 11.32, "note": "Mali imperial capital in West Africa."}, {"n": "Great Zimbabwe", "lo": 30.93, "la": -20.27, "note": "Stone-built royal centre of southern Africa."}, {"n": "Dali", "lo": 100.23, "la": 25.6, "note": "Southwest Chinese kingdom capital."}, {"n": "Angkor", "lo": 103.86, "la": 13.41, "note": "Khmer imperial capital."}, {"n": "Kyoto", "lo": 135.77, "la": 35.01, "note": "Imperial capital of Japan."}]}, {"id": "ifat", "refYear": 1375, "year": "1285–1415", "suffix": "CE", "era": "Medieval", "title": "Sultanate of Ifat", "desc": "Founded in 1285 by Umar Walashma, Ifat ran as a corridor from the Harar plateau to the port of Zeila and was the first major Islamic sultanate to contest Ethiopian highland power head-on. The Walashma dynasty led that resistance until 1415, when Sultan Sa'ad ad-Din II was killed by Emperor Yeshaq I near Zeila. His sons fled to Yemen, returned, and founded Adal, the direct predecessor of Ahmad Gurey's conquests.", "territories": [{"name": "Ifat — eastern Shewa / Awash / Zeila corridor", "color": "#dca86c", "pulse": false, "dashed": false, "fillOpacity": 0.18, "coords": [[39.4, 9.8], [40.0, 10.2], [40.8, 10.7], [41.7, 11.1], [42.6, 11.5], [43.3, 11.6], [43.4, 11.0], [43.1, 10.1], [42.5, 9.3], [41.8, 8.8], [41.0, 8.5], [40.1, 8.5], [39.5, 8.9], [39.4, 9.8]]}, {"name": "Ifat — tributary / campaign margin", "color": "#8aa95f", "pulse": false, "dashed": true, "fillOpacity": 0.08, "coords": [[38.9, 10.3], [39.9, 10.9], [41.0, 11.4], [42.2, 11.8], [43.1, 11.8], [43.4, 11.2], [43.3, 10.2], [42.7, 9.3], [41.9, 8.6], [40.8, 8.1], [39.8, 8.0], [39.0, 8.6], [38.9, 10.3]]}], "capitals": [{"n": "Wafāt / Awfāt (approx.)", "lo": 39.9, "la": 9.4, "uncertain": true, "note": "Approximate archaeological-historical center of Ifat."}, {"n": "Zeila", "lo": 43.47, "la": 11.35, "note": "Maritime outlet of Ifat."}, {"n": "Harar (frontier city)", "lo": 42.12, "la": 9.31, "note": "Major eastern highland city tied to Ifat–Adal history."}], "cityNotes": ["Wafat remains approximate in placement, but Zeila and Harar are firm historical anchors.", "The city layer keeps later places dimmed rather than deleting them, so the chronology stays visible.", "World capitals in this period are curated, not exhaustive."], "worldCapitals": [{"n": "Cairo", "lo": 31.24, "la": 30.04, "note": "Mamluk capital."}, {"n": "Mecca", "lo": 39.83, "la": 21.42, "note": "Capital of the Hejaz."}, {"n": "Constantinople", "lo": 28.98, "la": 41.01, "note": "Late Byzantine/Ottoman hinge city."}, {"n": "Fez", "lo": -5.0, "la": 34.03, "note": "Maghribi capital."}, {"n": "Delhi", "lo": 77.23, "la": 28.61, "note": "Capital of the Delhi Sultanate."}, {"n": "Nanjing", "lo": 118.79, "la": 32.06, "note": "Ming capital in the fourteenth century."}, {"n": "Oslo", "lo": 10.75, "la": 59.91, "note": "Norwegian capital after Bergen lost the role in 1299."}, {"n": "Tenochtitlan", "lo": -99.13, "la": 19.43, "note": "Mexica capital in the Valley of Mexico."}, {"n": "Cusco", "lo": -71.97, "la": -13.52, "note": "Inca capital in the Andes."}, {"n": "Samarkand", "lo": 66.97, "la": 39.65, "note": "Timurid imperial city."}, {"n": "Tlemcen", "lo": -1.32, "la": 34.88, "note": "Zayyanid capital in the Maghrib."}, {"n": "Great Zimbabwe", "lo": 30.93, "la": -20.27, "note": "Southern African royal centre."}]}, {"id": "ajuran", "refYear": 1550, "year": "1300–1700", "suffix": "CE", "era": "Medieval", "title": "The Ajuran Sultanate", "desc": "Africa's only hydraulic empire. The Ajuran monopolised the Jubba and Shabelle rivers through stone-fitted dams and wells, many still functioning three centuries later. The core boundary follows the river system; the wider sphere ran from Qelafo in the west to Hobyo on the central coast and Kismayo in the south, taking in the Benadir ports of Mogadishu, Merca, and Barawa. They repelled Portuguese naval assaults, allied with the Ottomans against European Indian Ocean hegemony, and were among the first East Africans to establish contact with Ming China.", "territories": [{"name": "Ajuran — wider reach (Hobyo to Kismayo, Qelafo to the coast)", "color": "#9ed06a", "pulse": false, "dashed": true, "fillOpacity": 0.09, "coords": [[48.8, 5.6], [49.18, 6.56], [49.43, 7.05], [49.81, 7.62], [49.84, 7.91], [49.4, 7.35], [49.15, 7.8], [48.7, 8.05], [48.25, 7.85], [47.8, 8.1], [47.35, 7.88], [46.9, 8.15], [46.45, 8.35], [45.95, 8.22], [45.5, 8.48], [45.0, 8.28], [44.55, 8.5], [44.1, 8.3], [43.65, 8.52], [43.2, 8.35], [42.75, 8.55], [42.3, 8.32], [41.85, 8.18], [41.4, 7.95], [41.0, 7.72], [40.65, 7.38], [40.35, 7.05], [40.15, 6.68], [40.05, 6.3], [40.0, 5.88], [40.1, 5.45], [40.25, 5.02], [40.45, 4.62], [40.7, 4.28], [40.98, 3.95], [41.25, 3.58], [41.55, 3.22], [41.8, 2.85], [42.0, 2.45], [42.15, 2.05], [42.28, 1.62], [42.35, 1.18], [42.42, 0.75], [42.48, 0.3], [42.5, -0.15], [42.55, -0.36], [43.02, 0.2], [43.7, 0.8], [44.02, 1.11], [44.77, 1.72], [45.35, 2.04], [45.6, 2.2], [46.0, 2.5], [46.5, 3.0], [47.0, 3.5], [47.5, 4.2], [48.0, 4.8], [48.53, 5.35], [48.8, 5.6]]}, {"name": "Ajuran — hydraulic core (Shabelle-Jubba river system)", "color": "#C49A3C", "pulse": false, "dashed": false, "fillOpacity": 0.18, "coords": [[48.53, 5.35], [48.0, 4.8], [47.5, 4.2], [47.0, 3.5], [46.5, 3.0], [46.0, 2.5], [45.6, 2.2], [45.35, 2.04], [45.1, 1.85], [44.77, 1.72], [44.4, 1.4], [44.02, 1.11], [43.7, 0.8], [43.02, 0.2], [42.55, -0.36], [42.631, -0.245], [42.57, -0.116], [42.754, 0.164], [42.738, 0.636], [42.6, 0.822], [42.611, 1.141], [42.413, 1.453], [42.43, 1.649], [42.264, 1.898], [42.308, 2.025], [42.179, 2.086], [42.133, 2.188], [42.228, 2.237], [42.116, 2.295], [42.336, 2.415], [42.339, 2.785], [42.556, 2.994], [42.466, 3.326], [42.556, 3.422], [42.478, 3.555], [42.572, 3.833], [42.398, 4.053], [42.072, 4.181], [41.966, 4.324], [41.966, 4.324], [41.591, 4.691], [41.15, 5.643], [42.05, 5.83], [43.22, 8.85], [43.65, 8.72], [43.42, 8.48], [43.78, 8.55], [44.15, 8.32], [44.52, 8.45], [44.55, 8.22], [44.9, 8.18], [45.28, 7.95], [45.65, 8.12], [45.72, 7.85], [46.1, 7.58], [46.48, 7.62], [46.5, 7.35], [46.85, 7.08], [47.2, 6.9], [47.65, 6.55], [47.42, 6.2], [48.1, 5.65], [48.53, 5.35], [48.53, 5.35]]}], "capitals": [{"n": "Mareeg", "lo": 46.33, "la": 3.85, "uncertain": true, "note": "One of the cities associated with Ajuran rulership."}, {"n": "Qelafo", "lo": 42.05, "la": 5.83, "note": "Interior Ajuran-associated center."}, {"n": "Mogadishu", "lo": 45.35, "la": 2.04, "note": "Major coastal capital/commercial center."}, {"n": "Merca", "lo": 44.77, "la": 1.72, "note": "Seasonal/political seat in some reconstructions."}, {"n": "El Bur", "lo": 46.62, "la": 4.69, "note": "Interior commercial hub linked to the Ajuran age."}, {"n": "Afgooye", "lo": 45.01, "la": 2.14, "note": "River town in the Shabelle system."}, {"n": "Beledweyne", "lo": 45.2, "la": 4.74, "note": "Upper Shabelle node within the wider Ajuran sphere."}], "cityNotes": ["Ajuran needed more inland urban anchors, so El Bur, Mareeg, Qelafo, Afgooye, and Beledweyne are now part of the picture.", "The capital story is plural here: court, seasonal seat, hydraulic node, and port do not always coincide.", "Later cities remain visible in muted form so the map does not pretend they simply did not exist yet."], "worldCapitals": [{"n": "Istanbul", "lo": 28.97, "la": 41.01, "note": "Ottoman capital."}, {"n": "Cairo", "lo": 31.24, "la": 30.04, "note": "Major Mamluk/Ottoman capital."}, {"n": "Mecca", "lo": 39.83, "la": 21.42, "note": "Hejaz capital."}, {"n": "Agra", "lo": 78.01, "la": 27.18, "note": "Mughal capital in the sixteenth century."}, {"n": "Beijing", "lo": 116.4, "la": 39.9, "note": "Ming capital."}, {"n": "Lisbon", "lo": -9.14, "la": 38.72, "note": "Portuguese imperial capital."}, {"n": "Cusco", "lo": -71.97, "la": -13.52, "note": "Andean imperial capital."}, {"n": "Oslo", "lo": 10.75, "la": 59.91, "note": "Capital of Norway before the Christiania refoundation."}, {"n": "Goa", "lo": 73.83, "la": 15.49, "note": "Portuguese Estado da Índia capital."}, {"n": "Tenochtitlan", "lo": -99.13, "la": 19.43, "note": "Mexica imperial capital before the Spanish conquest."}, {"n": "Isfahan", "lo": 51.67, "la": 32.65, "note": "Persian imperial capital of the Safavid age."}, {"n": "Nanjing", "lo": 118.79, "la": 32.06, "note": "Great state city of Ming China."}, {"n": "Angkor", "lo": 103.86, "la": 13.41, "note": "Khmer royal centre."}]}, {"id": "adal", "refYear": 1537, "year": "1415–1577", "suffix": "CE", "era": "Adal Sultanate · 1415–1577", "title": "The Adal Sultanate at Peak", "desc": "Adal at its peak under Sultan Badlay reached from Cape Guardafui to the Red Sea coast, with sources recording territory as far as Suakin in Sudan, and held the former Ifat tributary provinces of Fatagar, Dawaro, Bali, and Hadiya. In 1529 Imam Ahmad ibn Ibrahim al-Ghazi launched from the Harar plateau with muskets, cannon, and Ottoman support, and in fourteen years conquered three-quarters of the Ethiopian highlands, reversed only by Portuguese intervention under Cristóvão da Gama. The sultanate collapsed in 1577. The memory shaped Ethiopian and Somali relations for centuries afterward.", "territories": [{"name": "Adal Sultanate at peak (Badlay era — Guardafui to Suakin)", "color": "#d9a86a", "pulse": false, "dashed": false, "fillOpacity": 0.16, "coords": [[39.47, 15.61], [39.72, 15.38], [39.98, 15.12], [40.25, 14.85], [40.48, 14.58], [40.72, 14.32], [40.95, 14.05], [41.15, 13.78], [41.35, 13.52], [41.58, 13.25], [41.82, 12.98], [42.05, 12.72], [42.28, 12.48], [42.52, 12.22], [42.75, 11.98], [42.95, 11.72], [43.15, 11.55], [43.32, 11.42], [43.47, 11.35], [43.69, 11.13], [44.19, 10.92], [44.78, 10.78], [45.02, 10.44], [45.36, 10.83], [45.95, 10.82], [46.55, 10.84], [47.14, 10.9], [47.74, 10.96], [48.31, 11.06], [48.89, 11.24], [49.47, 11.46], [50.06, 11.64], [50.66, 11.78], [51.27, 11.83], [50.783, 12.011], [50.58, 11.944], [51.312, 11.846], [51.261, 11.631], [51.145, 11.502], [49.443, 11.366], [51.107, 11.222], [51.148, 10.96], [51.279, 10.513], [51.439, 10.427], [51.247, 10.373], [50.933, 10.314], [50.82, 9.54], [50.809, 9.296], [50.626, 9.014], [50.363, 8.63], [50.165, 8.183], [49.859, 7.79], [49.427, 7.045], [49.014, 6.012], [47.504, 3.903], [48.53, 5.35], [48.1, 5.65], [47.42, 6.2], [47.65, 6.55], [47.2, 6.9], [46.85, 7.08], [46.5, 7.35], [46.48, 7.62], [46.1, 7.58], [45.72, 7.85], [45.65, 8.12], [45.28, 7.95], [44.9, 8.18], [44.55, 8.22], [44.52, 8.45], [44.15, 8.32], [43.78, 8.55], [43.42, 8.48], [43.65, 8.72], [43.22, 8.85], [42.88, 8.78], [42.55, 9.05], [42.12, 9.31], [41.75, 9.18], [41.38, 9.42], [41.02, 9.28], [40.68, 9.52], [40.35, 9.38], [39.95, 9.55], [39.62, 9.42], [39.28, 9.58], [38.95, 9.35], [38.62, 9.18], [38.35, 8.95], [38.08, 8.72], [37.82, 8.48], [37.58, 8.22], [37.35, 7.98], [37.15, 7.72], [37.05, 7.48], [37.05, 7.48], [36.88, 7.75], [37.02, 8.05], [36.72, 8.32], [36.85, 8.58], [36.48, 8.72], [36.55, 9.05], [36.28, 9.22], [36.42, 9.55], [36.15, 9.72], [36.28, 10.02], [35.98, 10.25], [36.12, 10.55], [35.88, 10.78], [35.95, 11.08], [35.82, 11.35], [35.92, 11.62], [35.78, 11.88], [35.95, 12.15], [36.08, 12.42], [35.92, 12.68], [36.15, 12.95], [36.35, 13.22], [36.22, 13.48], [36.48, 13.72], [36.72, 13.98], [36.58, 14.22], [36.85, 14.48], [37.12, 14.72], [37.05, 14.95], [37.35, 15.12], [37.68, 15.28], [38.02, 15.42], [38.38, 15.52], [38.75, 15.58], [39.12, 15.6], [39.47, 15.61]]}, {"name": "Ahmad ibn Ibrahim — campaign theatre 1529–1543", "color": "#d66b4d", "pulse": false, "dashed": true, "fillOpacity": 0.08, "coords": [[39.75, 10.25], [39.42, 10.52], [39.15, 10.38], [38.82, 10.55], [38.5, 10.28], [38.22, 10.62], [37.85, 10.42], [37.52, 10.78], [37.25, 11.05], [36.88, 11.42], [36.55, 11.78], [36.28, 12.15], [36.02, 12.52], [35.82, 12.88], [35.68, 13.25], [35.58, 13.62], [35.62, 13.95], [35.78, 14.28], [36.05, 14.55], [36.38, 14.82], [36.75, 14.98], [37.18, 15.12], [37.62, 15.22], [38.08, 15.18], [38.55, 15.05], [39.02, 14.82], [39.42, 14.48], [39.72, 14.08], [39.95, 13.62], [40.15, 13.15], [40.32, 12.68], [40.48, 12.22], [40.62, 11.78], [40.52, 11.32], [40.28, 10.88], [39.98, 10.48], [39.75, 10.25]]}, {"name": "Contemporary Ajuran", "color": "#8aa95f", "pulse": false, "dashed": true, "fillOpacity": 0.06, "coords": [[48.53, 5.35], [48.0, 4.8], [47.5, 4.2], [47.0, 3.5], [46.5, 3.0], [46.0, 2.5], [45.6, 2.2], [45.35, 2.04], [45.1, 1.85], [44.77, 1.72], [44.4, 1.4], [44.02, 1.11], [43.7, 0.8], [43.02, 0.2], [42.55, -0.36], [42.631, -0.245], [42.57, -0.116], [42.754, 0.164], [42.738, 0.636], [42.6, 0.822], [42.611, 1.141], [42.413, 1.453], [42.43, 1.649], [42.264, 1.898], [42.308, 2.025], [42.179, 2.086], [42.133, 2.188], [42.228, 2.237], [42.116, 2.295], [42.336, 2.415], [42.339, 2.785], [42.556, 2.994], [42.466, 3.326], [42.556, 3.422], [42.478, 3.555], [42.572, 3.833], [42.398, 4.053], [42.072, 4.181], [41.966, 4.324], [41.966, 4.324], [41.591, 4.691], [41.15, 5.643], [42.05, 5.83], [43.22, 8.85], [43.65, 8.72], [43.42, 8.48], [43.78, 8.55], [44.15, 8.32], [44.52, 8.45], [44.55, 8.22], [44.9, 8.18], [45.28, 7.95], [45.65, 8.12], [45.72, 7.85], [46.1, 7.58], [46.48, 7.62], [46.5, 7.35], [46.85, 7.08], [47.2, 6.9], [47.65, 6.55], [47.42, 6.2], [48.1, 5.65], [48.53, 5.35], [48.53, 5.35]]}], "capitals": [{"n": "Harar", "lo": 42.12, "la": 9.31, "note": "Core inland center of Adal in the 16th century."}, {"n": "Zeila", "lo": 43.47, "la": 11.35, "note": "Historic maritime outlet of Adal."}, {"n": "Dakkar (approx.)", "lo": 43.3, "la": 9.9, "uncertain": true, "note": "Approximate early Adal capital area before Harar."}], "cityNotes": ["Harar and Zeila are the fixed poles; the campaign layer beyond them is intentionally more elastic.", "This is the one era where conquest-space and homeland must be read separately.", "Global capitals are included here to place the war within its sixteenth-century world."], "worldCapitals": [{"n": "Istanbul", "lo": 28.97, "la": 41.01, "note": "Ottoman capital."}, {"n": "Cairo", "lo": 31.24, "la": 30.04, "note": "Major eastern Mediterranean capital."}, {"n": "Mecca", "lo": 39.83, "la": 21.42, "note": "Hejaz capital."}, {"n": "Agra", "lo": 78.01, "la": 27.18, "note": "Mughal capital."}, {"n": "Beijing", "lo": 116.4, "la": 39.9, "note": "Ming capital."}, {"n": "Lisbon", "lo": -9.14, "la": 38.72, "note": "Portuguese imperial capital."}, {"n": "Oslo", "lo": 10.75, "la": 59.91, "note": "Capital of Norway before Christiania."}, {"n": "Mexico City", "lo": -99.13, "la": 19.43, "note": "Spanish capital built on former Tenochtitlan."}, {"n": "Cusco", "lo": -71.97, "la": -13.52, "note": "Andean royal city at the hinge of conquest."}, {"n": "Fez", "lo": -5.0, "la": 34.03, "note": "Maghribi capital city."}, {"n": "Marrakesh", "lo": -8.0, "la": 31.63, "note": "Saadian royal capital in Morocco."}]}, {"id": "warsangali", "refYear": 1750, "year": "13th–20th c.", "suffix": "CE", "era": "Medieval – Modern", "title": "Warsangali Sultanate", "desc": "The Warsangali Sultanate controlled the northeastern coast from Las Khorey toward Cape Guardafui. Founded in the 13th century, it held the frankincense-producing highlands of Sanaag and the ports that had fed Indian Ocean commerce for millennia. Through the colonial scramble it signed protectorate treaties with Britain while keeping internal governance and traditional law.", "territories": [{"name": "Warsangali — Maakhir / Sanaag / Cal Madow", "color": "#f0b06e", "pulse": false, "dashed": false, "fillOpacity": 0.17, "coords": [[46.0, 11.4], [47.2, 11.5], [48.5, 11.55], [49.4, 11.45], [49.8, 10.9], [49.7, 10.2], [49.2, 9.6], [48.4, 9.2], [47.4, 9.1], [46.5, 9.3], [45.9, 9.9], [45.8, 10.7], [46.0, 11.4]]}], "capitals": [{"n": "Durduri (early capital)", "lo": 48.6, "la": 10.95, "uncertain": true, "note": "Approximate early royal center."}, {"n": "Las Khorey", "lo": 48.2, "la": 11.16, "note": "Later coastal capital and port."}, {"n": "Ceelaayo", "lo": 49.05, "la": 11.0, "note": "Eastern Maakhir coast anchor."}, {"n": "Maydh", "lo": 47.98, "la": 10.98, "note": "Historic Sanaag coast port."}], "cityNotes": ["Las Khorey, Maydh, and the Guardafui-Hafun coast are treated as the living edge of the sultanate.", "Bosaso is shown only as a later or weaker label where chronology demands it.", "The global capital layer helps situate the northeast coast in the early modern Indian Ocean."], "worldCapitals": [{"n": "Istanbul", "lo": 28.97, "la": 41.01, "note": "Ottoman capital."}, {"n": "Mecca", "lo": 39.83, "la": 21.42, "note": "Hejaz capital."}, {"n": "London", "lo": -0.13, "la": 51.51, "note": "British capital."}, {"n": "Paris", "lo": 2.35, "la": 48.86, "note": "French capital."}, {"n": "Beijing", "lo": 116.4, "la": 39.9, "note": "Qing capital."}, {"n": "Edo", "lo": 139.76, "la": 35.68, "note": "Tokugawa capital."}, {"n": "Christiania", "lo": 10.75, "la": 59.91, "note": "Capital of Denmark-Norway / Norway after the 1624 refoundation."}, {"n": "Sana'a", "lo": 44.21, "la": 15.35, "note": "Highland Arabian capital."}, {"n": "Muscat", "lo": 58.41, "la": 23.59, "note": "Omani capital."}, {"n": "Tehran", "lo": 51.39, "la": 35.69, "note": "Qajar capital of Iran."}, {"n": "Calcutta", "lo": 88.36, "la": 22.57, "note": "British Indian capital before New Delhi."}, {"n": "Washington", "lo": -77.04, "la": 38.9, "note": "Capital of the United States."}, {"n": "Rio de Janeiro", "lo": -43.17, "la": -22.91, "note": "Capital of the Brazilian Empire."}]}, {"id": "successor", "refYear": 1850, "year": "18th–19th c.", "suffix": "CE", "era": "Post-Ajuran", "title": "Successor States", "desc": "After the Ajuran collapsed from internal revolt, successor states carved up the territory. The Geledi Sultanate controlled the lower Shabelle from Afgooye, dominating the agricultural hinterland behind Mogadishu. The Majeerteen Sultanate held the northeast and its frankincense trade. The Sultanate of Hobyo commanded the central coast. Each minted currency and fielded armies until colonial annexation dismantled them one by one. Oman appears at its actual extent, the Arabian homeland plus the Swahili coast with Zanzibar as capital from 1840; on the Benadir coast Omani authority was nominal, and the Geledi sultan collected tribute from the Omani sultan, not the reverse. Pre-Menelik Abyssinia is the compact highland kingdom before the conquests of the 1880s.", "territories": [{"name": "Majeerteen Sultanate", "color": "#f0c76e", "pulse": false, "dashed": false, "fillOpacity": 0.17, "coords": [[46.8, 11.2], [48.0, 11.5], [49.5, 11.8], [51.1, 11.85], [51.2, 10.7], [50.8, 9.6], [50.1, 8.6], [49.1, 7.7], [47.9, 6.7], [46.9, 6.6], [46.4, 7.4], [46.4, 8.7], [46.5, 9.9], [46.8, 11.2]]}, {"name": "Sultanate of Hobyo", "color": "#d08d43", "pulse": false, "dashed": false, "fillOpacity": 0.17, "coords": [[44.8, 6.3], [45.8, 6.7], [46.9, 6.8], [47.8, 6.4], [48.4, 5.5], [48.4, 4.4], [48.0, 3.4], [47.2, 2.4], [46.3, 1.8], [45.4, 1.7], [44.8, 2.4], [44.6, 3.6], [44.6, 4.9], [44.8, 6.3]]}, {"name": "Geledi Sultanate", "color": "#d8b56a", "pulse": false, "dashed": false, "fillOpacity": 0.17, "coords": [[41.8, 4.3], [42.9, 4.4], [44.1, 4.0], [45.0, 3.4], [45.4, 2.5], [45.2, 1.5], [44.5, 0.7], [43.6, 0.1], [42.4, 0.0], [41.7, 0.5], [41.5, 1.5], [41.5, 2.7], [41.8, 4.3]]}, {"name": "Benadir / Biimaal littoral", "color": "#78b6d8", "pulse": false, "dashed": true, "fillOpacity": 0.08, "coords": [[43.7, 2.5], [44.5, 2.6], [45.1, 2.3], [45.1, 1.4], [44.7, 0.9], [44.1, 0.8], [43.6, 1.2], [43.5, 1.9], [43.7, 2.5]]}, {"name": "Oman — Arabian homeland", "color": "#e85d4a", "pulse": false, "dashed": false, "fillOpacity": 0.08, "coords": [[55.961, 25.006], [55.812, 24.911], [55.837, 24.671], [55.765, 24.529], [55.835, 24.327], [55.753, 24.235], [55.956, 24.223], [56.018, 24.066], [55.833, 24.015], [55.737, 24.059], [55.484, 23.942], [55.572, 23.622], [55.233, 23.114], [55.213, 22.706], [55.665, 22.002], [54.998, 20.002], [52.0, 19.0], [52.778, 17.343], [52.743, 17.301], [52.806, 17.288], [53.113, 16.639], [53.69, 16.762], [54.003, 16.883], [54.061, 16.954], [54.426, 16.996], [54.613, 16.973], [54.745, 16.897], [54.954, 16.925], [55.25, 17.141], [55.327, 17.398], [55.269, 17.542], [55.374, 17.626], [55.456, 17.785], [55.588, 17.84], [56.354, 17.89], [56.525, 18.028], [56.692, 18.555], [56.832, 18.716], [57.104, 18.818], [57.761, 18.909], [57.857, 18.974], [57.849, 19.14], [57.78, 19.252], [57.733, 19.736], [57.862, 20.035], [57.862, 20.177], [57.994, 20.321], [57.991, 20.391], [58.076, 20.424], [58.123, 20.522], [58.175, 20.496], [58.192, 20.373], [58.475, 20.329], [58.626, 20.602], [58.749, 20.712], [58.832, 20.967], [59.076, 21.254], [59.34, 21.407], [59.865, 22.269], [59.87, 22.449], [59.818, 22.561], [59.466, 22.642], [58.821, 23.506], [58.675, 23.609], [58.543, 23.672], [58.425, 23.637], [58.145, 23.725], [57.917, 23.728], [57.838, 23.8], [57.714, 23.79], [57.318, 23.908], [56.975, 24.124], [56.681, 24.467], [56.409, 24.979], [56.325, 24.971], [56.326, 24.899], [56.206, 24.851], [56.201, 24.785], [56.113, 24.738], [55.979, 24.877], [56.061, 24.871], [56.059, 24.949], [55.961, 25.006]]}, {"name": "Omani Swahili coast (Mombasa to Cape Delgado)", "color": "#e85d4a", "pulse": false, "dashed": false, "fillOpacity": 0.06, "coords": [[45.35, 2.04], [44.02, 1.11], [43.7, 0.8], [43.02, 0.2], [42.55, -0.36], [41.87, -1.65], [41.1, -2.0], [40.9, -2.27], [40.1, -3.1], [39.67, -4.05], [39.5, -4.7], [39.35, -5.5], [39.27, -6.79], [39.4, -7.5], [39.45, -8.3], [39.52, -8.96], [39.8, -9.8], [40.2, -10.5], [40.6, -10.3], [40.4, -9.5], [40.2, -8.8], [40.0, -8.0], [39.9, -7.0], [40.0, -6.0], [40.2, -5.0], [40.4, -4.0], [40.8, -3.0], [41.2, -2.0], [41.7, -1.2], [42.5, -0.3], [43.5, 0.5], [44.5, 1.3], [45.35, 2.04]]}, {"name": "Zanzibar — Omani capital from 1840", "color": "#e85d4a", "pulse": false, "dashed": false, "fillOpacity": 0.12, "coords": [[39.1, -5.72], [39.35, -5.72], [39.5, -6.0], [39.48, -6.3], [39.3, -6.5], [39.1, -6.45], [39.0, -6.2], [39.05, -5.9], [39.1, -5.72]]}, {"name": "Abyssinia — pre-Menelik highland state", "color": "#7a9e5a", "pulse": false, "dashed": true, "fillOpacity": 0.06, "coords": [[36.5, 15.2], [37.2, 15.4], [38.0, 15.3], [38.8, 15.0], [39.5, 14.5], [39.8, 13.8], [40.0, 13.2], [39.9, 12.4], [39.7, 11.8], [39.5, 11.2], [39.4, 10.5], [39.3, 9.8], [39.1, 9.2], [38.8, 8.6], [38.5, 8.1], [38.1, 7.6], [37.6, 7.2], [37.0, 7.0], [36.4, 7.2], [35.8, 7.6], [35.3, 8.2], [34.9, 8.8], [34.7, 9.4], [34.6, 10.0], [34.7, 10.7], [34.8, 11.4], [35.0, 12.0], [35.2, 12.6], [35.5, 13.2], [35.8, 13.8], [36.1, 14.4], [36.5, 15.2]]}], "capitals": [{"n": "Bandar Qasim / Bosaso", "lo": 49.18, "la": 11.28, "note": "Major Majeerteen port and capital."}, {"n": "Alula", "lo": 50.75, "la": 11.96, "note": "Important Majeerteen seat/port."}, {"n": "Hobyo", "lo": 48.53, "la": 5.35, "note": "Capital of the Hobyo Sultanate."}, {"n": "Afgooye", "lo": 45.01, "la": 2.14, "note": "Geledi capital and agricultural core."}, {"n": "El Bur", "lo": 46.62, "la": 4.69, "note": "Interior town retained in the southern political world."}], "cityNotes": ["The successor states are meant to partition the wider Somali country rather than float as unrelated blobs.", "Bandar Qasim, Hobyo, and Afgooye remain the key seats, but several inland towns are now restored.", "Christiania / Kristiania / Oslo are era-correct in the world-capital layer rather than collapsed into one modern name."], "worldCapitals": [{"n": "London", "lo": -0.13, "la": 51.51, "note": "British capital."}, {"n": "Paris", "lo": 2.35, "la": 48.86, "note": "French capital."}, {"n": "Istanbul", "lo": 28.97, "la": 41.01, "note": "Ottoman capital."}, {"n": "Cairo", "lo": 31.24, "la": 30.04, "note": "Egyptian capital."}, {"n": "Mecca", "lo": 39.83, "la": 21.42, "note": "Hejaz capital."}, {"n": "Beijing", "lo": 116.4, "la": 39.9, "note": "Qing capital."}, {"n": "Edo", "lo": 139.76, "la": 35.68, "note": "Tokugawa capital before Tokyo."}, {"n": "Zanzibar", "lo": 39.2, "la": -6.16, "note": "Omani-Zanzibari capital after 1840."}, {"n": "Christiania", "lo": 10.75, "la": 59.91, "note": "Official Norwegian capital name before 1877."}, {"n": "Washington", "lo": -77.04, "la": 38.9, "note": "Capital of the United States."}, {"n": "Muscat", "lo": 58.41, "la": 23.59, "note": "Omani capital."}, {"n": "Tehran", "lo": 51.39, "la": 35.69, "note": "Iranian capital."}, {"n": "Tokyo", "lo": 139.76, "la": 35.68, "note": "Japanese capital after 1868."}, {"n": "Mexico City", "lo": -99.13, "la": 19.43, "note": "Capital of Mexico."}, {"n": "Rio de Janeiro", "lo": -43.17, "la": -22.91, "note": "Capital of Brazil before 1960."}]}, {"id": "dervish", "refYear": 1910, "year": "1899–1920", "suffix": "CE", "era": "Anti-Colonial Resistance", "title": "The Dervish State", "desc": "Founded in August 1899 when Sayyid Mohamed Abdullah Hassan occupied Burao and wrote his ultimatum to the British. Twenty-one years of resistance followed; four major Anglo-Ethiopian-Italian expeditions were defeated. By 1913 Dervish territory ran from the Nugaal Valley to the forts at Taleh and Jidali and into the Ogaden, so the geometry follows strongholds and campaigning space rather than an administrative line. In February 1920 the RAF bombed Taleh, among the first aerial bombardments in African history. The Sayyid escaped the bombs and died of influenza that December, aged 64. His gabay remains a cornerstone of Somali literature.", "territories": [{"name": "Dervish State — interior war-state reconstruction", "color": "#c19a64", "pulse": false, "dashed": false, "fillOpacity": 0.16, "coords": [[46.0, 11.1], [47.2, 11.2], [48.4, 11.1], [49.2, 10.7], [49.4, 9.8], [49.0, 8.9], [48.4, 8.0], [47.8, 7.2], [46.9, 6.8], [46.0, 6.9], [45.4, 7.7], [45.1, 8.9], [45.2, 10.0], [46.0, 11.1]]}, {"name": "Taleh fort belt", "color": "#e6d7b8", "pulse": false, "dashed": true, "fillOpacity": 0.06, "coords": [[48.2, 8.32], [48.68, 8.38], [48.88, 8.18], [48.75, 7.97], [48.3, 8.0], [48.2, 8.32]]}, {"name": "Oman — Arabian homeland", "color": "#e85d4a", "pulse": false, "dashed": true, "fillOpacity": 0.04, "coords": [[55.961, 25.006], [55.812, 24.911], [55.837, 24.671], [55.765, 24.529], [55.835, 24.327], [55.753, 24.235], [55.956, 24.223], [56.018, 24.066], [55.833, 24.015], [55.737, 24.059], [55.484, 23.942], [55.572, 23.622], [55.233, 23.114], [55.213, 22.706], [55.665, 22.002], [54.998, 20.002], [52.0, 19.0], [52.778, 17.343], [52.743, 17.301], [52.806, 17.288], [53.113, 16.639], [53.69, 16.762], [54.003, 16.883], [54.061, 16.954], [54.426, 16.996], [54.613, 16.973], [54.745, 16.897], [54.954, 16.925], [55.25, 17.141], [55.327, 17.398], [55.269, 17.542], [55.374, 17.626], [55.456, 17.785], [55.588, 17.84], [56.354, 17.89], [56.525, 18.028], [56.692, 18.555], [56.832, 18.716], [57.104, 18.818], [57.761, 18.909], [57.857, 18.974], [57.849, 19.14], [57.78, 19.252], [57.733, 19.736], [57.862, 20.035], [57.862, 20.177], [57.994, 20.321], [57.991, 20.391], [58.076, 20.424], [58.123, 20.522], [58.175, 20.496], [58.192, 20.373], [58.475, 20.329], [58.626, 20.602], [58.749, 20.712], [58.832, 20.967], [59.076, 21.254], [59.34, 21.407], [59.865, 22.269], [59.87, 22.449], [59.818, 22.561], [59.466, 22.642], [58.821, 23.506], [58.675, 23.609], [58.543, 23.672], [58.425, 23.637], [58.145, 23.725], [57.917, 23.728], [57.838, 23.8], [57.714, 23.79], [57.318, 23.908], [56.975, 24.124], [56.681, 24.467], [56.409, 24.979], [56.325, 24.971], [56.326, 24.899], [56.206, 24.851], [56.201, 24.785], [56.113, 24.738], [55.979, 24.877], [56.061, 24.871], [56.059, 24.949], [55.961, 25.006]]}, {"name": "Menelik's conquests 1887–97 (with British support)", "color": "#c45a3a", "pulse": false, "dashed": true, "fillOpacity": 0.06, "coords": [[39.3, 9.8], [39.6, 9.4], [40.2, 9.1], [40.8, 8.8], [41.4, 8.6], [42.0, 8.4], [42.5, 8.2], [42.8, 7.8], [42.6, 7.2], [42.3, 6.6], [41.9, 6.0], [41.4, 5.4], [40.8, 4.8], [40.2, 4.4], [39.6, 4.0], [39.0, 3.6], [38.4, 3.4], [37.8, 3.6], [37.2, 3.8], [36.6, 4.2], [36.0, 4.6], [35.4, 5.0], [34.8, 5.4], [34.4, 5.8], [34.2, 6.2], [34.2, 6.6], [34.4, 7.0], [34.7, 7.2], [35.3, 7.4], [35.8, 7.6], [36.4, 7.2], [37.0, 7.0], [37.6, 7.2], [38.1, 7.6], [38.5, 8.1], [38.8, 8.6], [39.1, 9.2], [39.3, 9.8]]}], "capitals": [{"n": "Taleh", "lo": 48.5, "la": 8.4, "note": "Fortified Dervish capital complex."}, {"n": "Jidali", "lo": 48.87, "la": 10.97, "note": "Northern anchor of the Dervish sphere."}, {"n": "Burao", "lo": 45.53, "la": 9.52, "note": "Major inland city in the wider conflict zone."}], "cityNotes": ["Taleh is the decisive capital marker, but the state also depended on a wider fort belt and allied interior towns.", "Burao, Jidali, and the Nugaal corridor now remain legible even when you toggle world view.", "World capitals at this date are selective and chosen for recognition, not exhaustiveness."], "worldCapitals": [{"n": "London", "lo": -0.13, "la": 51.51, "note": "British capital."}, {"n": "Paris", "lo": 2.35, "la": 48.86, "note": "French capital."}, {"n": "Rome", "lo": 12.5, "la": 41.9, "note": "Italian capital."}, {"n": "Istanbul", "lo": 28.97, "la": 41.01, "note": "Ottoman capital."}, {"n": "Cairo", "lo": 31.24, "la": 30.04, "note": "Egyptian capital."}, {"n": "Mecca", "lo": 39.83, "la": 21.42, "note": "Hejaz capital."}, {"n": "Addis Ababa", "lo": 38.76, "la": 8.98, "note": "Ethiopian capital."}, {"n": "Tokyo", "lo": 139.76, "la": 35.68, "note": "Japanese imperial capital."}, {"n": "Beijing", "lo": 116.4, "la": 39.9, "note": "Capital of late Qing / early Republic China."}, {"n": "Kristiania", "lo": 10.75, "la": 59.91, "note": "Official Norwegian capital name from 1877 to 1924."}, {"n": "Washington", "lo": -77.04, "la": 38.9, "note": "Capital of the United States."}, {"n": "Berlin", "lo": 13.41, "la": 52.52, "note": "German imperial capital."}, {"n": "Vienna", "lo": 16.37, "la": 48.21, "note": "Austro-Hungarian capital."}, {"n": "St Petersburg", "lo": 30.31, "la": 59.94, "note": "Russian imperial capital before 1918."}, {"n": "Tehran", "lo": 51.39, "la": 35.69, "note": "Qajar capital."}, {"n": "Muscat", "lo": 58.41, "la": 23.59, "note": "Omani capital."}, {"n": "Mexico City", "lo": -99.13, "la": 19.43, "note": "Capital of Mexico."}, {"n": "Rio de Janeiro", "lo": -43.17, "la": -22.91, "note": "Capital of Brazil."}, {"n": "Canberra", "lo": 149.13, "la": -35.28, "note": "Australian federal capital after 1913."}]}, {"id": "colonial", "refYear": 1930, "year": "1884–1960", "suffix": "CE", "era": "Colonial Partition", "title": "One People, Five Colonial Partitions", "desc": "Britain, Italy, France, Ethiopia, and Kenya divided Somali-inhabited territory into five administered pieces, with no regard for clan lands, seasonal migration routes, or the pastoral economy that depended on moving between wet and dry season grazing. The outlines follow the actual administrative boundaries. The five-pointed star on the Somali flag stands for these five territories, and the borders frozen here became the fault lines of the Ogaden War, the NFD secession movement, and Djibouti's delayed independence. The Somaliweyn overlay shows the single population the lines divided.", "territories": [{"name": "British Somaliland", "color": "#7ec7ff", "pulse": false, "dashed": false, "fillOpacity": 0.14, "coords": [[48.939, 11.249], [48.939, 9.451], [47.979, 7.997], [46.979, 7.997], [44.024, 8.986], [43.622, 9.337], [43.548, 9.336], [43.419, 9.413], [43.371, 9.544], [43.249, 9.652], [43.187, 9.883], [43.068, 9.923], [42.982, 10.092], [42.836, 10.208], [42.766, 10.452], [42.649, 10.611], [42.819, 10.873], [42.894, 10.92], [43.241, 11.488], [43.288, 11.46], [43.283, 11.499], [43.376, 11.392], [43.46, 11.351], [43.489, 11.381], [43.479, 11.272], [43.506, 11.209], [43.559, 11.176], [43.659, 10.988], [43.922, 10.724], [44.348, 10.415], [44.586, 10.384], [44.751, 10.428], [44.962, 10.416], [44.988, 10.46], [45.321, 10.662], [45.487, 10.685], [45.769, 10.878], [45.856, 10.824], [45.884, 10.841], [46.102, 10.771], [46.238, 10.792], [46.335, 10.71], [46.448, 10.693], [46.66, 10.754], [46.886, 10.899], [47.008, 10.939], [47.181, 11.08], [47.406, 11.185], [47.523, 11.187], [47.71, 11.101], [47.767, 11.13], [48.13, 11.137], [48.343, 11.275], [48.522, 11.319], [48.655, 11.331], [48.939, 11.249]]}, {"name": "Italian Somalia", "color": "#7fd17d", "pulse": false, "dashed": false, "fillOpacity": 0.12, "coords": [[50.783, 12.011], [50.58, 11.944], [50.414, 11.689], [50.069, 11.535], [49.55, 11.472], [49.443, 11.366], [48.941, 11.258], [48.654, 11.349], [48.391, 11.31], [48.145, 11.155], [47.705, 11.118], [47.508, 11.208], [47.373, 11.201], [46.736, 10.824], [46.388, 10.708], [46.239, 10.817], [46.101, 10.773], [45.759, 10.883], [45.488, 10.709], [45.314, 10.697], [45.188, 10.574], [44.933, 10.424], [44.72, 10.45], [44.617, 10.405], [44.407, 10.409], [44.289, 10.458], [43.721, 10.937], [43.518, 11.232], [43.535, 11.362], [43.47, 11.39], [43.473, 11.528], [43.404, 11.411], [43.374, 11.507], [43.336, 11.469], [43.279, 11.496], [42.963, 10.983], [42.669, 10.594], [42.744, 10.52], [42.884, 10.199], [43.016, 10.094], [43.094, 9.901], [43.257, 9.847], [43.297, 9.61], [43.397, 9.555], [43.465, 9.411], [43.645, 9.355], [44.014, 8.999], [46.992, 7.999], [47.988, 8.002], [44.975, 4.921], [44.009, 4.959], [43.314, 4.741], [43.025, 4.576], [42.998, 4.442], [42.918, 4.322], [42.827, 4.264], [42.696, 4.264], [42.558, 4.209], [42.089, 4.185], [41.96, 4.07], [41.31, 3.145], [40.986, 2.828], [40.991, -0.831], [41.557, -1.598], [41.561, -1.667], [42.231, -0.906], [42.649, -0.324], [43.531, 0.655], [44.839, 1.727], [45.92, 2.322], [46.17, 2.534], [46.375, 2.781], [46.563, 2.911], [47.504, 3.903], [47.965, 4.442], [49.014, 6.012], [49.183, 6.562], [49.427, 7.045], [49.809, 7.616], [49.859, 7.79], [49.835, 7.911], [50.165, 8.183], [50.372, 8.555], [50.363, 8.63], [50.451, 8.861], [50.626, 9.014], [50.685, 9.198], [50.809, 9.296], [50.883, 9.465], [50.82, 9.54], [50.92, 9.977], [50.933, 10.314], [51.217, 10.408], [51.247, 10.373], [51.412, 10.354], [51.439, 10.427], [51.415, 10.496], [51.279, 10.513], [51.18, 10.615], [51.148, 10.96], [51.199, 11.164], [51.107, 11.222], [51.096, 11.3], [51.145, 11.502], [51.261, 11.631], [51.312, 11.846], [51.056, 11.896], [50.783, 12.011]]}, {"name": "French Somaliland (Djibouti)", "color": "#d1a3ff", "pulse": false, "dashed": false, "fillOpacity": 0.16, "coords": [[43.14, 12.708], [42.874, 12.61], [42.858, 12.548], [42.803, 12.509], [42.821, 12.431], [42.698, 12.363], [42.48, 12.521], [42.402, 12.471], [42.336, 12.376], [42.319, 12.302], [42.256, 12.257], [41.955, 11.812], [41.899, 11.793], [41.89, 11.751], [41.835, 11.733], [41.771, 11.494], [41.808, 11.321], [41.8, 10.974], [41.943, 10.939], [41.945, 10.916], [42.07, 10.926], [42.075, 10.95], [42.137, 10.975], [42.216, 10.963], [42.355, 10.997], [42.423, 10.98], [42.637, 11.092], [42.69, 11.057], [42.773, 11.06], [42.791, 10.988], [42.869, 10.969], [42.963, 10.983], [43.258, 11.461], [43.201, 11.53], [43.16, 11.633], [43.094, 11.606], [42.801, 11.592], [42.659, 11.535], [42.681, 11.482], [42.621, 11.472], [42.534, 11.527], [42.533, 11.58], [42.683, 11.552], [42.788, 11.734], [42.854, 11.767], [42.942, 11.766], [42.972, 11.793], [43.052, 11.801], [43.189, 11.939], [43.382, 11.977], [43.422, 12.049], [43.418, 12.215], [43.332, 12.475], [43.309, 12.488], [43.302, 12.469], [43.157, 12.653], [43.14, 12.708]]}, {"name": "Ogaden — Somali territory under Ethiopia", "color": "#ff725e", "pulse": false, "dashed": true, "fillOpacity": 0.08, "coords": [[42.873, 10.978], [42.924, 10.999], [42.647, 10.632], [42.766, 10.452], [42.836, 10.208], [42.982, 10.092], [43.068, 9.923], [43.187, 9.883], [43.249, 9.652], [43.371, 9.544], [43.419, 9.413], [43.622, 9.337], [43.985, 9.008], [46.979, 7.997], [47.979, 7.997], [46.424, 6.497], [44.942, 4.911], [43.969, 4.954], [43.528, 4.842], [43.119, 4.648], [42.96, 4.517], [42.832, 4.302], [42.103, 4.192], [41.923, 4.071], [41.836, 3.949], [41.7, 3.997], [41.163, 3.943], [40.764, 4.285], [39.848, 3.867], [39.764, 3.686], [39.536, 3.405], [39.316, 3.495], [39.219, 3.469], [39.09, 3.518], [39.301, 3.643], [39.47, 3.918], [39.541, 4.234], [39.742, 4.657], [39.82, 5.015], [40.015, 5.383], [40.187, 5.355], [40.529, 5.416], [40.922, 5.699], [40.88, 5.812], [40.859, 6.42], [41.028, 6.656], [41.122, 6.693], [41.416, 6.557], [41.622, 6.364], [41.764, 6.541], [41.909, 6.543], [41.993, 6.606], [42.227, 7.223], [42.207, 7.293], [41.901, 7.412], [41.875, 7.511], [41.953, 7.751], [41.931, 8.116], [42.029, 8.325], [42.032, 8.434], [42.274, 8.623], [42.327, 8.539], [42.504, 8.493], [42.58, 8.231], [42.668, 8.141], [42.77, 8.365], [42.897, 8.412], [42.912, 8.565], [42.833, 8.707], [42.857, 8.84], [42.644, 9.08], [42.487, 9.479], [42.387, 9.568], [42.381, 9.708], [42.303, 9.763], [42.203, 9.774], [42.04, 9.629], [41.892, 9.684], [41.763, 9.64], [41.712, 9.468], [41.615, 9.518], [41.493, 9.46], [41.27, 9.506], [40.846, 9.307], [40.798, 9.395], [40.911, 9.396], [40.915, 9.429], [40.695, 9.444], [40.737, 9.624], [41.022, 9.951], [40.943, 10.047], [41.092, 10.699], [41.292, 10.967], [41.767, 10.989], [41.938, 10.93], [42.096, 10.99], [42.392, 11.006], [42.616, 11.09], [42.873, 10.978]]}, {"name": "NFD — Somali territory given to Kenya", "color": "#8e63d9", "pulse": false, "dashed": true, "fillOpacity": 0.08, "coords": [[41.215, 3.937], [41.643, 3.969], [41.7, 3.997], [41.836, 3.949], [41.885, 3.977], [41.343, 3.201], [40.965, 2.814], [40.98, -0.871], [41.523, -1.573], [41.536, -1.676], [40.997, -1.711], [40.168, -2.078], [40.109, -1.826], [40.113, -1.626], [40.033, -1.48], [39.994, -1.219], [39.917, -1.135], [39.937, -1.101], [39.862, -0.949], [39.812, -0.69], [39.765, -0.602], [39.699, -0.579], [39.64, -0.505], [39.581, -0.322], [39.443, -0.195], [39.307, -0.134], [39.143, -0.127], [39.065, -0.04], [38.979, -0.049], [38.934, -0.093], [38.746, -0.065], [38.747, 0.215], [38.67, 0.487], [38.776, 0.517], [38.826, 0.586], [39.159, 0.711], [39.308, 0.926], [39.447, 0.992], [39.278, 1.453], [39.452, 1.531], [39.193, 1.726], [39.125, 1.865], [39.026, 1.974], [38.943, 2.133], [38.88, 2.504], [38.971, 2.574], [39.12, 2.918], [39.323, 3.042], [39.296, 3.492], [39.311, 3.466], [39.467, 3.452], [39.536, 3.405], [39.575, 3.498], [39.764, 3.686], [39.848, 3.867], [40.167, 4.035], [40.366, 4.095], [40.764, 4.285], [41.115, 3.962], [41.215, 3.937]]}], "capitals": [{"n": "Hargeisa", "lo": 44.06, "la": 9.56, "note": "Administrative center in British Somaliland."}, {"n": "Mogadishu", "lo": 45.35, "la": 2.04, "note": "Capital of Italian Somaliland."}, {"n": "Djibouti City", "lo": 43.15, "la": 11.59, "note": "Capital of French Somaliland."}, {"n": "Addis Ababa", "lo": 38.76, "la": 8.98, "note": "Capital of Ethiopia."}, {"n": "Nairobi", "lo": 36.82, "la": -1.29, "note": "Capital of Kenya."}], "cityNotes": ["The partitions are shown as cuts through one larger Somali country, not as natural civilizational seams.", "Local cities remain visible in both Horn and world view so the map never collapses into colonial color alone.", "Global capitals are era-correct where the naming shifted, including Kristiania before the return to Oslo."], "worldCapitals": [{"n": "London", "lo": -0.13, "la": 51.51, "note": "British capital."}, {"n": "Paris", "lo": 2.35, "la": 48.86, "note": "French capital."}, {"n": "Rome", "lo": 12.5, "la": 41.9, "note": "Italian capital."}, {"n": "Cairo", "lo": 31.24, "la": 30.04, "note": "Egyptian capital."}, {"n": "Riyadh", "lo": 46.71, "la": 24.71, "note": "Saudi capital by the early 1930s."}, {"n": "Addis Ababa", "lo": 38.76, "la": 8.98, "note": "Ethiopian capital."}, {"n": "Nairobi", "lo": 36.82, "la": -1.29, "note": "Kenyan capital."}, {"n": "Oslo", "lo": 10.75, "la": 59.91, "note": "Norwegian capital after 1925."}, {"n": "Tokyo", "lo": 139.76, "la": 35.68, "note": "Japanese capital."}, {"n": "Washington", "lo": -77.04, "la": 38.9, "note": "Capital of the United States."}, {"n": "Berlin", "lo": 13.41, "la": 52.52, "note": "German capital."}, {"n": "Madrid", "lo": -3.7, "la": 40.42, "note": "Spanish capital."}, {"n": "Lisbon", "lo": -9.14, "la": 38.72, "note": "Portuguese capital."}, {"n": "Moscow", "lo": 37.62, "la": 55.76, "note": "Soviet capital."}, {"n": "Ankara", "lo": 32.86, "la": 39.93, "note": "Capital of Turkey."}, {"n": "Tehran", "lo": 51.39, "la": 35.69, "note": "Capital of Iran."}, {"n": "Baghdad", "lo": 44.37, "la": 33.31, "note": "Capital of Iraq."}, {"n": "Jerusalem", "lo": 35.22, "la": 31.78, "note": "Major seat of government and symbolism in the Levant."}, {"n": "New Delhi", "lo": 77.21, "la": 28.61, "note": "Capital of British India from 1911 onward."}, {"n": "Mexico City", "lo": -99.13, "la": 19.43, "note": "Capital of Mexico."}, {"n": "Rio de Janeiro", "lo": -43.17, "la": -22.91, "note": "Capital of Brazil before 1960."}, {"n": "Canberra", "lo": 149.13, "la": -35.28, "note": "Capital of Australia."}]}, {"id": "republic", "refYear": 1960, "year": "1960", "suffix": "CE", "era": "Independence", "title": "The Somali Republic", "desc": "British Somaliland gained independence on 26 June 1960 and united with Italian Somalia five days later, on 1 July, to form the Somali Republic, one of very few voluntary unions of two colonial territories in African history. Three Somali-majority territories remained outside: Djibouti under France until 1977, the Ogaden under Ethiopia, and the Northern Frontier District given to Kenya. Two points of the star united, three still divided. Toggle the Somaliweyn overlay to see the republic against the full extent of Somali-inhabited land.", "territories": [{"name": "Somali Republic (British Somaliland + Italian Somalia)", "color": "#d8b56a", "pulse": false, "dashed": false, "fillOpacity": 0.14, "coords": [[50.783, 12.011], [50.58, 11.944], [50.414, 11.689], [50.069, 11.535], [49.55, 11.472], [49.443, 11.366], [48.941, 11.258], [48.654, 11.349], [48.391, 11.31], [48.145, 11.155], [47.705, 11.118], [47.508, 11.208], [47.373, 11.201], [46.736, 10.824], [46.388, 10.708], [46.239, 10.817], [46.101, 10.773], [45.759, 10.883], [45.488, 10.709], [45.314, 10.697], [45.188, 10.574], [44.933, 10.424], [44.72, 10.45], [44.617, 10.405], [44.407, 10.409], [44.289, 10.458], [43.721, 10.937], [43.518, 11.232], [43.535, 11.362], [43.47, 11.39], [43.473, 11.528], [43.404, 11.411], [43.374, 11.507], [43.336, 11.469], [43.279, 11.496], [42.963, 10.983], [42.669, 10.594], [42.744, 10.52], [42.884, 10.199], [43.016, 10.094], [43.094, 9.901], [43.257, 9.847], [43.297, 9.61], [43.397, 9.555], [43.465, 9.411], [43.645, 9.355], [44.014, 8.999], [46.992, 7.999], [47.988, 8.002], [44.975, 4.921], [44.009, 4.959], [43.314, 4.741], [43.025, 4.576], [42.998, 4.442], [42.918, 4.322], [42.827, 4.264], [42.696, 4.264], [42.558, 4.209], [42.089, 4.185], [41.96, 4.07], [41.31, 3.145], [40.986, 2.828], [40.991, -0.831], [41.557, -1.598], [41.561, -1.667], [42.231, -0.906], [42.649, -0.324], [43.531, 0.655], [44.839, 1.727], [45.92, 2.322], [46.17, 2.534], [46.375, 2.781], [46.563, 2.911], [47.504, 3.903], [47.965, 4.442], [49.014, 6.012], [49.183, 6.562], [49.427, 7.045], [49.809, 7.616], [49.859, 7.79], [49.835, 7.911], [50.165, 8.183], [50.372, 8.555], [50.363, 8.63], [50.451, 8.861], [50.626, 9.014], [50.685, 9.198], [50.809, 9.296], [50.883, 9.465], [50.82, 9.54], [50.92, 9.977], [50.933, 10.314], [51.217, 10.408], [51.247, 10.373], [51.412, 10.354], [51.439, 10.427], [51.415, 10.496], [51.279, 10.513], [51.18, 10.615], [51.148, 10.96], [51.199, 11.164], [51.107, 11.222], [51.096, 11.3], [51.145, 11.502], [51.261, 11.631], [51.312, 11.846], [51.056, 11.896], [50.783, 12.011]]}, {"name": "Ogaden — outside the republic", "color": "#ff725e", "pulse": false, "dashed": true, "fillOpacity": 0.06, "coords": [[42.873, 10.978], [42.924, 10.999], [42.647, 10.632], [42.766, 10.452], [42.836, 10.208], [42.982, 10.092], [43.068, 9.923], [43.187, 9.883], [43.249, 9.652], [43.371, 9.544], [43.419, 9.413], [43.622, 9.337], [43.985, 9.008], [46.979, 7.997], [47.979, 7.997], [46.424, 6.497], [44.942, 4.911], [43.969, 4.954], [43.528, 4.842], [43.119, 4.648], [42.96, 4.517], [42.832, 4.302], [42.103, 4.192], [41.923, 4.071], [41.836, 3.949], [41.7, 3.997], [41.163, 3.943], [40.764, 4.285], [39.848, 3.867], [39.764, 3.686], [39.536, 3.405], [39.316, 3.495], [39.219, 3.469], [39.09, 3.518], [39.301, 3.643], [39.47, 3.918], [39.541, 4.234], [39.742, 4.657], [39.82, 5.015], [40.015, 5.383], [40.187, 5.355], [40.529, 5.416], [40.922, 5.699], [40.88, 5.812], [40.859, 6.42], [41.028, 6.656], [41.122, 6.693], [41.416, 6.557], [41.622, 6.364], [41.764, 6.541], [41.909, 6.543], [41.993, 6.606], [42.227, 7.223], [42.207, 7.293], [41.901, 7.412], [41.875, 7.511], [41.953, 7.751], [41.931, 8.116], [42.029, 8.325], [42.032, 8.434], [42.274, 8.623], [42.327, 8.539], [42.504, 8.493], [42.58, 8.231], [42.668, 8.141], [42.77, 8.365], [42.897, 8.412], [42.912, 8.565], [42.833, 8.707], [42.857, 8.84], [42.644, 9.08], [42.487, 9.479], [42.387, 9.568], [42.381, 9.708], [42.303, 9.763], [42.203, 9.774], [42.04, 9.629], [41.892, 9.684], [41.763, 9.64], [41.712, 9.468], [41.615, 9.518], [41.493, 9.46], [41.27, 9.506], [40.846, 9.307], [40.798, 9.395], [40.911, 9.396], [40.915, 9.429], [40.695, 9.444], [40.737, 9.624], [41.022, 9.951], [40.943, 10.047], [41.092, 10.699], [41.292, 10.967], [41.767, 10.989], [41.938, 10.93], [42.096, 10.99], [42.392, 11.006], [42.616, 11.09], [42.873, 10.978]]}, {"name": "NFD — outside the republic", "color": "#8e63d9", "pulse": false, "dashed": true, "fillOpacity": 0.06, "coords": [[41.215, 3.937], [41.643, 3.969], [41.7, 3.997], [41.836, 3.949], [41.885, 3.977], [41.343, 3.201], [40.965, 2.814], [40.98, -0.871], [41.523, -1.573], [41.536, -1.676], [40.997, -1.711], [40.168, -2.078], [40.109, -1.826], [40.113, -1.626], [40.033, -1.48], [39.994, -1.219], [39.917, -1.135], [39.937, -1.101], [39.862, -0.949], [39.812, -0.69], [39.765, -0.602], [39.699, -0.579], [39.64, -0.505], [39.581, -0.322], [39.443, -0.195], [39.307, -0.134], [39.143, -0.127], [39.065, -0.04], [38.979, -0.049], [38.934, -0.093], [38.746, -0.065], [38.747, 0.215], [38.67, 0.487], [38.776, 0.517], [38.826, 0.586], [39.159, 0.711], [39.308, 0.926], [39.447, 0.992], [39.278, 1.453], [39.452, 1.531], [39.193, 1.726], [39.125, 1.865], [39.026, 1.974], [38.943, 2.133], [38.88, 2.504], [38.971, 2.574], [39.12, 2.918], [39.323, 3.042], [39.296, 3.492], [39.311, 3.466], [39.467, 3.452], [39.536, 3.405], [39.575, 3.498], [39.764, 3.686], [39.848, 3.867], [40.167, 4.035], [40.366, 4.095], [40.764, 4.285], [41.115, 3.962], [41.215, 3.937]]}, {"name": "Djibouti — outside the republic", "color": "#d1a3ff", "pulse": false, "dashed": true, "fillOpacity": 0.06, "coords": [[43.14, 12.708], [42.874, 12.61], [42.858, 12.548], [42.803, 12.509], [42.821, 12.431], [42.698, 12.363], [42.48, 12.521], [42.402, 12.471], [42.336, 12.376], [42.319, 12.302], [42.256, 12.257], [41.955, 11.812], [41.899, 11.793], [41.89, 11.751], [41.835, 11.733], [41.771, 11.494], [41.808, 11.321], [41.8, 10.974], [41.943, 10.939], [41.945, 10.916], [42.07, 10.926], [42.075, 10.95], [42.137, 10.975], [42.216, 10.963], [42.355, 10.997], [42.423, 10.98], [42.637, 11.092], [42.69, 11.057], [42.773, 11.06], [42.791, 10.988], [42.869, 10.969], [42.963, 10.983], [43.258, 11.461], [43.201, 11.53], [43.16, 11.633], [43.094, 11.606], [42.801, 11.592], [42.659, 11.535], [42.681, 11.482], [42.621, 11.472], [42.534, 11.527], [42.533, 11.58], [42.683, 11.552], [42.788, 11.734], [42.854, 11.767], [42.942, 11.766], [42.972, 11.793], [43.052, 11.801], [43.189, 11.939], [43.382, 11.977], [43.422, 12.049], [43.418, 12.215], [43.332, 12.475], [43.309, 12.488], [43.302, 12.469], [43.157, 12.653], [43.14, 12.708]]}], "capitals": [{"n": "Mogadishu", "lo": 45.35, "la": 2.04, "note": "Capital of the Somali Republic."}, {"n": "Hargeisa", "lo": 44.06, "la": 9.56, "note": "Major northern city of the union."}, {"n": "Djibouti City", "lo": 43.15, "la": 11.59, "note": "Outside the republic in 1960."}, {"n": "Addis Ababa", "lo": 38.76, "la": 8.98, "note": "Capital of Ethiopia."}, {"n": "Nairobi", "lo": 36.82, "la": -1.29, "note": "Capital of Kenya."}], "cityNotes": ["Mogadishu leads the republic, but Hargeisa and the unrealized outer territories remain visible in the same field.", "The world-capital layer now shifts from Kristiania to Oslo on schedule and keeps Cairo, Addis Ababa, and Nairobi in view.", "This final layer is intentionally calmer so the political meaning reads before the cartographic ornament."], "worldCapitals": [{"n": "London", "lo": -0.13, "la": 51.51, "note": "British capital."}, {"n": "Paris", "lo": 2.35, "la": 48.86, "note": "French capital."}, {"n": "Cairo", "lo": 31.24, "la": 30.04, "note": "Egyptian capital."}, {"n": "Riyadh", "lo": 46.71, "la": 24.71, "note": "Capital of Saudi Arabia."}, {"n": "Addis Ababa", "lo": 38.76, "la": 8.98, "note": "Ethiopian capital."}, {"n": "Nairobi", "lo": 36.82, "la": -1.29, "note": "Kenyan capital."}, {"n": "Oslo", "lo": 10.75, "la": 59.91, "note": "Capital of Norway."}, {"n": "Washington", "lo": -77.04, "la": 38.9, "note": "Capital of the United States."}, {"n": "Moscow", "lo": 37.62, "la": 55.76, "note": "Soviet capital."}, {"n": "Beijing", "lo": 116.4, "la": 39.9, "note": "Capital of the People's Republic of China."}, {"n": "New Delhi", "lo": 77.21, "la": 28.61, "note": "Capital of India."}, {"n": "Rome", "lo": 12.5, "la": 41.9, "note": "Capital of Italy."}, {"n": "Ankara", "lo": 32.86, "la": 39.93, "note": "Capital of Turkey."}, {"n": "Baghdad", "lo": 44.37, "la": 33.31, "note": "Capital of Iraq."}, {"n": "Jerusalem", "lo": 35.22, "la": 31.78, "note": "Major seat of government and symbolism in the Levant."}, {"n": "Tokyo", "lo": 139.76, "la": 35.68, "note": "Capital of Japan."}, {"n": "Canberra", "lo": 149.13, "la": -35.28, "note": "Capital of Australia."}, {"n": "Mexico City", "lo": -99.13, "la": 19.43, "note": "Capital of Mexico."}, {"n": "Brasilia", "lo": -47.88, "la": -15.79, "note": "New capital of Brazil from 1960."}, {"n": "Buenos Aires", "lo": -58.38, "la": -34.6, "note": "Capital of Argentina."}, {"n": "Accra", "lo": -0.19, "la": 5.56, "note": "Capital of independent Ghana."}, {"n": "Lagos", "lo": 3.39, "la": 6.45, "note": "Federal capital of Nigeria in 1960."}]}];
+
+const MAJOR_SOMALI_CITIES = [{"name": "Zeila", "lo": 43.47, "la": 11.35, "estYear": -200, "label": "Zeila — attested by antiquity"}, {"name": "Heis", "lo": 44.08, "la": 10.89, "estYear": 100, "label": "Heis / Mundus — attested in the classical port world"}, {"name": "Berbera", "lo": 45.02, "la": 10.44, "estYear": 100, "label": "Berbera / Malao — attested 1st c. CE"}, {"name": "Maydh", "lo": 47.98, "la": 10.98, "estYear": 1000, "label": "Maydh — medieval Sanaag coast port"}, {"name": "Laasqoray", "lo": 48.2, "la": 11.16, "estYear": 1500, "label": "Laasqoray / Las Khorey — early modern port"}, {"name": "Ras Xafun", "lo": 51.27, "la": 10.44, "estYear": 100, "label": "Ras Xafun / Opone — classical emporium"}, {"name": "Qandala", "lo": 49.87, "la": 11.47, "estYear": 1600, "label": "Qandala — early modern port town"}, {"name": "Bosaso", "lo": 49.18, "la": 11.28, "estYear": 1700, "label": "Bosaso / Bandar Qasim — early modern port prominence"}, {"name": "Ceerigaabo", "lo": 47.37, "la": 10.62, "estYear": 1700, "label": "Ceerigaabo — early modern highland town"}, {"name": "Burao", "lo": 45.53, "la": 9.52, "estYear": 1800, "label": "Burao — c. 19th-century inland town"}, {"name": "Hargeisa", "lo": 44.06, "la": 9.56, "estYear": 1800, "label": "Hargeisa — c. 19th-century town"}, {"name": "Harar", "lo": 42.12, "la": 9.31, "estYear": 1000, "label": "Harar — major Islamic and caravan city by the medieval period"}, {"name": "Jigjiga", "lo": 42.8, "la": 9.35, "estYear": 1886, "label": "Jigjiga — late 19th-century town"}, {"name": "Dir Dhabe", "lo": 41.86, "la": 9.6, "estYear": 1902, "label": "Dir Dhabe — founded c. 1902"}, {"name": "Taleex", "lo": 48.5, "la": 8.4, "estYear": 1905, "label": "Taleex / Taleh — Dervish fort town, early 20th century"}, {"name": "Garoowe", "lo": 48.49, "la": 8.06, "estYear": 1900, "label": "Garoowe — modern town, early 20th century prominence"}, {"name": "Galkacyo", "lo": 47.43, "la": 6.77, "estYear": 1900, "label": "Galkacyo — modern town, early 20th century prominence"}, {"name": "Qelafo", "lo": 42.05, "la": 5.83, "estYear": 1300, "label": "Qelafo — medieval interior node"}, {"name": "Beledweyne", "lo": 45.2, "la": 4.74, "estYear": 1500, "label": "Beledweyne — early modern river town"}, {"name": "Dhuusamareeb", "lo": 46.39, "la": 5.54, "estYear": 1800, "label": "Dhuusamareeb — c. 19th-century interior town"}, {"name": "El Bur", "lo": 46.62, "la": 4.69, "estYear": 1300, "label": "El Bur — inhabited since at least the 13th century; Ajuran-era commercial hub"}, {"name": "Mareeg", "lo": 46.33, "la": 3.85, "estYear": 1300, "label": "Mareeg — Ajuran-associated inland centre"}, {"name": "Jowhar", "lo": 45.5, "la": 2.78, "estYear": 1908, "label": "Jowhar — modern river town, early 20th century"}, {"name": "Afgooye", "lo": 45.01, "la": 2.14, "estYear": 1400, "label": "Afgooye — long-lived river town"}, {"name": "Warsheikh", "lo": 45.48, "la": 2.3, "estYear": 1100, "label": "Warsheikh — medieval coastal town"}, {"name": "Mogadishu", "lo": 45.35, "la": 2.04, "estYear": 900, "label": "Mogadishu — attested by the 10th century CE"}, {"name": "Marka", "lo": 44.77, "la": 1.72, "estYear": 1000, "label": "Marka / Merca — medieval port town"}, {"name": "Barawa", "lo": 44.02, "la": 1.11, "estYear": 1000, "label": "Barawa — medieval port town"}, {"name": "Baidoa", "lo": 43.65, "la": 3.12, "estYear": 1800, "label": "Baidoa — c. 19th-century town"}, {"name": "Kismayo", "lo": 42.55, "la": -0.36, "estYear": 1850, "label": "Kismayo — 19th-century port"}, {"name": "Hobyo", "lo": 48.53, "la": 5.35, "estYear": 1878, "label": "Hobyo — sultanate capital, late 19th century"}, {"name": "Eyl", "lo": 49.82, "la": 7.98, "estYear": 1500, "label": "Eyl — historic coastal settlement of the northeastern seaboard"}, {"name": "Jidali", "lo": 48.87, "la": 10.97, "estYear": 1400, "label": "Jidali — northern interior/coastal corridor town"}, {"name": "Badhan", "lo": 48.74, "la": 10.72, "estYear": 1800, "label": "Badhan — later Sanaag highland town"}, {"name": "Qardho", "lo": 49.08, "la": 9.51, "estYear": 1800, "label": "Qardho — later Majeerteen inland centre"}, {"name": "Baargaal", "lo": 50.81, "la": 11.28, "estYear": 1500, "label": "Baargaal — old northeastern coastal settlement"}, {"name": "Las Anod", "lo": 47.36, "la": 8.48, "estYear": 1800, "label": "Las Anod — later inland town of the Sool corridor"}, {"name": "Mareeray", "lo": 46.63, "la": 3.95, "estYear": 1300, "label": "Mareeray — interior node of the central Somali country"}, {"name": "Buur Hakaba", "lo": 44.08, "la": 2.8, "estYear": 1500, "label": "Buur Hakaba — interior market town of the Bay hinterland"}, {"name": "Buur Gaabo", "lo": 41.85, "la": -1.22, "estYear": 1800, "label": "Buur Gaabo — southern coastal settlement near the Kenyan border"}, {"name": "Obbia", "lo": 48.57, "la": 5.33, "estYear": 1800, "label": "Obbia — later central coast roadstead"}];
+
+
+ERAS.forEach(era => {
+  era.territories.forEach(t => { t.feature = P(t.coords); });
+});
+
+const HORN_CENTER  = [6, 46];
+const HORN_ZOOM    = 5;
+const WORLD_CENTER = [10, 25];
+const WORLD_ZOOM   = 3;
+
+const map = L.map('map-div', {
+  center: HORN_CENTER,
+  zoom: HORN_ZOOM,
+  zoomControl: false,
+  attributionControl: false,
+  minZoom: 2,
+  maxZoom: 14,
+  worldCopyJump: false,
+  maxBounds: [[-65, -180], [85, 180]],
+  maxBoundsViscosity: 0.2
+});
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
+  subdomains: 'abcd',
+  maxZoom: 19,
+  noWrap: true
+}).addTo(map);
+
+map.createPane('somaliweynPane');
+map.getPane('somaliweynPane').style.zIndex = 425;
+map.createPane('cityPane');
+map.getPane('cityPane').style.zIndex = 430;
+map.createPane('worldCityPane');
+map.getPane('worldCityPane').style.zIndex = 431;
+
+const terrGroup      = L.layerGroup().addTo(map);
+const ringGroup      = L.layerGroup().addTo(map);
+const cityGroup      = L.layerGroup().addTo(map);
+const worldCityGroup = L.layerGroup().addTo(map);
+const cityNameGroup  = L.layerGroup().addTo(map);
+const worldNameGroup = L.layerGroup().addTo(map);
+const labelGroup     = L.layerGroup().addTo(map);
+
+const OCNLBLS = [
+  {t:'Indian Ocean',   lo:75,   la:-18},
+  {t:'Gulf of Aden',   lo:47,   la:13.5},
+  {t:'Red Sea',        lo:36,   la:22},
+  {t:'Arabian Sea',    lo:62,   la:16},
+  {t:'Atlantic Ocean', lo:-28,  la:8}
+];
+const CTRYLBLS = [
+  {t:'Ethiopia', lo:39,   la:9},
+  {t:'Somalia',  lo:47.5, la:6},
+  {t:'Kenya',    lo:37.5, la:0.5},
+  {t:'Yemen',    lo:47,   la:15.5},
+  {t:'Eritrea',  lo:38.5, la:15.5},
+  {t:'Djibouti', lo:42.5, la:11.8},
+  {t:'Sudan',    lo:30,   la:15},
+  {t:'Oman',     lo:57,   la:21},
+  {t:'Tanzania', lo:34,   la:-6}
+];
+
+function makeLabel(text, className, latLng, dx = 0, dy = 0) {
+  return L.marker(latLng, {
+    icon: L.divIcon({
+      html: `<span class="${className}" style="transform: translate(${dx}px, ${dy}px);">${text}</span>`,
+      className: '',
+      iconSize: null,
+      iconAnchor: [0, 0]
+    }),
+    interactive: false,
+    keyboard: false
+  });
+}
+
+function formatYearLabel(y) {
+  if (y < 0) return Math.abs(y) + ' BCE';
+  return y + ' CE';
+}
+
+function formatCityHover(city, exists) {
+  const when = formatYearLabel(city.estYear);
+  return exists
+    ? `<strong>${city.name}</strong><br>${city.label}<br><span style="color:#8a7e6a">Established / attested: ${when}</span>`
+    : `<strong>${city.name}</strong><br>Not yet attested in this era.<br><span style="color:#8a7e6a">Later emergence: ${when}</span>`;
+}
+
+function formatCapitalHover(c) {
+  const note = c.note ? `<br>${c.note}` : '';
+  return `<strong>${c.n}</strong>${note}`;
+}
+
+let isWorld = false;
+let showCapitals = true;
+let showWorldCapitals = true;
+let showSomaliCities = true;
+let cur = 0;
+
+function renderLabels() {
+  labelGroup.clearLayers();
+  OCNLBLS.forEach(ol => makeLabel(ol.t, 'ocean-lbl', [ol.la, ol.lo]).addTo(labelGroup));
+  if (!isWorld) CTRYLBLS.forEach(cl => makeLabel(cl.t, 'ctry-lbl', [cl.la, cl.lo]).addTo(labelGroup));
+}
+
+function drawRing() {
+  ringGroup.clearLayers();
+  if (isWorld) return;
+  L.circle([5.5, 47], {
+    radius: 820000,
+    fill: false,
+    color: '#C49A3C',
+    weight: 1.2,
+    dashArray: '8 5',
+    interactive: false,
+    className: 'horn-ring-path'
+  }).addTo(ringGroup);
+}
+
+function hexToRgba(hex, a) {
+  const r = parseInt(hex.slice(1,3), 16);
+  const g = parseInt(hex.slice(3,5), 16);
+  const b = parseInt(hex.slice(5,7), 16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+
+function addCapitalMarker(c) {
+  L.circleMarker([c.la, c.lo], {
+    pane: 'cityPane',
+    radius: c.uncertain ? 6.5 : 6,
+    fillOpacity: 0,
+    color: c.uncertain ? 'rgba(240,210,140,0.35)' : 'rgba(240,210,140,0.28)',
+    weight: 1,
+    dashArray: c.uncertain ? '3 3' : null,
+    interactive: false
+  }).addTo(cityGroup);
+
+  const dot = L.circleMarker([c.la, c.lo], {
+    pane: 'cityPane',
+    radius: c.uncertain ? 2.5 : 2.8,
+    fillColor: '#f0d28c',
+    fillOpacity: 0.95,
+    color: '#171108',
+    weight: 1,
+    interactive: true
+  }).addTo(cityGroup);
+
+  dot.bindTooltip(formatCapitalHover(c), {
+    className: 'info-tip',
+    direction: 'top',
+    offset: [0, -8],
+    sticky: true
+  });
+
+  makeLabel(c.n, 'place-label era-capital', [c.la, c.lo], 8, -2).addTo(cityNameGroup);
+}
+
+function addSomaliCityMarker(city, era) {
+  const exists = city.estYear <= era.refYear;
+  L.circleMarker([city.la, city.lo], {
+    pane: 'cityPane',
+    radius: exists ? 5 : 4.5,
+    fillOpacity: 0,
+    color: exists ? 'rgba(110,224,141,0.22)' : 'rgba(184,95,99,0.18)',
+    weight: 1,
+    dashArray: exists ? null : '2 3',
+    interactive: false
+  }).addTo(cityGroup);
+
+  const dot = L.circleMarker([city.la, city.lo], {
+    pane: 'cityPane',
+    radius: exists ? 2.5 : 2.3,
+    fillColor: exists ? '#6ee08d' : '#b85f63',
+    fillOpacity: exists ? 0.96 : 0.82,
+    color: exists ? '#08130c' : '#180a0b',
+    weight: 1,
+    interactive: true
+  }).addTo(cityGroup);
+
+  dot.bindTooltip(formatCityHover(city, exists), {
+    className: 'info-tip',
+    direction: 'top',
+    offset: [0, -8],
+    sticky: true
+  });
+
+  makeLabel(city.name, `place-label ${exists ? 'somali-live' : 'somali-future'}`, [city.la, city.lo], 8, -2).addTo(cityNameGroup);
+}
+
+function addWorldCapitalMarker(c) {
+  L.circleMarker([c.la, c.lo], {
+    pane: 'worldCityPane',
+    radius: 5.2,
+    fillOpacity: 0,
+    color: 'rgba(158,208,224,0.22)',
+    weight: 1,
+    interactive: false
+  }).addTo(worldCityGroup);
+
+  const dot = L.circleMarker([c.la, c.lo], {
+    pane: 'worldCityPane',
+    radius: 2.2,
+    fillColor: '#9ed0e0',
+    fillOpacity: 0.95,
+    color: '#081018',
+    weight: 1,
+    interactive: true
+  }).addTo(worldCityGroup);
+
+  dot.bindTooltip(formatCapitalHover(c), {
+    className: 'info-tip',
+    direction: 'top',
+    offset: [0, -8],
+    sticky: true
+  });
+
+  makeLabel(c.n, 'place-label world-city', [c.la, c.lo], 7, -1).addTo(worldNameGroup);
+}
+
+function renderCityNotes(era) {
+  const box = document.getElementById('i-citynotes');
+  const rows = [
+    '<strong>Capitals, cities & notes</strong>',
+    ...era.cityNotes.map(t => `<div class="cn">${t}</div>`),
+    '<div class="cn">Green Somali dots mark places already attested in the era; dim red dots mark towns that enter the record later and can be inspected on hover.</div>',
+    '<div class="cn">World capitals are selective state anchors, not an exhaustive census of every polity on earth.</div>'
+  ];
+  box.innerHTML = rows.join('');
+}
+
+function drawCities(era) {
+  cityGroup.clearLayers();
+  worldCityGroup.clearLayers();
+  cityNameGroup.clearLayers();
+  worldNameGroup.clearLayers();
+  if (showCapitals) era.capitals.forEach(addCapitalMarker);
+  if (showSomaliCities) MAJOR_SOMALI_CITIES.forEach(city => addSomaliCityMarker(city, era));
+  if (showWorldCapitals && era.worldCapitals) era.worldCapitals.forEach(addWorldCapitalMarker);
+}
+
+function renderEra(idx) {
+  const era = ERAS[idx];
+  document.getElementById('i-era').textContent   = era.era;
+  document.getElementById('i-year').innerHTML    = era.year + '<small> ' + era.suffix + '</small>';
+  document.getElementById('i-title').textContent = era.title;
+  document.getElementById('i-desc').textContent  = era.desc;
+  document.getElementById('i-sel').style.display = 'none';
+  renderCityNotes(era);
+
+  const leg = document.getElementById('i-legend');
+  leg.innerHTML = '';
+  terrGroup.clearLayers();
+
+  era.territories.forEach(t => {
+    const fillOpacity = t.fillOpacity ?? (t.dashed ? 0.09 : 0.18);
+    const geoLayer = L.geoJSON(t.feature, {
+      style: {
+        fillColor: t.color,
+        fillOpacity,
+        color: t.color,
+        weight: t.dashed ? 1.8 : 2.2,
+        dashArray: t.dashed ? '6 4' : null,
+        lineCap: 'round',
+        lineJoin: 'round'
+      }
+    });
+
+    geoLayer.bindTooltip(t.name, {
+      sticky: true,
+      className: 'terr-tip',
+      direction: 'top',
+      offset: [0, -4]
+    });
+
+    geoLayer.on('click', function(e) {
+      document.getElementById('i-sel').style.display = 'block';
+      document.getElementById('i-sel-name').textContent = t.name;
+      L.DomEvent.stopPropagation(e);
+    });
+
+    geoLayer.on('add', function() {
+      this.eachLayer(l => {
+        if (!l._path) return;
+        l._path.style.filter = `drop-shadow(0 0 8px ${hexToRgba(t.color, 0.22)})`;
+      });
+    });
+
+    terrGroup.addLayer(geoLayer);
+
+    const row = document.createElement('div');
+    row.className = 'li';
+    row.innerHTML = `<svg class="lsw" viewBox="0 0 22 8"><rect width="22" height="8" fill="${hexToRgba(t.color, fillOpacity)}" stroke="${t.color}" stroke-width="1.2" ${t.dashed ? 'stroke-dasharray="4 2"' : ''}></rect></svg><span>${t.name}</span>`;
+    leg.appendChild(row);
+  });
+
+  drawCities(era);
+  drawRing();
+  renderLabels();
+  if (somaliweynOn) drawSomaliweyn();
+
+
+  document.querySelectorAll('.era-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
+}
+
+map.on('click', () => document.getElementById('i-sel').style.display = 'none');
+
+function switchView(world) {
+  isWorld = world;
+  map.setView(world ? WORLD_CENTER : HORN_CENTER, world ? WORLD_ZOOM : HORN_ZOOM);
+  renderEra(cur);
+  document.getElementById('btn-world').classList.toggle('on',  world);
+  document.getElementById('btn-horn').classList.toggle('on',  !world);
+}
+
+document.getElementById('btn-world').onclick = () => switchView(true);
+document.getElementById('btn-horn').onclick  = () => switchView(false);
+document.getElementById('btn-zi').onclick    = () => map.zoomIn();
+document.getElementById('btn-zo').onclick    = () => map.zoomOut();
+document.getElementById('btn-reset').onclick = () => {
+  isWorld = false;
+  map.setView(HORN_CENTER, HORN_ZOOM);
+  document.getElementById('btn-world').classList.remove('on');
+  document.getElementById('btn-horn').classList.add('on');
+  renderEra(cur);
+};
+
+document.getElementById('btn-capitals').onclick = () => {
+  showCapitals = !showCapitals;
+  document.getElementById('btn-capitals').classList.toggle('on', showCapitals);
+  drawCities(ERAS[cur]);
+};
+document.getElementById('btn-capitals').classList.toggle('on', showCapitals);
+
+document.getElementById('btn-worldcaps').onclick = () => {
+  showWorldCapitals = !showWorldCapitals;
+  document.getElementById('btn-worldcaps').classList.toggle('on', showWorldCapitals);
+  drawCities(ERAS[cur]);
+};
+document.getElementById('btn-worldcaps').classList.toggle('on', showWorldCapitals);
+
+document.getElementById('btn-cities').onclick = () => {
+  showSomaliCities = !showSomaliCities;
+  document.getElementById('btn-cities').classList.toggle('on', showSomaliCities);
+  drawCities(ERAS[cur]);
+};
+document.getElementById('btn-cities').classList.toggle('on', showSomaliCities);
+
+map.on('zoomend', () => drawCities(ERAS[cur]));
+
+const track = document.getElementById('era-track');
+ERAS.forEach((era, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'era-btn' + (i === 0 ? ' active' : '');
+  btn.title = era.title;
+  const sy = era.year.length > 10 ? era.year.slice(0, 8) + '…' : era.year;
+  btn.innerHTML = `<div class="era-dot"></div><span class="era-yr">${sy}<br>${era.suffix}</span>`;
+  btn.onclick = () => { cur = i; renderEra(i); stopAuto(); };
+  track.appendChild(btn);
+});
+
+document.getElementById('prev-btn').onclick = () => { if (cur > 0) { cur--; renderEra(cur); stopAuto(); } };
+document.getElementById('next-btn').onclick = () => { if (cur < ERAS.length - 1) { cur++; renderEra(cur); stopAuto(); } };
+
+const pBtn = document.getElementById('play-btn');
+let autoT = null;
+function stopAuto() {
+  if (autoT) { clearInterval(autoT); autoT = null; }
+  pBtn.innerHTML = '&#9654; Play';
+  pBtn.classList.remove('playing');
+}
+pBtn.onclick = () => {
+  if (autoT) { stopAuto(); return; }
+  pBtn.innerHTML = '&#9646;&#9646; Pause';
+  pBtn.classList.add('playing');
+  autoT = setInterval(() => {
+    cur = (cur + 1) % ERAS.length;
+    renderEra(cur);
+  }, 4500);
+};
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft'  && cur > 0)               { cur--; renderEra(cur); stopAuto(); }
+  if (e.key === 'ArrowRight' && cur < ERAS.length - 1) { cur++; renderEra(cur); stopAuto(); }
+  if (e.key === ' ')                                    { e.preventDefault(); pBtn.click(); }
+});
+
+
+// ═══════════════════════════════════════════════════════════════
+// SOMALIWEYN — one polygon merged from real administrative boundaries
+// Somalia + Somali Region + NFD + Djibouti dissolved into a single outline.
+// No internal seams. One people, one line.
+// ═══════════════════════════════════════════════════════════════
+
+const SOMALIWEYN_COORDS = [[43.276, 11.497], [43.335, 11.475], [43.375, 11.51], [43.409, 11.431], [43.475, 11.53], [43.474, 11.395], [43.538, 11.363], [43.522, 11.232], [43.723, 10.939], [44.29, 10.461], [44.409, 10.412], [44.615, 10.408], [44.72, 10.453], [44.931, 10.427], [45.186, 10.576], [45.313, 10.7], [45.487, 10.712], [45.758, 10.886], [46.1, 10.777], [46.24, 10.82], [46.391, 10.712], [46.735, 10.827], [47.372, 11.204], [47.509, 11.211], [47.707, 11.121], [48.142, 11.158], [48.391, 11.313], [48.654, 11.352], [48.943, 11.261], [49.44, 11.368], [49.549, 11.475], [50.068, 11.538], [50.411, 11.691], [50.578, 11.946], [50.783, 12.014], [51.057, 11.899], [51.315, 11.847], [51.264, 11.63], [51.148, 11.5], [51.099, 11.299], [51.111, 11.224], [51.202, 11.164], [51.151, 10.959], [51.183, 10.617], [51.28, 10.517], [51.417, 10.498], [51.442, 10.427], [51.413, 10.351], [51.246, 10.37], [51.212, 10.403], [50.937, 10.31], [50.923, 9.977], [50.824, 9.543], [50.886, 9.465], [50.812, 9.295], [50.688, 9.196], [50.628, 9.012], [50.454, 8.859], [50.367, 8.631], [50.375, 8.554], [50.167, 8.181], [49.84, 7.911], [49.862, 7.79], [49.812, 7.615], [49.43, 7.044], [49.186, 6.562], [49.016, 6.01], [47.968, 4.441], [47.506, 3.901], [46.565, 2.909], [46.377, 2.778], [46.172, 2.532], [45.922, 2.32], [44.841, 1.724], [43.533, 0.653], [42.652, -0.326], [42.233, -0.908], [41.563, -1.669], [41.537, -1.583], [41.537, -1.679], [40.997, -1.714], [40.167, -2.081], [40.106, -1.826], [40.11, -1.627], [40.03, -1.481], [39.991, -1.221], [39.914, -1.136], [39.932, -1.098], [39.859, -0.95], [39.809, -0.691], [39.763, -0.606], [39.697, -0.581], [39.638, -0.507], [39.578, -0.323], [39.441, -0.197], [39.306, -0.137], [39.142, -0.13], [39.063, -0.044], [38.981, -0.052], [38.934, -0.096], [38.743, -0.066], [38.744, 0.214], [38.668, 0.489], [38.774, 0.52], [38.825, 0.589], [39.156, 0.713], [39.306, 0.928], [39.441, 0.997], [39.275, 1.453], [39.437, 1.537], [39.191, 1.724], [39.123, 1.863], [39.023, 1.972], [38.94, 2.132], [38.877, 2.503], [38.969, 2.577], [39.118, 2.92], [39.319, 3.046], [39.293, 3.478], [39.219, 3.466], [39.087, 3.519], [39.299, 3.646], [39.467, 3.919], [39.538, 4.235], [39.739, 4.658], [39.817, 5.016], [40.013, 5.385], [40.187, 5.358], [40.527, 5.419], [40.915, 5.699], [40.877, 5.812], [40.856, 6.42], [41.026, 6.658], [41.123, 6.696], [41.417, 6.56], [41.62, 6.373], [41.762, 6.543], [41.908, 6.546], [41.991, 6.609], [42.223, 7.224], [42.201, 7.292], [41.899, 7.41], [41.872, 7.511], [41.95, 7.751], [41.928, 8.116], [42.026, 8.325], [42.03, 8.436], [42.275, 8.626], [42.33, 8.542], [42.506, 8.495], [42.583, 8.233], [42.664, 8.153], [42.768, 8.367], [42.894, 8.418], [42.909, 8.564], [42.83, 8.707], [42.853, 8.839], [42.642, 9.078], [42.59, 9.203], [42.501, 9.097], [42.12, 9.097], [41.6, 8.997], [41.197, 9.198], [41.289, 9.499], [40.846, 9.304], [40.795, 9.396], [40.902, 9.399], [40.908, 9.425], [40.693, 9.442], [40.734, 9.625], [41.015, 9.948], [40.94, 10.047], [41.089, 10.7], [41.291, 10.97], [41.796, 10.989], [41.805, 11.321], [41.768, 11.494], [41.832, 11.734], [41.886, 11.754], [41.897, 11.795], [41.954, 11.816], [42.253, 12.259], [42.316, 12.304], [42.333, 12.377], [42.399, 12.473], [42.479, 12.524], [42.702, 12.369], [42.815, 12.432], [42.8, 12.51], [42.855, 12.55], [42.872, 12.612], [43.14, 12.711], [43.16, 12.654], [43.291, 12.488], [43.334, 12.477], [43.421, 12.215], [43.425, 12.048], [43.384, 11.975], [43.191, 11.936], [43.053, 11.798], [42.974, 11.79], [42.943, 11.763], [42.854, 11.764], [42.792, 11.733], [42.696, 11.567], [42.801, 11.595], [43.093, 11.609], [43.16, 11.636], [43.203, 11.532], [43.249, 11.476], [43.276, 11.497]];
+const SOMALIWEYN_FEATURE = { type:'Feature', geometry:{ type:'Polygon', coordinates:[SOMALIWEYN_COORDS] } };
+
+let somaliweynLayer = null;
+let somaliweynOn = false;
+
+function drawSomaliweyn() {
+  if (somaliweynLayer) map.removeLayer(somaliweynLayer);
+  somaliweynLayer = L.layerGroup();
+
+  L.geoJSON(SOMALIWEYN_FEATURE, {
+    pane: 'somaliweynPane',
+    style: {
+      fillColor: '#d8b56a',
+      fillOpacity: 0.02,
+      color: '#e4c56f',
+      weight: 1.8,
+      dashArray: '7 4',
+      lineCap: 'round',
+      lineJoin: 'round'
+    },
+    interactive: false
+  }).addTo(somaliweynLayer);
+
+  // Inner glow
+  L.geoJSON(SOMALIWEYN_FEATURE, {
+    pane: 'somaliweynPane',
+    style: {
+      fillOpacity: 0,
+      color: '#f7f0dd',
+      weight: 0.95,
+      opacity: 0.88
+    },
+    interactive: false
+  }).addTo(somaliweynLayer);
+
+  // Coast accent on the Indian Ocean side
+  const coastSlice = SOMALIWEYN_COORDS.filter(c => c[0] > 42 && c[1] < 3);
+  if (coastSlice.length > 2) {
+    L.polyline(coastSlice, {
+      pane: 'somaliweynPane',
+      color: '#7fcfe0',
+      weight: 1.15,
+      opacity: 0.82,
+      interactive: false
+    }).addTo(somaliweynLayer);
+  }
+
+  somaliweynLayer.addTo(map);
+}
+
+function toggleSomaliweyn() {
+  somaliweynOn = !somaliweynOn;
+  const btn = document.getElementById('btn-somaliweyn');
+  if (somaliweynOn) {
+    drawSomaliweyn();
+    btn.classList.add('on');
+  } else {
+    if (somaliweynLayer) map.removeLayer(somaliweynLayer);
+    somaliweynLayer = null;
+    btn.classList.remove('on');
+  }
+}
+
+document.getElementById('btn-somaliweyn').onclick = toggleSomaliweyn;
+
+
+
+function dismissLoader() {
+  const l = document.getElementById('loader');
+  if (!l || l.dataset.dismissed === '1') return;
+  l.dataset.dismissed = '1';
+  l.classList.add('gone');
+  setTimeout(() => { if (l.parentNode) l.remove(); }, 700);
+}
+
+let __xogBooted = false;
+function bootXog() {
+  if (__xogBooted) return;
+  __xogBooted = true;
+  try {
+    map.invalidateSize();
+    renderEra(0);
+  } catch (err) {
+    console.error('Xog boot error:', err);
+  } finally {
+    dismissLoader();
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bootXog, { once: true });
+} else {
+  bootXog();
+}
+
+window.addEventListener('load', dismissLoader, { once: true });
+setTimeout(bootXog, 1200);
+setTimeout(dismissLoader, 1800);
+</script>
+<script src="xog-nav.js"></script>
+</body>
+</html>

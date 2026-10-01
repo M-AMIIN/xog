@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xog — The Founding Genealogies · ~2500 BCE – present</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=DM+Serif+Display&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300;1,8..60,400&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="xog-nav.css">
+<link rel="stylesheet" href="xog-styles.css">
+<link rel="stylesheet" href="xog-cite.css">
+<style>
+/* ── ERA-GENEALOGIES ELEVATED STYLES ─────────────────────────────── */
+:root {
+  --ochre: #B83A22;
+  --ochre-dim: rgba(184,58,34, 0.55);
+  --ochre-glow: rgba(184,58,34, 0.10);
+  --ochre-deep: #7A2616;
+  --gold: #C49A3C;
+  --gold-dim: rgba(184,58,34, 0.55);
+  --gold-glow: rgba(184,58,34, 0.10);
+  --rust: #8A5800;
+  --rust-dim: rgba(138, 88, 0, 0.60);
+  --sand: #C8A882;
+  --text-bright: #140C04;
+  --text: #2A1E10;
+  --muted: #5A4430;
+  --faint: #8A7460;
+  --deep: #F9F6F1;
+  --surface: #F3EDE3;
+  --card: #EDE5D8;
+  --border: rgba(20, 12, 4, 0.09);
+  --border-mid: rgba(20, 12, 4, 0.16);
+  --sea: #1C3272;
+  --col-aside: 300px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  overflow-x: hidden;
+  background: var(--deep);
+  color: var(--text);
+  padding-top: 58px;
+}
+
+/* ── SCROLL REVEAL ── */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(1.8rem);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-reveal].visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── HERO ── */
+.era-hero {
+  position: relative;
+  border-bottom: 1px solid var(--border);
+  padding: 4rem 2rem 3.5rem;
+  overflow: hidden;
+  background: linear-gradient(170deg, #F9F6F1 0%, #F3EDE3 60%, #EDE5D8 100%);
+}
+.era-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 70% 50%, rgba(184,58,34,.06), transparent),
+    radial-gradient(ellipse 40% 60% at 20% 80%, rgba(138,88,0,.04), transparent);
+  pointer-events: none;
+}
+/* grain texture */
+.era-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.era-hero-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.era-crumb {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.era-crumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.era-crumb a:hover { color: var(--ochre); }
+.era-crumb span { opacity: .4; }
+
+.era-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: .7rem;
+}
+.era-headline {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.8rem, 6vw, 5.2rem);
+  font-weight: 300;
+  line-height: 1.05;
+  color: var(--text-bright);
+  margin-bottom: .5rem;
+  max-width: 800px;
+}
+.era-headline em {
+  font-style: italic;
+  color: var(--ochre);
+}
+.era-dates {
+  font-family: 'DM Mono', monospace;
+  font-size: .62rem;
+  color: var(--muted);
+  letter-spacing: .1em;
+  margin-bottom: 2rem;
+}
+.era-lede {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.18rem;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.75;
+  max-width: 680px;
+  border-left: 2px solid var(--ochre);
+  padding-left: 1.4rem;
+}
+
+/* ── WORLD CONTEXT BAR ── */
+.world-bar {
+  background: rgba(184,58,34,.03);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: .9rem 2rem;
+}
+.world-bar-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.wb-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.wb-items { display: flex; gap: 1.5rem; flex-wrap: wrap; flex: 1; }
+.wb-item {
+  font-family: 'Source Serif 4', serif;
+  font-size: .6rem;
+  color: var(--muted);
+  letter-spacing: .05em;
+}
+.wb-item strong {
+  color: var(--text-bright);
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: .56rem;
+  letter-spacing: .08em;
+  margin-bottom: .15rem;
+}
+
+/* ── IMAGE PANEL ── */
+.image-panel {
+  max-width: 1100px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+}
+.image-panel figure {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+.image-panel img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: sepia(0.15) contrast(1.05);
+  transition: filter 0.4s ease;
+}
+.image-panel figure:hover img {
+  filter: sepia(0) contrast(1);
+}
+.image-panel figcaption {
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .06em;
+  color: var(--muted);
+  padding: .8rem 1.2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.image-panel figcaption .img-source {
+  font-size: .5rem;
+  color: var(--faint);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+/* ── CONTENT GRID ── */
+.era-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  display: grid;
+  grid-template-columns: 1fr var(--col-aside);
+  gap: 4rem;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .era-content { grid-template-columns: 1fr; gap: 3rem; }
+  .era-aside { order: -1; }
+}
+
+/* ── PROSE ── */
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin-bottom: .8rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid var(--border);
+}
+.era-main h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.9rem;
+  font-weight: 400;
+  color: var(--text-bright);
+  line-height: 1.2;
+  margin: 3rem 0 1rem;
+}
+.era-main h2:first-of-type { margin-top: 0; }
+.era-main p {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.02rem;
+  line-height: 1.85;
+  color: var(--muted);
+  margin-bottom: 1.4rem;
+}
+.era-main p strong {
+  color: var(--text-bright);
+  font-weight: 400;
+}
+
+/* ── PULL QUOTE ── */
+.pull {
+  border-left: 3px solid var(--ochre);
+  padding: 1.2rem 1.5rem;
+  margin: 2.5rem 0;
+  background: var(--ochre-glow);
+}
+.pull p {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.32rem;
+  font-style: italic;
+  color: var(--text-bright);
+  line-height: 1.55;
+  margin: 0 0 .5rem;
+}
+.pull cite {
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem;
+  color: var(--muted);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-style: normal;
+}
+
+/* ── ASIDE ── */
+.era-aside {
+  position: sticky;
+  top: 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+@media (max-width: 900px) {
+  .era-aside { position: static; }
+}
+.aside-card {
+  border: 1px solid var(--border);
+  padding: 1.3rem;
+  background: rgba(184,58,34,.02);
+  position: relative;
+}
+.aside-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--ochre), transparent);
+}
+.aside-card h3 {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin-bottom: 1rem;
+}
+.figure {
+  display: flex; flex-direction: column; gap: .5rem;
+  padding-bottom: 1rem; margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.figure:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.fig-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.05rem; font-weight: 400;
+  color: var(--text-bright); line-height: 1.2;
+}
+.fig-role {
+  font-family: 'DM Mono', monospace;
+  font-size: .56rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ochre);
+}
+.fig-desc {
+  font-family: 'Source Serif 4', serif;
+  font-size: .7rem; line-height: 1.65; color: var(--muted);
+}
+.fact-row {
+  display: flex; justify-content: space-between;
+  align-items: baseline; padding: .5rem 0;
+  border-bottom: 1px solid rgba(200,176,144,.06); gap: 1rem;
+}
+.fact-row:last-child { border-bottom: none; }
+.fact-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted); flex-shrink: 0;
+}
+.fact-val {
+  font-family: 'DM Serif Display', serif;
+  font-size: .95rem; color: var(--text-bright); text-align: right;
+}
+.source-item {
+  font-family: 'Source Serif 4', serif;
+  font-size: .64rem; line-height: 1.6;
+  color: var(--muted); padding: .5rem 0;
+  border-bottom: 1px solid rgba(200,176,144,.06);
+}
+.source-item:last-child { border-bottom: none; }
+.source-item strong {
+  color: var(--text-bright); display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem; letter-spacing: .06em; margin-bottom: .2rem;
+}
+
+/* ── ARABESQUE DIVIDER ── */
+.arabesque {
+  display: block;
+  margin: 3rem auto;
+  height: 24px;
+  width: 200px;
+  opacity: 0.25;
+}
+
+/* ── ERA NAVIGATION ── */
+.era-nav {
+  border-top: 1px solid var(--border);
+  padding: 2.5rem 2rem;
+}
+.era-nav-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 2rem;
+}
+.era-nav-btn {
+  display: flex; flex-direction: column; gap: .3rem;
+  text-decoration: none; max-width: 280px; flex: 1;
+}
+.era-nav-btn:last-child { align-items: flex-end; }
+.nav-dir {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--muted);
+}
+.nav-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.05rem; color: var(--text-bright);
+  line-height: 1.2; transition: color .2s;
+}
+.era-nav-btn:hover .nav-title { color: var(--ochre); }
+.nav-dates {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem; color: var(--faint); letter-spacing: .06em;
+}
+.nav-center {
+  text-align: center; text-decoration: none;
+  color: var(--muted); font-family: 'DM Mono', monospace;
+  font-size: .54rem; letter-spacing: .14em;
+  text-transform: uppercase; transition: color .2s;
+}
+.nav-center:hover { color: var(--ochre); }
+
+/* ── MAP LINK CARD ── */
+.map-card {
+  display: block;
+  border: 1px solid var(--border);
+  padding: 1rem 1.2rem;
+  text-decoration: none;
+  transition: all .2s;
+  background: rgba(184,58,34,.03);
+}
+.map-card:hover { border-color: rgba(184,58,34,.4); }
+.map-card .mc-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--ochre); margin-bottom: .4rem;
+}
+.map-card .mc-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: .98rem; color: var(--text-bright); line-height: 1.3;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .era-hero { padding: 3rem 1.2rem 2.5rem; }
+  .era-content { padding: 3rem 1.2rem; }
+  .era-nav { padding: 2rem 1.2rem; }
+  .era-nav-inner { flex-direction: column; }
+}
+
+/* ── GHOSTED SVG ARTIFACT ── */
+@keyframes artifactFloat {
+  0%, 100% { transform: rotate(-12deg) translateY(0); }
+  50%      { transform: rotate(-12deg) translateY(-18px); }
+}
+</style>
+<link rel="stylesheet" href="xog-fable.css?v=3">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23111929'/%3E%3Cpath d='M32 8 L36.5 27.5 L56 32 L36.5 36.5 L32 56 L27.5 36.5 L8 32 L27.5 27.5 Z' fill='%23C49A3C'/%3E%3Ccircle cx='32' cy='32' r='3.4' fill='%23FDFAF5'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<!-- GHOSTED BACKGROUND ARTIFACT -->
+<img src="images/somaliman-camels.svg" alt="" aria-hidden="true" style="position:fixed;right:-6%;top:22%;width:24vw;max-width:290px;opacity:0.05;pointer-events:none;transform:rotate(-12deg);z-index:0;animation:artifactFloat 18s ease-in-out infinite">
+
+<!-- HERO -->
+<div class="era-hero" data-reveal>
+  <div class="era-hero-inner">
+    <div class="era-crumb">
+      <a href="somali-archive.html">Archive</a>
+      <span>/</span>
+      <span>The Founding Genealogies</span>
+    </div>
+    <div class="era-kicker">~2500 BCE – present · Oral tradition</div>
+    <h1 class="era-headline">The <em>Founding Genealogies</em><br>& Clan Identity</h1>
+    <div class="era-dates">Dir · Darod · Hawiye · Isaaq · Rahanweyn</div>
+    <p class="era-lede">Ask a Somali man who he is and he will recite his father's name, his grandfather's name, and keep going — twenty generations, sometimes fifty, without pause.<a class="c">1<span><strong>I.M. Lewis</strong>, <em>A Pastoral Democracy</em> (1961), pp. 1–2<span class="tip-note">On genealogical recitation depth among pastoral Somali</span></span></a> Each name is a clause in a contract. The chain determines who owes him protection, whose wells he may use, whose daughter he may marry, and whose death he must avenge.<a class="c">2<span><strong>I.M. Lewis</strong>, <em>A Pastoral Democracy</em> (1961), ch. 6–7<span class="tip-note">Genealogy as basis for jural obligations, grazing rights, and marriage law</span></span></a> This is not genealogy in the European sense. It is a legal system carried in the lungs.</p>
+  </div>
+</div>
+
+<!-- WORLD CONTEXT BAR -->
+<div class="world-bar" data-reveal>
+  <div class="world-bar-inner">
+    <div class="wb-label">While genealogy encoded identity</div>
+    <div class="wb-items">
+      <div class="wb-item"><strong>Rome</strong>Built aqueducts, roads, legal codes</div>
+      <div class="wb-item"><strong>China</strong>Unified under the Qin, built walls</div>
+      <div class="wb-item"><strong>Persia</strong>Ran empires on written bureaucracy</div>
+      <div class="wb-item"><strong>Horn of Africa</strong>Pastoralists encoded law, land, and alliance in oral genealogy</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="era-content">
+
+  <main class="era-main" role="main">
+
+    <div class="section-label" data-reveal>The Genealogical Foundation</div>
+    <h2 data-reveal>How Identity Is Transmitted</h2>
+
+    <p data-reveal>Two pastoral camps meet at a well in the Haud. Before anyone drinks, the genealogies are spoken. The recitation establishes which clan dug the well, which lineages hold customary rights to water there, what compensation was agreed three generations back when a dispute over that well arose. The genealogy settles the question before it becomes a conflict. It has been settling such questions for over a thousand years.<a class="c">3<span><strong>I.M. Lewis</strong>, <em>A Pastoral Democracy</em> (1961), ch. 7<span class="tip-note">On pastoral ecology and the role of genealogy in regulating wells and grazing access</span></span></a></p>
+
+    <p data-reveal>Five major ancestral lines run through Somali society: Dir, Darod, Hawiye, Isaaq, Rahanweyn. None were written down until Arab geographers began transcribing what they heard in the medieval period.<a class="c">4<span><strong>Al-Mas'udi</strong>, <em>Muruj al-Dhahab</em> (Meadows of Gold, c. 947 CE)<span class="tip-note">Earliest known written references to Somali lineage structures</span></span></a> Before that — and after — the genealogies live in recitation. A child learns his lineage the way he learns to speak: by listening and repeating until it holds. Twenty generations is ordinary. Fifty is not unusual.</p>
+
+    <p data-reveal>Accuracy holds because everyone enforces it. A man who misstates his lineage is corrected on the spot — not by a priest or an official, but by his own kinsmen, whose legal standing depends on the same chain being right. Insert a false ancestor and you alter the property rights of every person who shares that line. The genealogy is a commons. Corruption of the record is corruption of the law.<a class="c">5<span><strong>I.M. Lewis</strong>, <em>A Pastoral Democracy</em> (1961), pp. 127–130<span class="tip-note">On collective enforcement of genealogical accuracy and its legal basis</span></span></a></p>
+
+    <div class="pull" data-reveal>
+      <p>"The Somali genealogies form one of the most elaborate and detailed genealogical systems in the world, traced orally and preserved with remarkable accuracy over many generations."</p>
+      <cite>I.M. Lewis, A Pastoral Democracy (1961)</cite>
+    </div>
+
+    <p data-reveal>When Arab geographers began recording Somali genealogies in the 10th century, they were not creating a record. They were transcribing one. Al-Mas'udi's accounts describe a system already centuries old, already governing trade, marriage, and territorial access across the Horn.<a class="c">6<span><strong>Al-Mas'udi</strong>, <em>Muruj al-Dhahab</em> (c. 947 CE), Book IV<span class="tip-note">On the peoples and trade of the East African coast; <strong>see also</strong> Ahmad I. Samatar, <em>Genealogy and Legitimacy in Somali History</em> (1988) for modern analysis</span></span></a></p>
+
+    <div class="section-label" data-reveal>The Five Major Families</div>
+    <h2 data-reveal>Dir, Darod, Hawiye, Isaaq, Rahanweyn</h2>
+
+    <p data-reveal><strong>Dir.</strong> The eldest line. His descendants — Gadabuursi, Issa, Biimaal — hold the western Horn: the lowlands that became Djibouti, the coasts facing Yemen across the Bab al-Mandab. Oral tradition places Dir before Islam. When Islam came, the genealogy did not change. It absorbed the new faith without rearranging the lineage.<a class="c">7<span><strong>I.M. Lewis</strong>, <em>A Pastoral Democracy</em> (1961), pp. 12–14<span class="tip-note">Dir genealogy and pre-Islamic dating; <strong>see also</strong> E. Cerulli, <em>Somalia: Scritti vari editi ed inediti</em> (1957)</span></span></a></p>
+
+    <p data-reveal><strong>Darod.</strong> Abdirahman ibn Isma'il al-Jabarti — the name itself declares the claim. Ibn Isma'il: descended from Ishmael, and through Ishmael, from Ibrahim. The Darod genealogy binds the Somali pastoral interior to the Arabian prophetic line. His descendants — Majeerteen, Ogaden, Marehan, Harti — number in the millions and range across the central and eastern territories, from the Nugaal valley to the Ogaden plains. The largest clan family by territory.<a class="c">8<span><strong>I.M. Lewis</strong>, <em>A Pastoral Democracy</em> (1961), pp. 15–18<span class="tip-note">On the Darod genealogical structure and Arabian lineage claim</span></span></a></p>
+
+    <p data-reveal><strong>Hawiye.</strong> Irir Samaale's line. The central and southern territories — Mogadishu, the middle Shabelle, the agricultural belt between the two rivers. The Hawiye genealogy contains both pastoralists and settled farmers, both herders and the merchant families who ran the Indian Ocean trade from the Benadiri coast. The subclans — Abgaal, Habar Gidir, Murosade, Degodia — reflect that range.</p>
+
+    <p data-reveal><strong>Isaaq.</strong> Sheikh Isaaq ibn Ahmed al-Hashimi — the one ancestor treated in the sources as a historical person, not only an eponym. A Sufi scholar from Arabia, arrived in the 9th or 10th century, married into Dir lineages.<a class="c">9<span><strong>B.W. Andrzejewski</strong>, <em>The veneration of Sufi saints and its impact on the oral literature of the Somali people</em> (1974); <strong>see also</strong> A.A. Hersi, <em>The Arab Factor in Somali History</em> (1977)<span class="tip-note">On Sheikh Isaaq as historical figure and the dual genealogical-spiritual lineage</span></span></a> His genealogy carries two kinds of authority at once: blood descent and spiritual baraka. The Isaaq confederation holds the northwestern plateau — Hargeisa, Berbera, Burao — and the trading towns that linked the interior to the Gulf of Aden.</p>
+
+    <p data-reveal><strong>Rahanweyn.</strong> The fifth line, and the one most tied to the land. The Rahanweyn — also Rahanwin, also Digil-Mirifle — dominate the inter-riverine zone between the Juba and the Shabelle. Farmers and agropastoralists where the other lineages are primarily herders. The genealogical system works the same way: descent grants rights, recitation is law. The content of those rights — farmland rather than grazing range — differs.</p>
+
+    <!-- Arabesque divider -->
+    <svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="margin:2.5rem auto;display:block;width:140px;">
+      <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="#B83A22" stroke-width="1"/>
+      <circle cx="100" cy="12" r="2" fill="#B83A22"/>
+    </svg>
+
+    <div class="section-label" data-reveal>Genealogy vs. History</div>
+    <h2 data-reveal>The Tension</h2>
+
+    <p data-reveal>The genealogies present themselves as historical record, and they are — but not the kind European scholars expected. A European genealogy tracks biological descent. A Somali genealogy tracks political descent: who belongs to whom, and what follows from that belonging. Biology matters less than agreement.</p>
+
+    <p data-reveal>A person adopted into a clan becomes, genealogically, a member of that clan. The lineage adjusts to record the relationship that exists. This is the system functioning as designed — the genealogy tracks who belongs, and belonging is a social fact that can change. What holds the system together is not biological accuracy but collective agreement. Everyone who shares a lineage has an interest in maintaining it, because the lineage is what grants them their rights.</p>
+
+    <p data-reveal>Colonial administrators found this unacceptable. They wanted fixed records on paper. What they encountered was a system fixed in collective memory but flexible enough to absorb new realities — adoptions, alliances, migrations — without breaking. The British called it unreliable. It had been governing millions of people for longer than the British had been in Africa.</p>
+
+    <p data-reveal>The deep structure holds. When genealogies collected in different decades, from different regions, by different researchers are compared, the major lines align. The flexibility is at the edges — recent adoptions, minor branches. The trunk of the tree has not moved in over a thousand years. Lewis documented this in 1961.<a class="c">10<span><strong>I.M. Lewis</strong>, <em>A Pastoral Democracy</em> (1961), pp. 127–135<span class="tip-note">Cross-regional comparison of genealogies showing structural stability in the major lines</span></span></a> Genetic studies in the 2000s confirmed it from a different direction: the major clan families do correspond to distinct lineage clusters with different demographic origins.<a class="c">11<span><strong>J.J. Sanchez et al.</strong>, "Y-chromosome lineages in Somali" in <em>European Journal of Human Genetics</em> (2005); <strong>see also</strong> Mikkelsen et al., <em>Forensic Science International</em> (2001)<span class="tip-note">Y-chromosome and autosomal studies showing distinct haplogroup distributions across Somali clan families</span></span></a></p>
+
+    <p data-reveal>Al-Mas'udi in the 10th century,<a class="c">12<span><strong>Al-Mas'udi</strong>, <em>Muruj al-Dhahab</em> (c. 947 CE)<span class="tip-note">Describes coastal Somali communities and their social organization</span></span></a> Ibn Battuta in the 14th<a class="c">13<span><strong>Ibn Battuta</strong>, <em>Rihla</em> (c. 1355), trans. H.A.R. Gibb<span class="tip-note">Chapter on Mogadishu and the Somali coast; records genealogical structures observed at the Sultan's court</span></span></a> — both recorded Somali lineages they encountered on the coast. The genealogies they transcribed are recognizable in oral recitations today. This does not prove the oral tradition is accurate in a biological sense. It proves the tradition is stable — that the system of collective memory and collective enforcement has preserved the same structure across six centuries of documented comparison, and likely much longer.</p>
+
+  </main>
+
+  <!-- ASIDE -->
+  <aside class="era-aside" role="complementary">
+
+    <div class="aside-card" data-reveal>
+      <h3>Quick Facts</h3>
+      <div class="fact-row">
+        <span class="fact-label">Major families</span>
+        <span class="fact-val">~6 clan families</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Time depth</span>
+        <span class="fact-val">1500+ years</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Transmission method</span>
+        <span class="fact-val">Oral only</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Genealogy depth</span>
+        <span class="fact-val">20–50+ generations</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">First written records</span>
+        <span class="fact-val">9th–10th centuries CE</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Legal function</span>
+        <span class="fact-val">Living law code</span>
+      </div>
+    </div>
+
+    <div class="aside-card" data-reveal>
+      <h3>Key Figures</h3>
+      <div class="figure">
+        <div class="fig-name">Dir</div>
+        <div class="fig-role">Founding ancestor</div>
+        <div class="fig-desc">Founder of the Dir confederation. Ancestors of the Gadabuursi, Issa, and Arap clans. Genealogy predates Islam.</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">Abdirahman ibn Isma'il al-Jabarti</div>
+        <div class="fig-role">Darod ancestor</div>
+        <div class="fig-desc">Called Darod. His genealogy explicitly incorporates Arabian descent from Isma'il (Ishmael), binding Somalia to Islamic genealogy. Millions of descendants.</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">Irir Samaale</div>
+        <div class="fig-role">Hawiye ancestor</div>
+        <div class="fig-desc">Founder of the Hawiye confederation. Dominates central and southern Somalia. Historical connection to agricultural settlement and coast.</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">Sheikh Isaaq ibn Ahmed al-Hashimi</div>
+        <div class="fig-role">Isaaq ancestor</div>
+        <div class="fig-desc">Sufi scholar and saint, arrived from Arabia ~9th–10th century. Genealogy combines descent with spiritual authority. Dominates northwest.</div>
+      </div>
+    </div>
+
+    <div class="aside-card" data-reveal>
+      <h3>Primary Sources</h3>
+      <div class="source-item">
+        <strong>A Pastoral Democracy</strong>
+        I.M. Lewis (1961). Comprehensive analysis of genealogical structure and clan law among pastoral Somali. Standard reference.
+      </div>
+      <div class="source-item">
+        <strong>Muqaddimah</strong>
+        Ibn Khaldun (14th century). Contains genealogies and observations of Somali clans, recording how genealogy structures law and trade.
+      </div>
+      <div class="source-item">
+        <strong>Meadows of Gold</strong>
+        Al-Mas'udi (10th century). Arab geographer's account of Somali coast traders, including genealogical information.
+      </div>
+      <div class="source-item">
+        <strong>Genealogy and Legitimacy in Somali History</strong>
+        Ahmed I. Samatar (1988). Modern analysis of genealogy as political charter and legal code.
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<!-- Arabesque divider -->
+<svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="#B83A22" stroke-width="1"/>
+  <circle cx="100" cy="12" r="2" fill="#B83A22"/>
+</svg>
+
+<!-- SECOND HALF — Genealogy as Law -->
+<div class="era-content" style="padding-top:0;">
+  <main class="era-main" role="main">
+
+    <div class="section-label" data-reveal>The Function of Genealogy</div>
+    <h2 data-reveal>Law Without State</h2>
+
+    <p data-reveal>The genealogy is not heritage. It is operating law. A man's position in the lineage determines which wells he can use, which grazing lands he can claim, whom he can marry, and whom he must fight for. It also determines what he owes: his share of blood compensation when a kinsman kills, his obligation to shelter relatives in drought, his vote in clan council.</p>
+
+    <p data-reveal>A dispute over water between two camps is settled by genealogy. Who dug the well? Which lineage holds historical usage rights? What did the elders agree two generations back? The answers sit in the genealogical record — not on paper, but in the memories of every elder present. Each side knows the other's lineage. Each side knows what was agreed. The genealogy functions as both the law and the court record.</p>
+
+    <p data-reveal>No court enforces it. No police back it up. No document records it. It has governed pastoral life across the Horn for longer than most written legal systems have existed. It persists because every person in the system has a stake in its accuracy. Corrupt the genealogy and you corrupt your own legal standing.<a class="c">14<span><strong>I.M. Lewis</strong>, <em>A Pastoral Democracy</em> (1961), ch. 8<span class="tip-note">On dia-paying groups and the mutual legal interest in genealogical accuracy</span></span></a></p>
+
+    <p data-reveal>Islam did not replace the genealogies. It was absorbed into them. Ancestral lines were extended backward to connect with the Prophet's lineage or his companions. Darod became ibn Isma'il — descended from Ishmael.<a class="c">15<span><strong>A.A. Hersi</strong>, <em>The Arab Factor in Somali History</em> (1977), ch. 3<span class="tip-note">On the Islamization of Somali genealogies and the grafting of Arabian prophetic lineage onto existing structures</span></span></a> This was not revision. It was the genealogy doing what it always does: incorporating new relationships into the existing structure. The same flexibility that frustrated colonial administrators is what allowed the system to accommodate an entire religion without breaking.</p>
+
+    <div class="section-label" data-reveal>European Dismissal</div>
+    <h2 data-reveal>The Written Against the Oral</h2>
+
+    <p data-reveal>European scholars in the 19th century encountered the genealogies and dismissed them. The lineages shifted depending on who spoke and to whom. Different branches emphasized different ancestors. The genealogy bent under social pressure — or so it appeared to men who expected a family tree to look like a parish register.</p>
+
+    <p data-reveal>From inside the system, the flexibility was the point. The genealogy tracked living relationships, not dead biology. From outside, it looked like evidence of unreliability. The European scholars chose the outside view.</p>
+
+    <p data-reveal>The dismissal had administrative consequences. Colonial governments rejected genealogical law as "customary" — a word that, in colonial usage, meant inferior to written statute. They imposed paper codes. They drew territorial boundaries looking for written charters that did not exist, because the society they were partitioning had solved the governance problem without paper. The Somali system needed no written charter. It needed everyone to remember.</p>
+
+    <p data-reveal>Genetic research has since confirmed what the genealogies claimed. The major clan families correspond to distinct genetic clusters with different demographic origins. The Isaaq connection to Arabian lineages shows Arabian-origin markers in the DNA.<a class="c">16<span><strong>J.J. Sanchez et al.</strong>, <em>European Journal of Human Genetics</em> (2005), vol. 13, pp. 856–866<span class="tip-note">Haplogroup E-M78 and T-M184 distributions in Isaaq compared with Arabian Peninsula populations</span></span></a> The oral tradition preserved real population history — preserved it accurately enough that molecular analysis, applied a millennium later, found the same structure the genealogists had been reciting all along.</p>
+
+  </main>
+
+  <!-- Empty aside column for alignment -->
+  <aside class="era-aside" style="position:static;" aria-hidden="true"></aside>
+</div>
+
+<!-- ERA NAVIGATION -->
+<div class="era-nav" data-reveal>
+  <div class="era-nav-inner">
+    <a href="somali-archive.html" class="era-nav-btn" style="opacity: 0.4; cursor: default;">
+      <span class="nav-dir">← Previous era</span>
+      <span class="nav-title">—</span>
+      <span class="nav-dates">—</span>
+    </a>
+    <a href="somali-archive.html" class="nav-center">All Eras</a>
+    <a href="era-maritime.html" class="era-nav-btn">
+      <span class="nav-dir">Next era →</span>
+      <span class="nav-title">Maritime Networks</span>
+      <span class="nav-dates">100 BCE – 1900 CE</span>
+    </a>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script>
+(function() {
+  'use strict';
+
+  // ── Scroll Reveal ──
+  var revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('[data-reveal]').forEach(function(el) {
+    revealObserver.observe(el);
+  });
+
+})();
+</script>
+<script src="xog-cite.js"></script>
+<script src="xog-fable.js?v=3"></script>
+<script src="xog-nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xog — Independence & the Republic · 1960–1991</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=DM+Serif+Display&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300;1,8..60,400&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="xog-nav.css">
+<link rel="stylesheet" href="xog-styles.css">
+<link rel="stylesheet" href="xog-cite.css">
+<style>
+/* ── ERA-INDEPENDENCE ELEVATED STYLES ─────────────────────────────── */
+:root {
+  --ochre: #B83A22;
+  --ochre-dim: rgba(184, 58, 34, 0.55);
+  --ochre-glow: rgba(184, 58, 34, 0.10);
+  --ochre-deep: #7A2616;
+  --gold: #C49A3C;
+  --gold-dim: rgba(184, 58, 34, 0.55);
+  --gold-glow: rgba(184, 58, 34, 0.10);
+  --rust: #8A5800;
+  --rust-dim: rgba(138, 88, 0, 0.60);
+  --sand: #C8A882;
+  --text-bright: #140C04;
+  --text: #2A1E10;
+  --muted: #5A4430;
+  --faint: #8A7460;
+  --deep: #F9F6F1;
+  --surface: #F3EDE3;
+  --card: #EDE5D8;
+  --border: rgba(20, 12, 4, 0.09);
+  --border-mid: rgba(20, 12, 4, 0.16);
+  --sea: #1C3272;
+  --col-aside: 300px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  overflow-x: hidden;
+  background: var(--deep);
+  color: var(--text);
+  padding-top: 58px;
+}
+
+/* ── SCROLL REVEAL ── */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(1.8rem);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-reveal].visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── HERO ── */
+.era-hero {
+  position: relative;
+  border-bottom: 1px solid var(--border);
+  padding: 4rem 2rem 3.5rem;
+  overflow: hidden;
+  background: linear-gradient(170deg, #F9F6F1 0%, #F3EDE3 60%, #EDE5D8 100%);
+}
+.era-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 70% 50%, rgba(184,58,34,.06), transparent),
+    radial-gradient(ellipse 40% 60% at 20% 80%, rgba(138,88,0,.04), transparent);
+  pointer-events: none;
+}
+/* grain texture */
+.era-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.era-hero-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.era-crumb {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.era-crumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.era-crumb a:hover { color: var(--ochre); }
+.era-crumb span { opacity: .4; }
+
+.era-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: .7rem;
+}
+.era-headline {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.8rem, 6vw, 5.2rem);
+  font-weight: 300;
+  line-height: 1.05;
+  color: var(--text-bright);
+  margin-bottom: .5rem;
+  max-width: 800px;
+}
+.era-headline em {
+  font-style: italic;
+  color: var(--ochre);
+}
+.era-dates {
+  font-family: 'DM Mono', monospace;
+  font-size: .62rem;
+  color: var(--muted);
+  letter-spacing: .1em;
+  margin-bottom: 2rem;
+}
+.era-lede {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.18rem;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.75;
+  max-width: 680px;
+  border-left: 2px solid var(--ochre);
+  padding-left: 1.4rem;
+}
+
+/* ── WORLD CONTEXT BAR ── */
+.world-bar {
+  background: rgba(184,58,34,.03);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: .9rem 2rem;
+}
+.world-bar-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.wb-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.wb-items { display: flex; gap: 1.5rem; flex-wrap: wrap; flex: 1; }
+.wb-item {
+  font-family: 'Source Serif 4', serif;
+  font-size: .6rem;
+  color: var(--muted);
+  letter-spacing: .05em;
+}
+.wb-item strong {
+  color: var(--text-bright);
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: .56rem;
+  letter-spacing: .08em;
+  margin-bottom: .15rem;
+}
+
+/* ── IMAGE PANEL ── */
+.image-panel {
+  max-width: 1100px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+}
+.image-panel figure {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+.image-panel img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: sepia(0.15) contrast(1.05);
+  transition: filter 0.4s ease;
+}
+.image-panel figure:hover img {
+  filter: sepia(0) contrast(1);
+}
+.image-panel figcaption {
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .06em;
+  color: var(--muted);
+  padding: .8rem 1.2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.image-panel figcaption .img-source {
+  font-size: .5rem;
+  color: var(--faint);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+/* ── CONTENT GRID ── */
+.era-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  display: grid;
+  grid-template-columns: 1fr var(--col-aside);
+  gap: 4rem;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .era-content { grid-template-columns: 1fr; gap: 3rem; }
+  .era-aside { order: -1; }
+}
+
+/* ── PROSE ── */
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin-bottom: .8rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid var(--border);
+}
+.era-main h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.9rem;
+  font-weight: 400;
+  color: var(--text-bright);
+  line-height: 1.2;
+  margin: 3rem 0 1rem;
+}
+.era-main h2:first-of-type { margin-top: 0; }
+.era-main p {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.02rem;
+  line-height: 1.85;
+  color: var(--muted);
+  margin-bottom: 1.4rem;
+}
+.era-main p strong {
+  color: var(--text-bright);
+  font-weight: 400;
+}
+
+/* ── PULL QUOTE ── */
+.pull {
+  border-left: 3px solid var(--ochre);
+  padding: 1.2rem 1.5rem;
+  margin: 2.5rem 0;
+  background: var(--ochre-glow);
+}
+.pull p {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.32rem;
+  font-style: italic;
+  color: var(--text-bright);
+  line-height: 1.55;
+  margin: 0 0 .5rem;
+}
+.pull cite {
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem;
+  color: var(--muted);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-style: normal;
+}
+
+/* ── TIMELINE ── */
+.timeline {
+  margin: 2rem 0;
+  border: 1px solid var(--border);
+}
+.timeline-row {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.3s ease;
+  cursor: default;
+}
+.timeline-row:last-child { border-bottom: none; }
+.timeline-row:hover { background: rgba(184,58,34,0.03); }
+.timeline-yr {
+  font-family: 'DM Mono', monospace;
+  font-size: .6rem;
+  color: var(--ochre);
+  letter-spacing: .06em;
+  padding: 1rem;
+  border-right: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+}
+.timeline-text { padding: .8rem 1rem; }
+.timeline-text strong {
+  font-family: 'DM Mono', monospace;
+  font-size: .62rem;
+  color: var(--text-bright);
+  display: block;
+  margin-bottom: .3rem;
+  letter-spacing: .04em;
+}
+.timeline-text p {
+  font-size: .72rem;
+  line-height: 1.6;
+  margin: 0;
+  color: var(--muted);
+}
+
+/* ── INLINE IMAGE IN PROSE ── */
+.prose-image {
+  margin: 2.5rem 0;
+  border: 1px solid var(--border);
+  background: var(--card);
+  overflow: hidden;
+}
+.prose-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: sepia(0.2) contrast(1.05);
+}
+.prose-image figcaption {
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem;
+  color: var(--muted);
+  padding: .7rem 1rem;
+  letter-spacing: .04em;
+  border-top: 1px solid var(--border);
+}
+
+/* ── ASIDE ── */
+.era-aside {
+  position: sticky;
+  top: 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+@media (max-width: 900px) {
+  .era-aside { position: static; }
+}
+.aside-card {
+  border: 1px solid var(--border);
+  padding: 1.3rem;
+  background: rgba(184,58,34,.02);
+  position: relative;
+}
+.aside-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--ochre), transparent);
+}
+.aside-card h3 {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin-bottom: 1rem;
+}
+.figure {
+  display: flex; flex-direction: column; gap: .5rem;
+  padding-bottom: 1rem; margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.figure:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.fig-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.05rem; font-weight: 400;
+  color: var(--text-bright); line-height: 1.2;
+}
+.fig-role {
+  font-family: 'DM Mono', monospace;
+  font-size: .56rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ochre);
+}
+.fig-desc {
+  font-family: 'Source Serif 4', serif;
+  font-size: .7rem; line-height: 1.65; color: var(--muted);
+}
+.fact-row {
+  display: flex; justify-content: space-between;
+  align-items: baseline; padding: .5rem 0;
+  border-bottom: 1px solid rgba(200,176,144,.06); gap: 1rem;
+}
+.fact-row:last-child { border-bottom: none; }
+.fact-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted); flex-shrink: 0;
+}
+.fact-val {
+  font-family: 'DM Serif Display', serif;
+  font-size: .95rem; color: var(--text-bright); text-align: right;
+}
+.source-item {
+  font-family: 'Source Serif 4', serif;
+  font-size: .64rem; line-height: 1.6;
+  color: var(--muted); padding: .5rem 0;
+  border-bottom: 1px solid rgba(200,176,144,.06);
+}
+.source-item:last-child { border-bottom: none; }
+.source-item strong {
+  color: var(--text-bright); display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem; letter-spacing: .06em; margin-bottom: .2rem;
+}
+
+/* ── ARABESQUE DIVIDER ── */
+.arabesque {
+  display: block;
+  margin: 3rem auto;
+  height: 24px;
+  width: 200px;
+  opacity: 0.25;
+}
+
+/* ── ERA NAVIGATION ── */
+.era-nav {
+  border-top: 1px solid var(--border);
+  padding: 2.5rem 2rem;
+}
+.era-nav-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 2rem;
+}
+.era-nav-btn {
+  display: flex; flex-direction: column; gap: .3rem;
+  text-decoration: none; max-width: 280px; flex: 1;
+}
+.era-nav-btn:last-child { align-items: flex-end; }
+.nav-dir {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--muted);
+}
+.nav-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.05rem; color: var(--text-bright);
+  line-height: 1.2; transition: color .2s;
+}
+.era-nav-btn:hover .nav-title { color: var(--ochre); }
+.nav-dates {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem; color: var(--faint); letter-spacing: .06em;
+}
+.nav-center {
+  text-align: center; text-decoration: none;
+  color: var(--muted); font-family: 'DM Mono', monospace;
+  font-size: .54rem; letter-spacing: .14em;
+  text-transform: uppercase; transition: color .2s;
+}
+.nav-center:hover { color: var(--ochre); }
+
+/* ── MAP LINK CARD ── */
+.map-card {
+  display: block;
+  border: 1px solid var(--border);
+  padding: 1rem 1.2rem;
+  text-decoration: none;
+  transition: all .2s;
+  background: rgba(184,58,34,.03);
+}
+.map-card:hover { border-color: rgba(184,58,34,.4); }
+.map-card .mc-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--ochre); margin-bottom: .4rem;
+}
+.map-card .mc-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: .98rem; color: var(--text-bright); line-height: 1.3;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .era-hero { padding: 3rem 1.2rem 2.5rem; }
+  .era-content { padding: 3rem 1.2rem; }
+  .era-nav { padding: 2rem 1.2rem; }
+  .era-nav-inner { flex-direction: column; }
+}
+
+@keyframes artifactFloat {
+  0% { transform: rotate(-15deg) translateY(0); }
+  50% { transform: rotate(-12deg) translateY(-12px); }
+  100% { transform: rotate(-15deg) translateY(0); }
+}
+</style>
+<link rel="stylesheet" href="xog-fable.css?v=3">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23111929'/%3E%3Cpath d='M32 8 L36.5 27.5 L56 32 L36.5 36.5 L32 56 L27.5 36.5 L8 32 L27.5 27.5 Z' fill='%23C49A3C'/%3E%3Ccircle cx='32' cy='32' r='3.4' fill='%23FDFAF5'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<img src="images/spear.svg" alt="" aria-hidden="true" style="position:fixed;right:-7%;top:17%;width:27vw;max-width:320px;opacity:0.06;pointer-events:none;transform:rotate(-25deg);z-index:0;animation:artifactFloat 18s ease-in-out infinite">
+
+<!-- HERO -->
+<div class="era-hero" data-reveal>
+  <div class="era-hero-inner">
+    <div class="era-crumb">
+      <a href="somali-archive.html">Archive</a>
+      <span>/</span>
+      <span>Independence & the Republic</span>
+    </div>
+    <div class="era-kicker">1960 – 1991 CE · Somalia</div>
+    <h1 class="era-headline">Independence <em>& the Collapse</em></h1>
+    <div class="era-dates">July 1, 1960 — October 21, 1969 — January 22, 1991</div>
+    <p class="era-lede">On June 26, 1960, British Somaliland declared independence. Four days later it merged with Italian Somalia to form the Somali Republic. In thirty-one years it would dissolve into fragments. The middle years held genuine hopes for a unified, democratic nation. The later years held dictatorship, ethnic favoritism, and the machinery of collapse.</p>
+  </div>
+</div>
+
+<!-- WORLD CONTEXT BAR -->
+<!-- THE FIVE DAYS ── the union counted day by day -->
+<section class="fivedays" aria-label="The five days between independence and union">
+  <div class="fd-inner">
+    <div class="fd-kicker">Five Days &middot; One Republic</div>
+    <div class="fd-track">
+      <button class="fd-day on" data-d="0"><span class="fd-date">26 JUN</span><span class="fd-dot"></span></button>
+      <span class="fd-line"></span>
+      <button class="fd-day" data-d="1"><span class="fd-date">27&ndash;30 JUN</span><span class="fd-dot fd-dot-mid"></span></button>
+      <span class="fd-line"></span>
+      <button class="fd-day" data-d="2"><span class="fd-date">1 JUL</span><span class="fd-dot"></span></button>
+    </div>
+    <div class="fd-panel" id="fdPanel">
+      <div class="fd-title" id="fdTitle">The State of Somaliland</div>
+      <p class="fd-text" id="fdText">British Somaliland becomes independent. For five days it is a sovereign state, recognized and self-governing, holding the union in its hands.</p>
+    </div>
+  </div>
+</section>
+
+<div class="world-bar" data-reveal>
+  <div class="world-bar-inner">
+    <div class="wb-label">The world in 1960</div>
+    <div class="wb-items">
+      <div class="wb-item"><strong>Africa</strong>Decolonization wave hits the continent — seventeen African nations gain independence this year alone</div>
+      <div class="wb-item"><strong>Kenya</strong>Still under British rule; independence two years away</div>
+      <div class="wb-item"><strong>Ethiopia</strong>The one African state that was never colonized; still a feudal monarchy</div>
+      <div class="wb-item"><strong>Cold War</strong>Soviet Union and USA compete for influence in newly independent African states</div>
+      <div class="wb-item"><strong>Somalia</strong>Aden Abdullah Osman sworn in as first president on July 1</div>
+    </div>
+  </div>
+</div>
+
+<svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;max-width:200px;margin:2rem auto;opacity:0.3">
+  <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="var(--ochre)" stroke-width="1"/>
+  <circle cx="100" cy="12" r="2" fill="var(--ochre)"/>
+</svg>
+
+<!-- MAIN CONTENT -->
+<div class="era-content">
+
+  <main class="era-main" role="main">
+
+    <div class="section-label" data-reveal>The Early Years · 1960–1969</div>
+    <h2 data-reveal>Independence & Democracy</h2>
+
+    <p data-reveal>The Somali Republic was born from a union that almost no one expected to work. British Somaliland, administered as a protectorate since 1887, had developed different educational systems, different military structures, and a somewhat different social fabric from Italian Somalia, which had been a direct colony with a different approach to governance. The two regions had different laws, different languages of instruction, and in some cases different memories of what it meant to be Somali.</p>
+
+    <p data-reveal>When independence came, the merger happened peacefully. <strong>Aden Abdullah Osman Daar</strong>, a businessman from the Somali north, became the first president. <strong>Abdirashid Ali Shermarke</strong>, a lawyer from the south, became the first prime minister. The constitution enshrined parliamentary democracy. Somali became the official language — the first time a Somali state had unified under a single written language.<span class="c">1<span>I.M. Lewis, <em>A Modern History of the Somali</em>, 4th ed. (Ohio University Press, 2002), pp. 145-160.</span></span> By 1964, Somalia had held multiple parliamentary elections. Parties competed. Governments fell and were replaced.</p>
+
+    <p data-reveal>The early republic looked toward Ethiopia with a mixed vision: as a former adversary, as a neighbor, and as a fellow postcolonial state. The Somali government pursued irredentist claims to the Ogaden region of Ethiopia and the Northern Frontier District of Kenya — areas with large Somali populations. This was not a fringe position; it had broad support. But it also meant Somalia was building its foreign policy on a boundary dispute with its largest neighbor.</p>
+
+    <div class="pull" data-reveal>
+      <p>"Somalia is a country where peace is the exception and blood feuds are the rule. Yet for a moment it had democracy anyway."</p>
+      <cite>Ioan M. Lewis, A Modern History of the Somali (2002)</cite>
+    </div>
+
+    <p data-reveal>By the mid-1960s, the democratic experiment was showing strain. The number of parties fragmented. Votes became tied to clan loyalty. Voting coalitions had to redistribute power to keep governments stable.<span class="c">4<span>David D. Laitin & Said S. Samatar, <em>Somalia: Nation in Search of a State</em> (Westview Press, 1987), pp. 67–89. <span class="tip-note">Analyzes clan dynamics in parliamentary coalitions and the fragmentation of party politics.</span></span></span> This was the machinery of democratic politics everywhere — but in a context where clan identities remained primary, it meant the state was increasingly seen as an instrument of particular clans rather than a national entity. The vision of a unified Somali state was fracturing from within.</p>
+
+    <div class="section-label" data-reveal>The Coup · October 21, 1969</div>
+    <h2 data-reveal>Siad Barre & Military Rule</h2>
+
+    <p data-reveal>On October 21, 1969, the government was overthrown in a bloodless coup. Major General Siad Barre, a military officer from the Marehan clan, seized power and declared that the army would rule as trustees of the nation.<span class="c">2<span>Ahmed Ismail Samatar, <em>Socialist Somalia: Rhetoric and Reality</em> (Zed Books, 1988), pp. 12-35.</span></span> He announced the military would dissolve party politics, eliminate clan favoritism, and build a "scientific socialist" state aligned with the Soviet Union.</p>
+
+    <p data-reveal>Barre was a talented administrator with a vision of state power. He launched literacy campaigns. He reorganized the military. He adopted a Latin alphabet for the Somali language — radically modernizing the written form overnight. He established the Supreme Revolutionary Council as the governing body, with himself as chairman. The early years of his rule were characterized by genuine state capacity and relative order. For five years, many Somalis believed this was exactly what the country needed.</p>
+
+    <p data-reveal>But the foundation was rotten. Barre's revolution claimed to be "scientific socialism" while practicing systematic clan favoritism. The Marehan clan and its allied clans — the "MOD" (Marehan, Ogaden, Dulbahante) — received preferential access to positions in the military, the state security apparatus, and the government.<span class="c">3<span>Abdi Ismail Samatar, <em>The State and Rural Transformation in Northern Somalia, 1884-1986</em> (University of Wisconsin Press, 1989), pp. 89-112.</span></span> Barre rotated out military officers from other clans before they could build independent power bases. Clan identity, which the revolution supposedly transcended, became the hidden operating system of the state.</p>
+
+    <div class="section-label" data-reveal>The Ogaden War · 1977–1978</div>
+    <h2 data-reveal>Victory, Then Defeat, Then Collapse</h2>
+
+    <p data-reveal>In 1977, Barre made the strategic calculation that would begin the unraveling. He ordered the military into the Ogaden region of Ethiopia, seeking to seize the territory that Somalia claimed as its own.<span class="c">5<span>Saadia Touval, <em>Somali Nationalism: International Politics and the Drive for Unity in the Horn of Africa</em> (Harvard University Press, 1963), pp. 189–201. <span class="tip-note">Touval examines the irredentist ideology that drove Somali claims to the Ogaden and the geopolitical miscalculations of 1977.</span></span></span> The invasion was initially successful. The Somali army, trained and equipped by the Soviet Union, drove deep into Ethiopian territory.</p>
+
+    <p data-reveal>But Ethiopia had something Somalia did not: the strategic attention of a superpower that feared losing influence. When the invasion began, Soviet General Vasily Petrov was in Moscow. When Barre looked for Soviet support for his conquest, he found the Soviets had switched sides. The Soviet Union — the same power that had armed and trained Somalia — airlifted Cuban troops to Ethiopia and switched their backing to Mengistu Haile Mariam's military dictatorship there. Within months, the Somali invasion had been reversed. By 1978, Somalia had been defeated.</p>
+
+    <p data-reveal>The consequences cascaded. Hundreds of thousands of ethnic Somali refugees fled Ethiopia into Somalia, straining resources. Barre's legitimacy took a permanent hit. The military, which he had relied on to rule, was humiliated. Most crucially: the army that returned from defeat was angry, demoralized, and increasingly resentful of clan favoritism in promotions and resources. Barre responded to discontent by strengthening the secret police and the clan-based military units he could trust. This meant further consolidation of power in the hands of a narrower group.</p>
+
+    <div class="timeline" data-reveal>
+      <div class="timeline-row">
+        <div class="timeline-yr">1960</div>
+        <div class="timeline-text">
+          <strong>July 1 — Independence</strong>
+          <p>British Somaliland and Italian Somalia merge into the Somali Republic. Aden Abdullah Osman becomes first president.</p>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-yr">1964</div>
+        <div class="timeline-text">
+          <strong>Constitutional Democracy</strong>
+          <p>Somalia has held multiple competitive elections. Parliamentary politics is functional but increasingly clan-based.</p>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-yr">1969</div>
+        <div class="timeline-text">
+          <strong>Oct 21 — Military Coup</strong>
+          <p>Siad Barre seizes power in a bloodless coup. Claims to end clan politics and establish scientific socialism.</p>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-yr">1977</div>
+        <div class="timeline-text">
+          <strong>Invasion of Ogaden</strong>
+          <p>Barre orders invasion of Ethiopia's Ogaden region to seize Somali-populated territory. Initial success.</p>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-yr">1978</div>
+        <div class="timeline-text">
+          <strong>Defeat & Soviet Switch</strong>
+          <p>Soviet Union backs Ethiopia instead of Somalia. Cuban troops arrive. Somali invasion reversed. Barre humiliated.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label" data-reveal>The Descent · 1978–1988</div>
+    <h2 data-reveal>Dictatorship & Ethnic Cleansing</h2>
+
+    <p data-reveal>After the Ogaden defeat, Barre abandoned the pretense of egalitarianism. The security apparatus expanded. The National Security Service (NSS) became feared throughout the country. Torture became routine in detention facilities. Dissent was not debated — it was eliminated. Military officers from clans outside the MOD coalition were purged or demoted. Resources were funneled to Marehan-dominated units.</p>
+
+    <p data-reveal>The Isaaq clan, from the northern region, began organizing armed resistance. The Somali National Movement (SNM) launched attacks against military installations. Barre's response was not military counter-insurgency — it was ethnic cleansing. In 1988, Barre ordered the air force to bomb Hargeisa, the capital of the northern region. For five days the city was bombarded. Thousands were killed. Thousands more fled to Ethiopia as refugees. Entire neighborhoods were leveled.</p>
+
+    <p data-reveal>The assault on Hargeisa in 1988 was systematic ethnic violence. Soldiers went house to house in Mogadishu, the capital, separating Isaaq civilians and executing them. Whole neighborhoods were cleared. People were dumped in mass graves.<span class="c">6<span>Abdi Ismail Samatar, <em>Africa's First Democrats: Somalia's Stop on Democracy's Long and Arduous Road</em> (Indiana University Press, 2016), pp. 112–128. <span class="tip-note">Samatar documents the state's targeting of the Isaaq clan and the dismantling of democratic institutions.</span></span></span> The military did not hide what it was doing — it was sending a message: the state would destroy any clan that resisted.</p>
+
+    <p data-reveal>Other opposition groups emerged. The Somali Patriotic Movement (SPM) fought in the south. The United Somali Congress (USC), based among Hawiye clans in central Somalia, launched attacks in Mogadishu. Barre responded with the same logic: collective punishment of entire communities. But now the state was fracturing into territorial fragments where no single group could establish authority. Government soldiers controlled Mogadishu's center. Opposition forces controlled neighborhoods. By 1989, Mogadishu had become a city of checkpoints and tribal militias.</p>
+
+    <p data-reveal><strong>Barre's state was hollow.</strong> It controlled territory through fear, but fear cannot sustain a state when the economy is collapsing, when foreign aid is drying up, and when every clan has organized an armed faction. The military was still the largest organized force in the country — but it was now primarily an instrument of the MOD coalition against everyone else. It was not an army of the nation. It was the military wing of a clan.</p>
+
+    <div class="section-label" data-reveal>The Collapse · 1991</div>
+    <h2 data-reveal>The State Ceases to Exist</h2>
+
+    <p data-reveal>By January 1991, the end was visible. The USC had driven deep into Mogadishu. Government forces were in full retreat. Barre tried to regroup south of the capital but lacked the military capacity. On January 26, 1991 — just eight months after the fall of the Berlin Wall — Siad Barre fled Somalia on an airplane, heading to Kenya. Days later, the USC rolled into Mogadishu unopposed.</p>
+
+    <p data-reveal>But the USC's military victory was not a state victory. The various militias that had fought Barre — each organized around clan identity, each armed, each with no unified command structure — could not agree on what came next. The USC wanted to select a president. The Somali National Movement, which had liberated the north, wanted to negotiate as equals. The Somali Patriotic Movement wanted recognition. And behind them were subclans, smaller identity groups, and military commanders who had accumulated power fighting a war and saw no reason to surrender it peacefully.</p>
+
+    <p data-reveal>There was no attempt at a transition government. There was no negotiation. What happened instead was the most complete state collapse in recent African history. The institutions of the Somali state — the parliament, the executive branch, the courts, the civil service — simply ceased to function. The armed forces disbanded. There was no orderly transfer of power because there was no state to transfer. Somalia did not become another authoritarian regime. It became stateless.</p>
+
+    <p data-reveal>By mid-1991, the capital was ruled by competing militias. The country had fractured into clan-controlled zones. There was no government, no army, no police. This was not a failed coup or a civil war that displaced the government while maintaining state structures. This was the dissolution of the state itself. In the capital, they called it "the collapse." In international circles, they called it "state failure." In the Horn of Africa, it was understood as the completion of a process that had been underway since the Ogaden War: the Somali state had proven itself incapable of being a multiclan polity and was decomposing into its constituent parts.</p>
+
+  </main>
+
+  <!-- ASIDE -->
+  <aside class="era-aside" role="complementary">
+
+    <div class="aside-card" data-reveal>
+      <h3>Quick Facts</h3>
+      <div class="fact-row">
+        <span class="fact-label">Republic</span>
+        <span class="fact-val">1960–1991</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Democracy</span>
+        <span class="fact-val">1960–1969</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Military rule</span>
+        <span class="fact-val">1969–1991</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Ogaden War</span>
+        <span class="fact-val">1977–78</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Hargeisa bombed</span>
+        <span class="fact-val">May 1988</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">State collapse</span>
+        <span class="fact-val">January 1991</span>
+      </div>
+    </div>
+
+    <div class="aside-card" data-reveal>
+      <h3>Key Figures</h3>
+      <div class="figure">
+        <div class="fig-name">Aden Abdullah Osman Daar</div>
+        <div class="fig-role">First President (1960–1967)</div>
+        <div class="fig-desc">Businessman from the north who presided over Somalia's early democratic period. Represented the hope that a unified Somali state could function through consensus.</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">Abdirashid Ali Shermarke</div>
+        <div class="fig-role">PM & Second President (1964–1969)</div>
+        <div class="fig-desc">Lawyer and political figure. Assassinated on October 15, 1969 by a member of his own guard. His death triggered Barre's coup just days later.</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">Siad Barre</div>
+        <div class="fig-role">Military ruler (1969–1991)</div>
+        <div class="fig-desc">Major General who seized power claiming to eliminate clan politics and establish scientific socialism. Instead consolidated power in his clan, ordered the bombing of Hargeisa, and fled the country in 1991.</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">Mengistu Haile Mariam</div>
+        <div class="fig-role">Ethiopian dictator</div>
+        <div class="fig-desc">Military ruler of Ethiopia. Switched Soviet support from Somalia to Ethiopia during the Ogaden War. Sent Cuban troops that defeated Somali invasion and humiliated Barre's regime.</div>
+      </div>
+    </div>
+
+    <div class="aside-card" data-reveal>
+      <h3>Primary Sources</h3>
+      <div class="source-item">
+        <strong>A Modern History of the Somali</strong>
+        Ioan M. Lewis (2002). The authoritative English-language history covering the independence period and the early years of Barre's rule.
+      </div>
+      <div class="source-item">
+        <strong>Somalia: State Collapse, Multilateral Intervention, and Strategies for Political Reconstruction</strong>
+        Terrence Lyons & Ahmed I. Samatar (1995). Analysis of the collapse and the international response.
+      </div>
+      <div class="source-item">
+        <strong>The Ogaden War and its International Dimensions</strong>
+        Gebru Tareke (2009). Ethiopian historian's account of the war and the Soviet switch that determined its outcome.
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;max-width:200px;margin:2rem auto;opacity:0.3">
+  <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="var(--ochre)" stroke-width="1"/>
+  <circle cx="100" cy="12" r="2" fill="var(--ochre)"/>
+</svg>
+
+<!-- ERA NAVIGATION -->
+<div class="era-nav" data-reveal>
+  <div class="era-nav-inner">
+    <a href="era-partition.html" class="era-nav-btn">
+      <span class="nav-dir">← Previous era</span>
+      <span class="nav-title">The Partition</span>
+      <span class="nav-dates">1880–1960 CE</span>
+    </a>
+    <a href="somali-archive.html" class="nav-center">All Eras</a>
+    <a href="era-script.html" class="era-nav-btn">
+      <span class="nav-dir">Next era →</span>
+      <span class="nav-title">The Script Wars</span>
+      <span class="nav-dates">1920 – 1972</span>
+    </a>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script>
+(function() {
+  'use strict';
+
+  // ── Scroll Reveal ──
+  var revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('[data-reveal]').forEach(function(el) {
+    revealObserver.observe(el);
+  });
+
+})();
+</script>
+<script src="xog-cite.js"></script>
+<script src="xog-fable.js?v=3"></script>
+<script src="xog-nav.js"></script>
+<style>
+.fivedays{background:var(--card,#EDE5D8);border-top:2px solid var(--ochre);border-bottom:1px solid var(--rule,rgba(184,58,34,0.12));padding:2.6rem 2rem;position:relative;z-index:1}
+.fd-inner{max-width:880px;margin:0 auto}
+.fd-kicker{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ochre);margin-bottom:1.4rem}
+.fd-track{display:flex;align-items:center;gap:.4rem;margin-bottom:1.4rem}
+.fd-day{background:none;border:none;cursor:pointer;text-align:center;padding:.2rem .4rem}
+.fd-date{display:block;font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.12em;color:var(--muted,#5A4430);margin-bottom:.4rem;transition:color .2s}
+.fd-dot{display:block;width:12px;height:12px;border-radius:50%;border:2px solid var(--ochre);background:transparent;margin:0 auto;transition:background .2s}
+.fd-dot-mid{width:9px;height:9px;opacity:.8}
+.fd-day.on .fd-dot{background:var(--ochre)}
+.fd-day.on .fd-date{color:var(--ochre)}
+.fd-line{flex:1;height:1.5px;background:rgba(184,58,34,0.3)}
+.fd-title{font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--text-bright,#140C04);margin-bottom:.4rem}
+.fd-text{font-size:.95rem;color:var(--muted,#5A4430);max-width:640px;margin:0}
+</style>
+<script>
+(function () {
+  var DAYS = [
+    { t: 'The State of Somaliland',
+      x: 'British Somaliland becomes independent. For five days it is a sovereign state, recognized and self-governing, holding the union in its hands.' },
+    { t: 'Five Days of Choice',
+      x: 'Nothing forces what happens next. A sovereign state spends its first week of existence preparing to give itself to a union, because its people demanded it. The legislature passes the union law; the south readies its own independence.' },
+    { t: 'The Somali Republic',
+      x: 'The trust territory becomes independent at midnight and the two states merge the same day. One of the only consensual unifications in African decolonisation. Two points of the star joined; three still outside.' }
+  ];
+  var days = document.querySelectorAll('.fd-day');
+  var title = document.getElementById('fdTitle');
+  var text = document.getElementById('fdText');
+  days.forEach(function (d) {
+    d.addEventListener('click', function () {
+      days.forEach(function (x) { x.classList.remove('on'); });
+      d.classList.add('on');
+      var i = +d.getAttribute('data-d');
+      title.textContent = DAYS[i].t;
+      text.textContent = DAYS[i].x;
+    });
+  });
+})();
+</script>
+</body>
+</html>

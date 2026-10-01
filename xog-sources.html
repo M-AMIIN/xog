@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xog — Sources</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=DM+Serif+Display:ital@0;1&family=Instrument+Serif:ital@0;1&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,300;1,8..60,400&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="xog-nav.css">
+<style>
+:root{--bg:#FAF6EF;--bg-warm:#F0E8DA;--bg-deep:#E5D9C7;--ink:#110E0A;--text:#2E2518;--muted:#3D3024;--faint:#4A3C28;--ochre:#B83A22;--ochre-soft:rgba(184,58,34,0.08);--gold:#C49A3C;--violet:#7B5EA7;--rule:rgba(184,58,34,0.12);--white:#FDFAF5;--display:'DM Serif Display',Georgia,serif;--editorial:'Instrument Serif',Georgia,serif;--body:'Source Serif 4',Georgia,serif;--gabay:'Spectral',Georgia,serif;--mono:'DM Mono','Courier New',monospace}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:clamp(15px,1.1vw,18px);scroll-behavior:smooth}
+body{font-family:var(--body);font-weight:300;font-size:1rem;line-height:1.78;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+
+.col-lines{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1fr;padding:0 3rem}
+.col-lines span{border-right:1px solid var(--rule);opacity:0.5}
+.col-lines span:last-child{border-right:none}
+
+.wrap{max-width:1400px;margin:0 auto;padding:0 3rem;position:relative;z-index:1}
+
+/* ═══ HERO ═══ */
+.hero{padding:4rem 0 3rem;position:relative;z-index:1}
+.hero-kicker{font-family:var(--mono);font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--ochre);display:flex;align-items:center;gap:0.8rem;margin-bottom:0.5rem}
+.hero-kicker::before{content:'';width:24px;height:1.5px;background:var(--ochre)}
+.hero-title{font-family:var(--display);font-size:clamp(2.4rem,4.5vw,3.8rem);color:var(--ink);line-height:1.05;margin-bottom:1.2rem}
+.hero-title em{font-family:var(--editorial);font-style:italic;color:var(--ochre)}
+.hero-intro{font-size:1rem;color:var(--muted);max-width:700px;line-height:1.8}
+
+/* ═══ SOURCE SECTION ═══ */
+.sources-section{margin-top:3rem;margin-bottom:4rem}
+.section-label{font-family:var(--mono);font-size:0.56rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--faint);margin-bottom:1.2rem;padding-bottom:0.8rem;border-bottom:1px solid var(--rule)}
+
+/* ═══ SOURCE GRID ═══ */
+.source-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:3rem}
+
+.src-card{padding:1.8rem;border:1px solid var(--rule);background:var(--white);transition:all 0.3s;position:relative}
+.src-card:hover{border-color:var(--ochre);box-shadow:0 8px 24px rgba(17,14,10,0.12);transform:translateY(-4px)}
+
+.src-tag{font-family:var(--mono);font-size:0.48rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ochre);background:var(--ochre-soft);padding:0.12rem 0.5rem;display:inline-block;margin-bottom:0.8rem}
+
+.src-title{font-family:var(--editorial);font-size:1.3rem;color:var(--ink);line-height:1.2;margin-bottom:0.4rem;font-style:italic;transition:color 0.2s}
+.src-card:hover .src-title{color:var(--ochre)}
+
+.src-meta{font-family:var(--mono);font-size:0.56rem;letter-spacing:0.06em;color:var(--faint);margin-bottom:1rem}
+
+.src-desc{font-size:0.95rem;line-height:1.7;color:var(--muted);margin-bottom:1.2rem}
+
+.src-footer{display:flex;justify-content:space-between;align-items:center;padding-top:1rem;border-top:1px solid var(--rule)}
+.src-date{font-family:var(--mono);font-size:0.52rem;letter-spacing:0.06em;color:var(--faint)}
+.src-arrow{color:var(--ochre);font-size:1.2rem;transition:transform 0.2s}
+.src-card:hover .src-arrow{transform:translateX(4px)}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:900px){
+  .source-grid{grid-template-columns:1fr;gap:1.5rem}
+  .wrap{padding:0 2rem}
+  .col-lines{padding:0 2rem}
+}
+</style>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23111929'/%3E%3Cpath d='M32 8 L36.5 27.5 L56 32 L36.5 36.5 L32 56 L27.5 36.5 L8 32 L27.5 27.5 Z' fill='%23C49A3C'/%3E%3Ccircle cx='32' cy='32' r='3.4' fill='%23FDFAF5'/%3E%3C/svg%3E">
+<style id="xg-align">
+/* page-top alignment with the era pages: crumb, kicker, headline, lede */
+.xg-crumb { font-family: 'DM Mono', monospace; font-size: .54rem; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--muted, #3D3024); margin-bottom: 1.2rem;
+  display: flex; gap: .6em; align-items: center; }
+.xg-crumb a { color: var(--ochre, #B83A22); text-decoration: none; }
+.xg-crumb a:hover { text-decoration: underline; }
+.hero-kicker, .ex-kicker { font-size: .58rem !important; letter-spacing: .22em !important; }
+.hero-title, .hero-word, .ex-title {
+  font-family: 'DM Serif Display', serif !important;
+  font-size: clamp(2.8rem, 6vw, 5.2rem) !important;
+  font-weight: 300 !important; line-height: 1.05 !important;
+}
+.hero-intro, .ex-sub { font-size: 1.18rem !important; line-height: 1.75 !important; max-width: 640px; }
+.src-prov{font-family:'DM Mono',monospace;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint,#4A3C28);margin-top:.9rem;padding-top:.7rem;border-top:1px solid var(--rule,rgba(184,58,34,0.12));line-height:1.9}
+.src-stamp{float:right;font-family:'DM Mono',monospace;font-size:.48rem;letter-spacing:.14em;text-transform:uppercase;color:var(--white,#FDFAF5);background:var(--ochre,#B83A22);padding:.25rem .6rem;margin-left:.8rem}
+.src-prov b{color:var(--ochre,#B83A22);font-weight:400}
+</style>
+
+</head>
+<body>
+
+<div class="col-lines"><span></span><span></span><span></span></div>
+
+<div class="wrap">
+
+<section class="hero" data-reveal>
+  <div class="xg-crumb"><a href="somali-archive.html">Archive</a><span>/</span><span>Sources</span></div>
+  <div class="hero-kicker">THE ARCHIVE</div>
+  <h1 class="hero-title">Sources</h1>
+  <p class="hero-intro">Eleven entries stand established as of this writing; the number grows as the Fragments board weaves, and each new entry arrives here with its own article and its chain of evidence intact. Every entry carries forward a specific argument, through direct record, oral inheritance, or deliberate counter-narrative. Every card states who recorded the source, when, and for whom, because provenance shapes meaning. Each entry here is established: it stood on three or more independent sources before it was filed, and claims still short of that standard work their way up on the <a href="xog-fragments.html" style="color:var(--ochre);text-decoration:underline">Fragments board</a>. These are the pillars. Read them, and the archive becomes defensible.</p>
+</section>
+
+<!-- PRIMARY SOURCES -->
+<section class="sources-section" data-reveal>
+  <h2 class="section-label">Primary Sources</h2>
+  <div class="source-grid">
+
+    <article class="src-card">
+      <span class="src-stamp">Established</span><div class="src-tag">CHRONICLE</div>
+      <h3 class="src-title">Futuh al-Habasha</h3>
+      <div class="src-meta">Shihab al-Din Ahmad (Arab Faqih) | written 1530s &middot; Cairo ms. 1559</div>
+      <p class="src-desc">The only eyewitness chronicle of the Adal conquest of Ethiopia, written by a companion of Ahmad Gurey who names every commander, every battle, every town taken. The second half has never been found.</p>
+      <div class="src-prov">Recorded <b>on campaign, 1530s</b> &middot; for <b>the Muslim record of the conquest</b></div>
+      <div class="src-footer">
+        <span class="src-date">1559</span>
+        <a href="files/xog-futuh-al-habasha.html" class="src-arrow">→</a>
+      </div>
+    </article>
+
+    <article class="src-card">
+      <span class="src-stamp">Established</span><div class="src-tag">HISTORICAL TEXT</div>
+      <h3 class="src-title">Rihla</h3>
+      <div class="src-meta">Ibn Battuta | 1331</div>
+      <p class="src-desc">The Moroccan traveler's record of Mogadishu in the fourteenth century. Not a history written for historians, but a merchant's observations on trade, wealth, and the ordering of a coastal city.</p>
+      <div class="src-prov">Dictated to <b>Ibn Juzayy, Fez, 1355</b> &middot; for <b>the Marinid court</b></div>
+      <div class="src-footer">
+        <span class="src-date">1331</span>
+        <a href="files/xog-rihla-ibn-battuta.html" class="src-arrow">→</a>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ORAL TRADITION & POETRY -->
+<section class="sources-section" data-reveal>
+  <h2 class="section-label">Oral Tradition & Poetry</h2>
+  <div class="source-grid">
+
+    <article class="src-card">
+      <span class="src-stamp">Established</span><div class="src-tag">POETRY</div>
+      <h3 class="src-title">Somali Poetry</h3>
+      <div class="src-meta">Sayyid & Oral Poets | 1899–1920</div>
+      <p class="src-desc">The gabay tradition as resistance. The Sayyid's own poetry—composed not for reading but for recitation, not for record but for circulation among those who needed to hear it.</p>
+      <div class="src-prov">Composed <b>1899 to 1920</b>, carried by <b>reciters</b> &middot; for <b>the cause, then posterity</b></div>
+      <div class="src-footer">
+        <span class="src-date">1899–1920</span>
+        <a href="files/xog-somali-poetry.html" class="src-arrow">→</a>
+      </div>
+    </article>
+
+    <article class="src-card">
+      <span class="src-stamp">Established</span><div class="src-tag">ORAL TRADITION</div>
+      <h3 class="src-title">Gaala Leeyahay</h3>
+      <div class="src-meta">The Sayyid's War Poem</div>
+      <p class="src-desc">A single composition from the oral repertoire. Preserved not in paper but in recitation. This is how a people organizes what it needs to remember without bureaucracy.</p>
+      <div class="src-prov">Composed by <b>the Sayyid, 1913</b>, after Dul Madoba &middot; memorized in <b>G-alliteration</b></div>
+      <div class="src-footer">
+        <span class="src-date">c. 1900</span>
+        <a href="files/xog-gaala-leeyahay.html" class="src-arrow">→</a>
+      </div>
+    </article>
+
+    <article class="src-card">
+      <span class="src-stamp">Established</span><div class="src-tag">ORAL TRADITION</div>
+      <h3 class="src-title">Deelley</h3>
+      <div class="src-meta">The Burden — A Chain Debate</div>
+      <p class="src-desc">A silsilad: one poet opens, others answer, all bound to the same alliteration in D. The Deelley is the most famous of these chain debates, dozens of poets arguing nation, clan, and conscience in verse. A parliament conducted in poetry.</p>
+      <div class="src-prov">A <b>chain of poets</b>, each answering the last &middot; for <b>a public argument in verse</b></div>
+      <div class="src-footer">
+        <span class="src-date">20th century</span>
+        <a href="files/xog-deelley.html" class="src-arrow">→</a>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- COUNTER-NARRATIVES -->
+<section class="sources-section" data-reveal>
+  <h2 class="section-label">Counter-Narratives</h2>
+  <div class="source-grid">
+
+    <article class="src-card">
+      <span class="src-stamp">Established</span><div class="src-tag">HISTORIOGRAPHY</div>
+      <h3 class="src-title">Punt Was Not a Mystery</h3>
+      <div class="src-meta">Contemporary Analysis</div>
+      <p class="src-desc">An argument against the argument. This source challenges the persistent myth that ancient Punt remains unknown. It insists on the Somali reading of archaeological and textual evidence.</p>
+      <div class="src-prov">Assembled by <b>this archive</b> from Egyptian records and the <b>2020 isotope study</b></div>
+      <div class="src-footer">
+        <span class="src-date">Contemporary</span>
+        <a href="files/xog-punt-not-a-mystery.html" class="src-arrow">→</a>
+      </div>
+    </article>
+
+    <article class="src-card">
+      <span class="src-stamp">Established</span><div class="src-tag">HISTORIOGRAPHY</div>
+      <h3 class="src-title">Somali Had Written Script Before 1972</h3>
+      <div class="src-meta">Linguistic Recovery</div>
+      <p class="src-desc">The official story says Somali script came in 1972. This source archives the evidence of earlier written traditions—the scripts that existed before nation-building decided to standardize.</p>
+      <div class="src-prov">Assembled by <b>this archive</b> from <b>Osmanya and Wadaad</b> documentation</div>
+      <div class="src-footer">
+        <span class="src-date">Contemporary</span>
+        <a href="files/xog-somali-script.html" class="src-arrow">→</a>
+      </div>
+    </article>
+
+    <article class="src-card">
+      <span class="src-stamp">Established</span><div class="src-tag">INSTITUTIONAL CRITIQUE</div>
+      <h3 class="src-title">The Xeer Is Not "Customary Law"</h3>
+      <div class="src-meta">Contemporary Analysis</div>
+      <p class="src-desc">A correction in terminology. When you call the xeer "customary law," you place it inside Western legal frameworks. This source insists on what the xeer actually is: a system of resource distribution and conflict resolution that survives statelessness.</p>
+      <div class="src-prov">Argued by <b>this archive</b> against <b>the colonial classification</b></div>
+      <div class="src-footer">
+        <span class="src-date">Contemporary</span>
+        <a href="files/xog-xeer-not-customary-law.html" class="src-arrow">→</a>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- COLONIAL RECORDS -->
+<section class="sources-section" data-reveal>
+  <h2 class="section-label">Colonial Records</h2>
+  <div class="source-grid">
+
+    <article class="src-card">
+      <span class="src-stamp">Established</span><div class="src-tag">COLONIAL INTELLIGENCE</div>
+      <h3 class="src-title">British Military Intelligence Reports</h3>
+      <div class="src-meta">1900–1920</div>
+      <p class="src-desc">The colonial observer's anxiety made legible. These reports document what the British did not understand—and what they tried to control. Read against themselves, they reveal the Somali perspective they tried to suppress.</p>
+      <div class="src-prov">Written by <b>colonial officers, 1900 to 1920</b> &middot; for <b>London</b> &middot; read here <b>against itself</b></div>
+      <div class="src-footer">
+        <span class="src-date">1900–1920</span>
+        <a href="files/xog-british-intelligence.html" class="src-arrow">→</a>
+      </div>
+    </article>
+
+    <article class="src-card">
+      <span class="src-stamp">Established</span><div class="src-tag">COUNTER-HISTORY</div>
+      <h3 class="src-title">Black Hawk Down</h3>
+      <div class="src-meta">The Somali Perspective</div>
+      <p class="src-desc">The Western narrative reversed. When the American military arrived in 1993, Somali resistance was not chaos—it was organized, strategic, and clear. This source centers that clarity.</p>
+      <div class="src-prov">From <b>Somali eyewitnesses of 1993</b> &middot; for <b>the other side of a famous story</b></div>
+      <div class="src-footer">
+        <span class="src-date">1993</span>
+        <a href="files/xog-black-hawk-down.html" class="src-arrow">→</a>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- KNOWLEDGE SYSTEMS -->
+<section class="sources-section" data-reveal>
+  <h2 class="section-label">Knowledge Systems</h2>
+  <div class="source-grid">
+
+    <article class="src-card">
+      <span class="src-stamp">Established</span><div class="src-tag">ASTRONOMY</div>
+      <h3 class="src-title">Xiddigis: The Somali Sky</h3>
+      <div class="src-meta">After Muuse H. I. Galaal | 1968&ndash;1970</div>
+      <p class="src-desc">The sky as a working calendar: 28 stations of the moon, the Pleiades timing the lambing, Spica naming half the year. The science Somali pastoralists kept in memory, presented as the instrument it was.</p>
+      <div class="src-prov">Recorded by <b>Galaal from the nomadic experts</b> &middot; for <b>a science kept in memory</b></div>
+      <div class="src-footer">
+        <span class="src-date">1968&ndash;1970</span>
+        <a href="files/xog-somali-astronomy.html" class="src-arrow">→</a>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- THE LOOM -->
+<section class="sources-section" data-reveal>
+  <h2 class="section-label">The Working Room</h2>
+  <div class="source-grid">
+    <article class="src-card">
+      <div class="src-tag">OPEN RESEARCH</div>
+      <h3 class="src-title">Fragments &middot; The Loom of the Archive</h3>
+      <div class="src-meta">Where pieces become cloth</div>
+      <p class="src-desc">Somali history is scattered across manuscripts, margins, and memories. This room holds the pieces honestly: one source is a fragment, two independent sources twist into a hypothesis, three weave into an established entry. Contributors are credited permanently.</p>
+      <div class="src-prov">Run by <b>this archive with invited researchers</b> &middot; contradictions <b>stay on the loom</b></div>
+      <div class="src-footer">
+        <span class="src-date">Standing</span>
+        <a href="xog-fragments.html" class="src-arrow">→</a>
+      </div>
+    </article>
+  </div>
+</section>
+
+</div><!-- /.wrap -->
+
+<script>
+// IntersectionObserver for [data-reveal]
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('[data-reveal]').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(12px)';
+  el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+  observer.observe(el);
+});
+</script>
+
+<script src="xog-nav.js"></script>
+
+</body>
+</html>

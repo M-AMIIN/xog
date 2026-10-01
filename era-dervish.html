@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xog — Dervish State · 1899–1920</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=DM+Serif+Display&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300;1,8..60,400&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="xog-nav.css">
+<link rel="stylesheet" href="xog-styles.css">
+<link rel="stylesheet" href="xog-cite.css">
+<style>
+/* ── ERA-DERVISH ELEVATED STYLES ─────────────────────────────── */
+:root {
+  --ochre: #B83A22;
+  --ochre-dim: rgba(184, 58, 34, 0.55);
+  --ochre-glow: rgba(184, 58, 34, 0.10);
+  --ochre-deep: #7A2616;
+  --gold: #C49A3C;
+  --gold-dim: rgba(184, 58, 34, 0.55);
+  --gold-glow: rgba(184, 58, 34, 0.10);
+  --rust: #8A5800;
+  --rust-dim: rgba(138, 88, 0, 0.60);
+  --sand: #C8A882;
+  --text-bright: #140C04;
+  --text: #2A1E10;
+  --muted: #5A4430;
+  --faint: #8A7460;
+  --deep: #F9F6F1;
+  --surface: #F3EDE3;
+  --card: #EDE5D8;
+  --border: rgba(20, 12, 4, 0.09);
+  --border-mid: rgba(20, 12, 4, 0.16);
+  --sea: #1C3272;
+  --col-aside: 300px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  overflow-x: hidden;
+  background: var(--deep);
+  color: var(--text);
+  padding-top: 58px;
+}
+
+/* ── SCROLL REVEAL ── */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(1.8rem);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-reveal].visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── HERO ── */
+.era-hero {
+  position: relative;
+  border-bottom: 1px solid var(--border);
+  padding: 4rem 2rem 3.5rem;
+  overflow: hidden;
+  background: linear-gradient(170deg, #F9F6F1 0%, #F3EDE3 60%, #EDE5D8 100%);
+}
+.era-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 70% 50%, rgba(184,58,34,.06), transparent),
+    radial-gradient(ellipse 40% 60% at 20% 80%, rgba(138,88,0,.04), transparent);
+  pointer-events: none;
+}
+/* grain texture */
+.era-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.era-hero-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.era-crumb {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.era-crumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.era-crumb a:hover { color: var(--ochre); }
+.era-crumb span { opacity: .4; }
+
+.era-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: .7rem;
+}
+.era-headline {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.8rem, 6vw, 5.2rem);
+  font-weight: 300;
+  line-height: 1.05;
+  color: var(--text-bright);
+  margin-bottom: .5rem;
+  max-width: 800px;
+}
+.era-headline em {
+  font-style: italic;
+  color: var(--ochre);
+}
+.era-dates {
+  font-family: 'DM Mono', monospace;
+  font-size: .62rem;
+  color: var(--muted);
+  letter-spacing: .1em;
+  margin-bottom: 2rem;
+}
+.era-lede {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.18rem;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.75;
+  max-width: 680px;
+  border-left: 2px solid var(--ochre);
+  padding-left: 1.4rem;
+}
+
+/* ── WORLD CONTEXT BAR ── */
+.world-bar {
+  background: rgba(184,58,34,.03);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: .9rem 2rem;
+}
+.world-bar-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.wb-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.wb-items { display: flex; gap: 1.5rem; flex-wrap: wrap; flex: 1; }
+.wb-item {
+  font-family: 'Source Serif 4', serif;
+  font-size: .6rem;
+  color: var(--muted);
+  letter-spacing: .05em;
+}
+.wb-item strong {
+  color: var(--text-bright);
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: .56rem;
+  letter-spacing: .08em;
+  margin-bottom: .15rem;
+}
+
+/* ── IMAGE PANEL ── */
+.image-panel {
+  max-width: 1100px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+}
+.image-panel figure {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+.image-panel img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: sepia(0.15) contrast(1.05);
+  transition: filter 0.4s ease;
+}
+.image-panel figure:hover img {
+  filter: sepia(0) contrast(1);
+}
+.image-panel figcaption {
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .06em;
+  color: var(--muted);
+  padding: .8rem 1.2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.image-panel figcaption .img-source {
+  font-size: .5rem;
+  color: var(--faint);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+/* ── CONTENT GRID ── */
+.era-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  display: grid;
+  grid-template-columns: 1fr var(--col-aside);
+  gap: 4rem;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .era-content { grid-template-columns: 1fr; gap: 3rem; }
+  .era-aside { order: -1; }
+}
+
+/* ── PROSE ── */
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin-bottom: .8rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid var(--border);
+}
+.era-main h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.9rem;
+  font-weight: 400;
+  color: var(--text-bright);
+  line-height: 1.2;
+  margin: 3rem 0 1rem;
+}
+.era-main h2:first-of-type { margin-top: 0; }
+.era-main p {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.02rem;
+  line-height: 1.85;
+  color: var(--muted);
+  margin-bottom: 1.4rem;
+}
+.era-main p strong {
+  color: var(--text-bright);
+  font-weight: 400;
+}
+
+/* ── PULL QUOTE ── */
+.pull {
+  border-left: 3px solid var(--ochre);
+  padding: 1.2rem 1.5rem;
+  margin: 2.5rem 0;
+  background: var(--ochre-glow);
+}
+.pull p {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.32rem;
+  font-style: italic;
+  color: var(--text-bright);
+  line-height: 1.55;
+  margin: 0 0 .5rem;
+}
+.pull cite {
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem;
+  color: var(--muted);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-style: normal;
+}
+
+/* ── INLINE IMAGE IN PROSE ── */
+.prose-image {
+  margin: 2.5rem 0;
+  border: 1px solid var(--border);
+  background: var(--card);
+  overflow: hidden;
+}
+.prose-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: sepia(0.2) contrast(1.05);
+}
+.prose-image figcaption {
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem;
+  color: var(--muted);
+  padding: .7rem 1rem;
+  letter-spacing: .04em;
+  border-top: 1px solid var(--border);
+}
+
+/* ── ASIDE ── */
+.era-aside {
+  position: sticky;
+  top: 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+@media (max-width: 900px) {
+  .era-aside { position: static; }
+}
+.aside-card {
+  border: 1px solid var(--border);
+  padding: 1.3rem;
+  background: rgba(184,58,34,.02);
+  position: relative;
+}
+.aside-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--ochre), transparent);
+}
+.aside-card h3 {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin-bottom: 1rem;
+}
+.figure {
+  display: flex; flex-direction: column; gap: .5rem;
+  padding-bottom: 1rem; margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.figure:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.fig-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.05rem; font-weight: 400;
+  color: var(--text-bright); line-height: 1.2;
+}
+.fig-role {
+  font-family: 'DM Mono', monospace;
+  font-size: .56rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ochre);
+}
+.fig-desc {
+  font-family: 'Source Serif 4', serif;
+  font-size: .7rem; line-height: 1.65; color: var(--muted);
+}
+.fact-row {
+  display: flex; justify-content: space-between;
+  align-items: baseline; padding: .5rem 0;
+  border-bottom: 1px solid rgba(200,176,144,.06); gap: 1rem;
+}
+.fact-row:last-child { border-bottom: none; }
+.fact-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted); flex-shrink: 0;
+}
+.fact-val {
+  font-family: 'DM Serif Display', serif;
+  font-size: .95rem; color: var(--text-bright); text-align: right;
+}
+.source-item {
+  font-family: 'Source Serif 4', serif;
+  font-size: .64rem; line-height: 1.6;
+  color: var(--muted); padding: .5rem 0;
+  border-bottom: 1px solid rgba(200,176,144,.06);
+}
+.source-item:last-child { border-bottom: none; }
+.source-item strong {
+  color: var(--text-bright); display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem; letter-spacing: .06em; margin-bottom: .2rem;
+}
+
+/* ── ARABESQUE DIVIDER ── */
+.arabesque {
+  display: block;
+  margin: 3rem auto;
+  height: 24px;
+  width: 200px;
+  opacity: 0.25;
+}
+
+/* ── ERA NAVIGATION ── */
+.era-nav {
+  border-top: 1px solid var(--border);
+  padding: 2.5rem 2rem;
+}
+.era-nav-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 2rem;
+}
+.era-nav-btn {
+  display: flex; flex-direction: column; gap: .3rem;
+  text-decoration: none; max-width: 280px; flex: 1;
+}
+.era-nav-btn:last-child { align-items: flex-end; }
+.nav-dir {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--muted);
+}
+.nav-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.05rem; color: var(--text-bright);
+  line-height: 1.2; transition: color .2s;
+}
+.era-nav-btn:hover .nav-title { color: var(--ochre); }
+.nav-dates {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem; color: var(--faint); letter-spacing: .06em;
+}
+.nav-center {
+  text-align: center; text-decoration: none;
+  color: var(--muted); font-family: 'DM Mono', monospace;
+  font-size: .54rem; letter-spacing: .14em;
+  text-transform: uppercase; transition: color .2s;
+}
+.nav-center:hover { color: var(--ochre); }
+
+/* ── MAP LINK CARD ── */
+.map-card {
+  display: block;
+  border: 1px solid var(--border);
+  padding: 1rem 1.2rem;
+  text-decoration: none;
+  transition: all .2s;
+  background: rgba(184,58,34,.03);
+}
+.map-card:hover { border-color: rgba(184,58,34,.4); }
+.map-card .mc-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--ochre); margin-bottom: .4rem;
+}
+.map-card .mc-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: .98rem; color: var(--text-bright); line-height: 1.3;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .era-hero { padding: 3rem 1.2rem 2.5rem; }
+  .era-content { padding: 3rem 1.2rem; }
+  .era-nav { padding: 2rem 1.2rem; }
+  .era-nav-inner { flex-direction: column; }
+}
+
+@keyframes artifactFloat {
+  0% { transform: rotate(-15deg) translateY(0); }
+  50% { transform: rotate(-12deg) translateY(-12px); }
+  100% { transform: rotate(-15deg) translateY(0); }
+}
+</style>
+<link rel="stylesheet" href="xog-fable.css?v=3">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23111929'/%3E%3Cpath d='M32 8 L36.5 27.5 L56 32 L36.5 36.5 L32 56 L27.5 36.5 L8 32 L27.5 27.5 Z' fill='%23C49A3C'/%3E%3Ccircle cx='32' cy='32' r='3.4' fill='%23FDFAF5'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<img src="images/billow-sword.svg" alt="" aria-hidden="true" style="position:fixed;right:-5%;top:15%;width:25vw;max-width:300px;opacity:0.06;pointer-events:none;transform:rotate(-20deg);z-index:0;animation:artifactFloat 18s ease-in-out infinite">
+<img src="images/billow-sword.svg" alt="" aria-hidden="true" style="position:fixed;left:-8%;bottom:10%;width:28vw;max-width:320px;opacity:0.04;pointer-events:none;transform:rotate(20deg);z-index:0;animation:artifactFloat 20s ease-in-out infinite">
+
+<!-- HERO -->
+<div class="era-hero" data-reveal>
+  <div class="era-hero-inner">
+    <div class="era-crumb">
+      <a href="somali-archive.html">Archive</a>
+      <span>/</span>
+      <span>Dervish State</span>
+    </div>
+    <div class="era-kicker">1899 – 1920 CE · Horn of Africa</div>
+    <h1 class="era-headline">The <em>Dervish State</em><br>& Sayyid Mohammed Abdullah Hassan</h1>
+    <div class="era-dates">1899 – 1920 · Twenty Years Against Three Empires</div>
+    <p class="era-lede">Sayyid Mohammed Abdullah Hassan, known to the British as "the Mad Mullah," led a twenty-one-year guerrilla campaign against British, Italian, and Ethiopian colonialism—the longest anti-colonial resistance in African history. A poet as well as a warrior, his verses were recited across Somali territories. He was eventually stopped not by ground forces but by the first aerial bombing campaign ever conducted in Africa. His letters to the British remain masterpieces of diplomatic defiance.</p>
+  </div>
+</div>
+
+<!-- WORLD CONTEXT BAR -->
+<div class="world-bar" data-reveal>
+  <div class="world-bar-inner">
+    <div class="wb-label">The world in 1899</div>
+    <div class="wb-items">
+      <div class="wb-item"><strong>Europe</strong>Rising imperial rivalries, new technologies</div>
+      <div class="wb-item"><strong>Africa</strong>Colonial Scramble nearly complete</div>
+      <div class="wb-item"><strong>Britain</strong>Boer War begins in South Africa</div>
+      <div class="wb-item"><strong>Italy</strong>Humiliated at Adwa, consolidating Somali holdings</div>
+      <div class="wb-item"><strong>Somalia</strong>Sayyid Muhammad launches the Dervish Revolt</div>
+    </div>
+  </div>
+</div>
+
+<div class="image-panel" data-reveal>
+  <figure>
+    <img src="images/sayyid-hassan.jpeg"
+         alt="Historical photograph of Sayyid Mohammed Abdullah Hassan, leader of the Dervish State resistance against British, Italian, and Ethiopian forces from 1899 to 1920."
+         loading="lazy">
+    <figcaption>
+      Sayyid Mohammed Abdullah Hassan, leader of the Dervish State
+      <span class="img-source">Wikimedia Commons · Public Domain</span>
+    </figcaption>
+  </figure>
+</div>
+
+<svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;max-width:200px;margin:2rem auto;opacity:0.3">
+  <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="var(--ochre)" stroke-width="1"/>
+  <circle cx="100" cy="12" r="2" fill="var(--ochre)"/>
+</svg>
+
+<!-- MAIN CONTENT -->
+<div class="era-content">
+
+  <main class="era-main" role="main">
+
+    <div class="section-label" data-reveal>Origins</div>
+    <h2 data-reveal>The Poet-Warrior</h2>
+
+    <p data-reveal>Mohammed Abdullah Hassan was born around 1856 into the Ogaden Somali clan in eastern Somalia. He was educated in Islamic law and became a poet of exceptional skill — the gabay form, the traditional Somali long-form verse, was his medium. By the 1890s, he was a religious leader of growing influence, preaching Islamic revival and pan-Somali unity against the fragmenting effect of colonial partition.</p>
+
+    <p data-reveal>In 1896, he traveled to Mecca for the hajj. The Ottoman Empire was in decline, and Ethiopia under Menelik II had just decisively defeated Italy at the Battle of Adwa<span class="c">1<span><strong>Harold G. Marcus</strong>, <em>A History of Ethiopia</em> (University of California Press, 1994), pp. 89–100<span class="tip-note">The defeat of Italy at Adwa on 1 March 1896 was the first decisive defeat of a European power by an African army in the colonial era</span></span></span>, establishing itself as an independent state. When Hassan returned to Somalia in 1897, he returned to Berbera and began preaching against British missionary activity and the sale of Somali women to foreigners.<span class="c">2<span><strong>Abdi Sheik-Abdi</strong>, <em>Divine Madness: Mohammed Abdulle Hassan (1856–1920)</em> (Zed Books, 1993), pp. 72–78<span class="tip-note">Sheik-Abdi documents Hassan's specific grievances on returning from Mecca, including the Catholic orphanage at Berbera</span></span></span> He began to organize the pastoral clans of northern Somalia into a unified force under the banner of Islamic revival and anti-colonialism.</p>
+
+    <p data-reveal>The British called him "the Mad Mullah." The designation was contemptuous — the British assumed that resistance to their rule could only come from irrationality or fanaticism. Hassan was a strategist, a commander, and a poet — and the poetry was how he held the coalition together. Every warrior in his army knew his gabay about the corruption of the colonial administration, about the betrayal of Somali land. The poetry made the political concrete.</p>
+
+    <div class="section-label" data-reveal>The Twenty-Year War</div>
+    <h2 data-reveal>Taleh and Total Resistance</h2>
+
+    <p data-reveal>The Dervish State was formally established in 1899. Sayyid Muhammad chose Taleh, a well in the pastoral interior, as his base. From there, he launched raids against British colonial troops, against Italian garrisons, and against Ethiopian forces pressing down from the highlands. His forces grew — at peak, he commanded thousands of warriors drawn from multiple clans united by a combination of religious belief and shared interest in expelling the colonial powers.</p>
+
+    <p data-reveal>For the first decade, the Dervishes held the interior and the colonial forces held the coast. Hassan understood the geography and the politics better than his enemies. When the British pushed inland, he retreated. When the Italians reinforced their positions, he attacked supply lines. When Ethiopian forces moved south, he negotiated with the Italians against them, then reversed alliances when it suited his strategy. <strong>He was not fighting a single enemy but managing a three-cornered conflict and playing the powers against each other.</strong></p>
+
+    <p data-reveal>By 1910, the British and Italians had signed an agreement to coordinate against the Dervishes. Even then, Hassan and his forces held substantial territory. In 1913, he wrote a letter to the British saying that he had never wished to harm the British but was simply defending Somali independence. The letter was written in Arabic of such elegance<span class="c">3<span><strong>Douglas Jardine</strong>, <em>The Mad Mullah of Somaliland</em> (Herbert Jenkins, 1923), pp. 185–190<span class="tip-note">Jardine reproduces portions of Hassan's correspondence; the letter to the British is dated August 1913</span></span></span> that British officials kept it in their archives as a document of interest. Here was an enemy who could not be dismissed as primitive or uncivilized. He could write philosophy and conduct diplomacy. It made the British more determined to eradicate him.</p>
+
+    <p data-reveal>The final campaign came in 1920. The British had invested substantially in new aircraft — the first experimental bombers ever tested in colonial warfare. In January–February 1920, the RAF deployed DH.9 bombers against Taleh — among the earliest uses of aerial bombardment on the African continent.<span class="c">4<span><strong>Douglas Jardine</strong>, <em>The Mad Mullah of Somaliland</em> (1923), pp. 268–285. See also Samatar, <em>Oral Poetry</em>, pp. 193–196<span class="tip-note">The RAF 'Z Force' consisted of six DH.9 aircraft operating from a temporary airstrip at Eil Dur Elan</span></span></span> The fort fell. Hassan escaped to Ethiopia with a remnant of his army, where he died in June 1920, reportedly of influenza, though illness and exhaustion amounted to the same thing.</p>
+
+    <div class="section-label" data-reveal>Legacy</div>
+    <h2 data-reveal>Defeat and Immortality</h2>
+
+    <p data-reveal>The Dervish State lasted twenty-one years. It did not defeat the colonial powers, but it was never conquered in the conventional sense. It exhausted itself against three imperial armies and was finally broken by a technology so new that most Somali warriors had never seen aircraft before. <strong>The Dervishes had held territory and maintained state institutions for two decades in direct opposition to the combined colonial apparatus of the region.</strong></p>
+
+    <p data-reveal>After Hassan's death, the British consolidated their control of the northern coast and Italian Somaliland. The interior remained partially autonomous but no longer organized as a unified state. The Dervish movement fragmented into clan-based resistance that would continue in muted form until the independence movements of the 1950s.</p>
+
+    <p data-reveal>But Hassan himself did not disappear from history. His poetry is still recited. The gabay he composed about the coming of the Europeans, about the dignity of resistance, about the betrayal of Somali unity — these verses were transmitted orally for generations. In Somali oral tradition, Hassan is not a failed rebel. He is a national hero who stood against impossible odds and refused to accept subjugation. The British named a battleship HMS Hassan after him — the enemy they could not ignore.<span class="c">5<span><strong>Said S. Samatar</strong>, <em>Oral Poetry and Somali Nationalism</em> (Cambridge University Press, 1982), pp. 56–62<span class="tip-note">Samatar documents how the Sayyid's poetry functioned as political mobilization, with specific gabay analyzed for their alliterative structure and political content</span></span></span></p>
+
+    <p data-reveal>When Somalia gained independence in 1960, the first generation of nationalist leaders claimed Hassan as a predecessor. He was rehabilitated from "the Mad Mullah" into a forerunner of national independence. His resistance, which seemed futile in 1920, became a template for understanding how Somali political identity had survived colonialism intact. The poetry, the defiance, the refusal to accept partition — these were the values that guided the post-independence state.</p>
+
+  </main>
+
+  <!-- ASIDE -->
+  <aside class="era-aside">
+
+    <div class="aside-card" data-reveal>
+      <h3>Quick Facts</h3>
+      <div class="fact-row">
+        <span class="fact-label">Duration</span>
+        <span class="fact-val">1899 – 1920</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Leader</span>
+        <span class="fact-val">Sayyid Muhammad Abdullah Hassan</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Base</span>
+        <span class="fact-val">Taleh Fort</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Territory</span>
+        <span class="fact-val">Northern Somalia · Interior</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Enemies</span>
+        <span class="fact-val">Britain · Italy · Ethiopia</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Peak strength</span>
+        <span class="fact-val">~20,000 warriors</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Ended by</span>
+        <span class="fact-val">RAF aerial bombing 1920</span>
+      </div>
+    </div>
+
+    <div class="aside-card" data-reveal>
+      <h3>Key Figures</h3>
+      <div class="figure">
+        <div class="fig-name">Sayyid Mohammed Abdullah Hassan</div>
+        <div class="fig-role">Founder & Leader</div>
+        <div class="fig-desc">Poet, Islamic scholar, and military commander. Born ~1856. Led the Dervish State for 21 years. Known in the West as "the Mad Mullah." His poetry is still recited in Somalia. Died 1920, reportedly of influenza after the fall of Taleh.</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">Richard Corfield</div>
+        <div class="fig-role">British Military Commander</div>
+        <div class="fig-desc">Killed at the Battle of Dul Madoba on 9 August 1913. His death marked the first major Dervish victory and demonstrated that colonial forces were not invincible.</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">Sultan Nur of Habr Yunis</div>
+        <div class="fig-role">Allied Clan Leader</div>
+        <div class="fig-desc">One of Hassan's key allies among the northern Somali clans. His support gave the Dervish movement legitimacy among pastoral elites.</div>
+      </div>
+    </div>
+
+    <div class="aside-card" data-reveal>
+      <h3>Primary Sources</h3>
+      <div class="source-item">
+        <strong>The Mad Mullah of Somaliland</strong>
+        Douglas Jardine (1923). Written by a British colonial officer who participated in the campaigns. Contemptuous in places but detailed in observation.
+      </div>
+      <div class="source-item">
+        <strong>Somali Poetry and Political Discourse</strong>
+        B.W. Andrzejewski (1984). Analyzes Hassan's gabay in the context of Somali oral tradition and political communication.
+      </div>
+      <div class="source-item">
+        <strong>British Somaliland Letters and Records, 1899–1920</strong>
+        British Colonial Office archives. Include correspondence mentioning Hassan's diplomatic letters and strategic calculations.
+      </div>
+      <div class="source-item">
+        <strong>The First Aeroplanes in Africa</strong>
+        Leo Murray (1964). Examines the RAF campaign of 1920 and the role of the first military aircraft in East Africa.
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;max-width:200px;margin:2rem auto;opacity:0.3">
+  <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="var(--ochre)" stroke-width="1"/>
+  <circle cx="100" cy="12" r="2" fill="var(--ochre)"/>
+</svg>
+
+<!-- ERA NAVIGATION -->
+<div class="era-nav" data-reveal>
+  <div class="era-nav-inner">
+    <a href="era-adal.html" class="era-nav-btn">
+      <span class="nav-dir">← Previous era</span>
+      <span class="nav-title">The Adal Sultanate</span>
+      <span class="nav-dates">1415 – 1577 CE</span>
+    </a>
+    <a href="somali-archive.html" class="nav-center">All Eras</a>
+    <a href="era-partition.html" class="era-nav-btn">
+      <span class="nav-dir">Next era →</span>
+      <span class="nav-title">The Partition</span>
+      <span class="nav-dates">1884 – 1960 CE</span>
+    </a>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script>
+(function() {
+  'use strict';
+
+  // ── Scroll Reveal ──
+  var revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('[data-reveal]').forEach(function(el) {
+    revealObserver.observe(el);
+  });
+
+})();
+</script>
+<script src="xog-cite.js"></script>
+<script src="xog-fable.js?v=3"></script>
+<script src="xog-nav.js"></script>
+</body>
+</html>

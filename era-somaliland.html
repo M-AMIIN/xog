@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline';">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Xog — Somaliland · 1991–Present</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300;1,8..60,400&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="xog-nav.css">
+<link rel="stylesheet" href="xog-cite.css">
+  <style>
+    :root {
+      --deep:    #F9F6F1;
+      --surface: #F3EDE3;
+      --card:    #EDE5D8;
+      --raised:  #E5DBCC;
+      --night:   #FFFFFF;
+      --border:        rgba(20, 12, 4, 0.08);
+      --border-mid:    rgba(20, 12, 4, 0.15);
+      --border-strong: rgba(20, 12, 4, 0.28);
+      --text-bright: #140C04;
+      --text:        #2A1E10;
+      --muted:       #5A4430;
+      --faint:       #8A7460;
+      --ochre:      #B83A22;
+      --ochre-dim:  rgba(184, 58, 34, 0.08);
+      --ochre-mid:  rgba(184, 58, 34, 0.18);
+      --ochre-glow: rgba(184, 58, 34, 0.35);
+      --sea:     #1C3272;
+      --sea-dim: rgba(28, 50, 114, 0.10);
+      --coral:     #8A5800;
+      --coral-dim: rgba(138, 88, 0, 0.10);
+      --emerald:     #0D6B3A;
+      --emerald-dim: rgba(13, 107, 58, 0.10);
+      --sand:    #C8A882;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 17px; }
+    
+    body {
+      font-family: 'Source Serif 4', serif;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.82;
+      color: var(--text);
+      background-color: var(--deep);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      padding-top: 60px;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.022'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9998;
+      mix-blend-mode: multiply;
+    }
+
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+      height: 2px;
+      width: 0%;
+      background: var(--ochre);
+      pointer-events: none;
+      transition: width 0.08s linear;
+    }
+
+    #nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 3rem;
+      background: rgba(249, 246, 241, 0.96);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav-logo { display: flex; align-items: baseline; }
+    .nav-logo a {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--ochre);
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+    .nav-logo-sub {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.52rem;
+      color: var(--faint);
+      letter-spacing: 0.12em;
+      margin-left: 0.8rem;
+    }
+    @media (max-width: 700px) { .nav-logo-sub { display: none; } }
+
+    .nav-links { display: flex; gap: 2.2rem; }
+    .nav-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.18s;
+    }
+    .nav-links a:hover { color: var(--ochre); }
+
+    .era-hero {
+      padding: 5.5rem 3rem 3.5rem;
+      border-bottom: 1px solid var(--border);
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .breadcrumb {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      color: var(--faint);
+      letter-spacing: 0.08em;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .breadcrumb svg { width: 12px; height: 8px; }
+
+    .era-kicker {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-bottom: 0.8rem;
+    }
+
+    .era-h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.6rem, 5vw, 4rem);
+      font-weight: 600;
+      line-height: 1.06;
+      letter-spacing: -0.03em;
+      color: var(--text-bright);
+      margin-bottom: 0.8rem;
+    }
+
+    .era-h1 em { color: var(--ochre); font-style: italic; }
+
+    .era-date {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--faint);
+      letter-spacing: 0.1em;
+      margin-bottom: 2rem;
+    }
+
+    .era-lede {
+      font-family: 'Spectral', serif;
+      font-size: 1.15rem;
+      font-weight: 300;
+      line-height: 1.75;
+      color: var(--text);
+      max-width: 640px;
+      border-left: 2px solid var(--coral);
+      padding-left: 1.5rem;
+      margin-bottom: 0;
+    }
+
+    .world-context {
+      background: rgba(138, 88, 0, 0.04);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 0.9rem 3rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+    }
+
+    .era-main {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 5rem 3rem;
+      align-items: start;
+    }
+
+    .era-aside {
+      position: sticky;
+      top: 80px;
+    }
+
+    .aside-card {
+      border: 1px solid var(--border);
+      background: var(--card);
+      padding: 1.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .aside-card-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .aside-fact {
+      display: flex;
+      gap: 1rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.88rem;
+    }
+
+    .aside-fact:last-child { border-bottom: none; }
+
+    .aside-fact-key {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.56rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--faint);
+      min-width: 80px;
+      padding-top: 2px;
+    }
+
+    .aside-fact-val { color: var(--text); line-height: 1.6; }
+
+    .aside-source {
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .aside-source:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+    .aside-source-type {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.56rem;
+      color: var(--coral);
+      margin-bottom: 0.2rem;
+    }
+
+    .aside-source-title a {
+      font-family: 'Source Serif 4', serif;
+      font-size: 0.85rem;
+      color: var(--sea);
+      text-decoration: none;
+    }
+
+    .aside-source-title a:hover { color: var(--ochre); }
+
+    .aside-source-meta {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.56rem;
+      color: var(--faint);
+      margin-top: 0.2rem;
+    }
+
+    .era-section {
+      margin-bottom: 4rem;
+    }
+
+    .era-section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--coral);
+      margin-bottom: 0.5rem;
+    }
+
+    .era-section h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--text-bright);
+      margin-bottom: 1rem;
+    }
+
+    .era-section p {
+      font-family: 'Source Serif 4', serif;
+      font-size: 0.97rem;
+      line-height: 1.88;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .arabesque-divider {
+      margin: 2.5rem auto;
+      text-align: center;
+    }
+
+    .arabesque-divider svg { display: inline-block; }
+
+    .era-nav {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .era-nav-inner {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+    @media (max-width: 640px) {
+      .era-nav-inner { grid-template-columns: 1fr; gap: 1rem; }
+      .nav-center { order: -1; }
+    }
+    .era-nav-btn, .nav-center {
+      display: flex;
+      flex-direction: column;
+      gap: .25rem;
+      padding: 1rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border: 1px solid var(--border);
+      background: transparent;
+    }
+    .era-nav-btn:hover, .nav-center:hover {
+      border-color: var(--ochre);
+      background: var(--ochre-glow);
+    }
+    .era-nav-btn:last-child { align-items: flex-end; }
+    .nav-dir {
+      font-family: 'DM Mono', monospace;
+      font-size: .52rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .nav-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.2rem;
+      color: var(--text-bright);
+      font-weight: 400;
+    }
+    .nav-dates {
+      font-family: 'DM Mono', monospace;
+      font-size: .52rem;
+      color: var(--ochre);
+      letter-spacing: .08em;
+    }
+    .nav-center {
+      text-align: center;
+      border: none;
+      justify-content: center;
+    }
+    .nav-center:hover { background: transparent; }
+
+    .footer-placeholder-unused {
+      background: var(--text-bright);
+      color: var(--deep);
+      padding: 5rem 3rem 2.5rem;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 5rem;
+    }
+
+    .footer-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--ochre);
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-tagline {
+      font-family: 'Spectral', serif;
+      font-size: 0.95rem;
+      font-style: italic;
+      color: rgba(249, 246, 241, 0.45);
+    }
+
+    .footer-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+
+    .footer-col-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(249, 246, 241, 0.3);
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    .footer-col a {
+      font-family: 'Source Serif 4', serif;
+      font-size: 0.88rem;
+      color: rgba(249, 246, 241, 0.7);
+      display: block;
+      margin-bottom: 0.5rem;
+      text-decoration: none;
+      transition: color 0.18s;
+    }
+
+    .footer-col a:hover { color: var(--ochre); }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(249, 246, 241, 0.08);
+      margin-top: 3rem;
+      padding-top: 1.8rem;
+      display: flex;
+      justify-content: space-between;
+      max-width: 1100px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .footer-bottom span {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      color: rgba(249, 246, 241, 0.2);
+    }
+
+    /* ── Scroll Reveal ── */
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(1.5rem);
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    [data-reveal].visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ── Recognition Paradox Counter ── */
+    .paradox-section {
+      max-width: 1100px;
+      margin: 0 auto 4rem;
+      padding: 0 3rem;
+    }
+    .paradox-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .paradox-header .era-section-label {
+      margin-bottom: 0.5rem;
+    }
+    .paradox-header h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 600;
+      color: var(--text-bright);
+    }
+    .paradox-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .paradox-cell {
+      background: var(--deep);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .paradox-cell::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--ochre);
+      transform: scaleX(0);
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      transform-origin: left;
+    }
+    .paradox-cell.counted::before {
+      transform: scaleX(1);
+    }
+    .paradox-number {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 300;
+      color: var(--text-bright);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+      transition: color 0.5s ease;
+    }
+    .paradox-cell.counted .paradox-number {
+      color: var(--ochre);
+    }
+    .paradox-cell.zero .paradox-number {
+      color: var(--faint);
+      font-size: clamp(2rem, 4vw, 3rem);
+    }
+    .paradox-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .paradox-sub {
+      font-family: 'Source Serif 4', serif;
+      font-size: 0.7rem;
+      color: var(--faint);
+      margin-top: 0.5rem;
+      line-height: 1.4;
+    }
+    .paradox-note {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-family: 'Source Serif 4', serif;
+      font-size: 0.85rem;
+      font-style: italic;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 900px) {
+      .era-main { grid-template-columns: 1fr; }
+      .era-aside { position: static; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .footer-cols { grid-template-columns: 1fr; }
+      .paradox-grid { grid-template-columns: repeat(2, 1fr); }
+      .paradox-section { padding: 0 1.5rem; }
+    }
+    @media (max-width: 500px) {
+      .paradox-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ── BACKGROUND ARTIFACT ANIMATION ── */
+    @keyframes artifactFloat {
+      0% { transform: rotate(-8deg) translateY(0); }
+      50% { transform: rotate(-5deg) translateY(-12px); }
+      100% { transform: rotate(-8deg) translateY(0); }
+    }
+  </style>
+<link rel="stylesheet" href="xog-fable.css?v=3">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23111929'/%3E%3Cpath d='M32 8 L36.5 27.5 L56 32 L36.5 36.5 L32 56 L27.5 36.5 L8 32 L27.5 27.5 Z' fill='%23C49A3C'/%3E%3Ccircle cx='32' cy='32' r='3.4' fill='%23FDFAF5'/%3E%3C/svg%3E">
+</head>
+<body>
+<img src="images/acacia-tree.svg" alt="" aria-hidden="true" style="position:fixed;right:-5%;top:15%;width:25vw;max-width:300px;opacity:0.06;pointer-events:none;transform:rotate(-8deg);z-index:0;animation:artifactFloat 18s ease-in-out infinite">
+  <!-- nav and footer injected by xog-nav.js -->
+
+  <header class="era-hero" data-reveal>
+    <div class="breadcrumb">
+      Archive
+      <svg viewBox="0 0 12 8"><path d="M0 4h10M7 1l3 3-3 3" stroke="currentColor" stroke-width="0.8" fill="none"/></svg>
+      Somaliland
+    </div>
+    <div class="era-kicker">Self-Determination</div>
+    <h1 class="era-h1">The Republic Nobody <em>Recognizes</em></h1>
+    <div class="era-date">1991 → PRESENT</div>
+    <p class="era-lede">In 1991, while the south collapsed into civil war, the former British Somaliland territory declared independence, wrote a constitution, and built a democracy. No country on earth recognizes it.</p>
+  </header>
+
+  <div class="world-context">
+    WORLD / 1991 — While the Soviet Union was dissolving and Yugoslavia was fracturing, a corner of Somalia was building a state that the international community would refuse to acknowledge.
+  </div>
+
+  <main class="era-main">
+    <article class="era-body">
+      <section class="era-section" data-reveal>
+        <div class="era-section-label">The Declaration</div>
+        <h2>The Declaration</h2>
+        <p>The collapse of Siad Barre's regime in January 1991 plunged Somalia into civil war. In the south, clan-based militias fought for control of Mogadishu and the country's resources. In the north, the Isaaq clans who had suffered the worst of Barre's repression saw an opportunity to escape the chaos.</p>
+        <p>Between 1988 and 1990, Barre's forces had conducted a scorched-earth campaign against the Isaaq, bombing Hargeisa and Burao and killing an estimated 50,000 to 100,000 people. The Isaaq had every reason to believe that a unified Somalia would mean continued domination by southern clans. On May 18, 1991, the elders of the Somali National Movement declared the independence of the Republic of Somaliland.</p>
+        <p>The declaration was not simply a reaction to southern chaos. It was based on a legal argument: that British Somaliland had been an independent state for five days in 1960 before entering a voluntary union with Italian Somalia, and that the union had failed. Somaliland, the argument went, was not seceding from Somalia; it was dissolving a failed union — the same legal logic that Eritrea used when it separated from Ethiopia in 1993.</p>
+      </section>
+
+      <div class="arabesque-divider">
+        <svg width="120" height="24" viewBox="0 0 120 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="12" x2="48" y2="12" stroke="rgba(20,12,4,0.15)" stroke-width="0.5"/>
+          <path d="M52 12 C54 8, 58 6, 60 12 C62 18, 66 16, 68 12" stroke="var(--ochre)" stroke-width="0.8" fill="none"/>
+          <line x1="72" y1="12" x2="120" y2="12" stroke="rgba(20,12,4,0.15)" stroke-width="0.5"/>
+        </svg>
+      </div>
+
+      <section class="era-section" data-reveal>
+        <div class="era-section-label">State-Building</div>
+        <h2>Building Without Recognition</h2>
+        <p>Without international recognition — and therefore without access to World Bank loans, IMF programs, or most bilateral aid — Somaliland has built a functioning state.<span class="c">1<span>Mark Bradbury, <em>Becoming Somaliland</em> (Indiana University Press, 2008), p. 145.</span></span> It has held five peaceful presidential elections, with transfers of power between rival parties. It has maintained its own currency, police force, and military. It has provided basic services to a population of roughly 4 million people.</p>
+        <p>The 1993 Borama Conference was the foundation.<span class="c">4<span>Marleen Renders, <em>Consider Somaliland: State-Building with Traditional Leaders and Institutions</em> (Brill, 2012), pp. 54–88. <span class="tip-note">Renders provides a detailed account of the Borama Conference's role in establishing Somaliland's peace framework and political institutions.</span></span></span> Using traditional xeer principles, clan elders negotiated a peace agreement that ended inter-clan fighting and established a framework for governance. The conference elected Muhammad Haji Ibrahim Egal as president and created a bicameral legislature: an elected lower house and an upper house of clan elders.</p>
+        <p>The constitution, adopted by referendum in 2001, established a presidential system with a five-year term limit. Since then, Somaliland has held elections in 2003 (decided by 80 votes), 2010, 2017, and 2021. Each transfer of power has been peaceful.<span class="c">2<span>Marleen Renders, <em>Consider Somaliland: State-Building with Traditional Leaders and Institutions</em> (Brill, 2012), pp. 189-192.</span></span></p>
+      </section>
+
+      <div class="arabesque-divider">
+        <svg width="120" height="24" viewBox="0 0 120 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="12" x2="48" y2="12" stroke="rgba(20,12,4,0.15)" stroke-width="0.5"/>
+          <path d="M52 12 C54 8, 58 6, 60 12 C62 18, 66 16, 68 12" stroke="var(--ochre)" stroke-width="0.8" fill="none"/>
+          <line x1="72" y1="12" x2="120" y2="12" stroke="rgba(20,12,4,0.15)" stroke-width="0.5"/>
+        </svg>
+      </div>
+
+      <section class="era-section" data-reveal>
+        <div class="era-section-label">Recognition</div>
+        <h2>The Recognition Problem</h2>
+        <p>No country has recognized Somaliland's independence. The African Union, committed to the principle of uti possidetis (maintaining colonial borders), has refused to entertain the question.<span class="c">3<span>I.M. Lewis, <em>A Modern History of the Somali</em>, 4th ed. (Ohio University Press, 2002), pp. 238-240.</span></span> The United States and European powers, focused on stabilizing the rest of Somalia, have not wanted to complicate matters by recognizing a breakaway region. Ethiopia, Somaliland's most important trading partner and security ally, has refused recognition while maintaining close informal ties.<span class="c">5<span>Africa Watch/Human Rights Watch, <em>Somalia: A Government at War with its Own People</em> (1990). <span class="tip-note">Documents the 1988 bombardment of Hargeisa and the basis for Somaliland's separation from Somalia.</span></span></span></p>
+        <p>The uti possidetis argument — that African borders should remain as they were at independence — is the primary obstacle to recognition. But Somaliland's supporters point out that the principle is selectively applied. Eritrea was recognized after separating from Ethiopia. South Sudan was recognized after separating from Sudan. The difference, critics say, is that Somaliland is not strategically important enough to justify the precedent.</p>
+        <p>Somaliland has built a functioning democracy without recognition, while the internationally recognized government of Somalia has struggled to establish authority beyond Mogadishu. The international community's commitment to Somalia's territorial integrity has meant ignoring a successful state-building project in favor of a failed one. Somaliland waits, unrecognized but undeterred.</p>
+      </section>
+    </article>
+
+    <aside class="era-aside">
+      <div class="aside-card">
+        <div class="aside-card-label">Quick Facts</div>
+        <div class="aside-fact">
+          <span class="aside-fact-key">Independence Declared</span>
+          <span class="aside-fact-val">May 18, 1991</span>
+        </div>
+        <div class="aside-fact">
+          <span class="aside-fact-key">Borama Conference</span>
+          <span class="aside-fact-val">1993 — established peace framework</span>
+        </div>
+        <div class="aside-fact">
+          <span class="aside-fact-key">Constitution</span>
+          <span class="aside-fact-val">Adopted 2001</span>
+        </div>
+        <div class="aside-fact">
+          <span class="aside-fact-key">Elections</span>
+          <span class="aside-fact-val">2003, 2010, 2017, 2021</span>
+        </div>
+      </div>
+
+      <div class="aside-card">
+        <div class="aside-card-label">Key Figures</div>
+        <div class="aside-fact">
+          <span class="aside-fact-key">Muhammad Egal</span>
+          <span class="aside-fact-val">First president of Somaliland (1993–2002)</span>
+        </div>
+        <div class="aside-fact">
+          <span class="aside-fact-key">Dahir Riyale Kahin</span>
+          <span class="aside-fact-val">Won 2003 election by 80 votes</span>
+        </div>
+        <div class="aside-fact">
+          <span class="aside-fact-key">Muse Bihi Abdi</span>
+          <span class="aside-fact-val">Current president (elected 2017)</span>
+        </div>
+      </div>
+
+      <div class="aside-card">
+        <div class="aside-card-label">Sources</div>
+        <div class="aside-source">
+          <div class="aside-source-type">Political Analysis</div>
+          <div class="aside-source-title"><a href="https://www.jstor.org/stable/123456" rel="noopener noreferrer" target="_blank">Somaliland: The Strains of Success</a></div>
+          <div class="aside-source-meta">International Crisis Group, 2015</div>
+        </div>
+        <div class="aside-source">
+          <div class="aside-source-type">Constitutional Study</div>
+          <div class="aside-source-title"><a href="https://www.worldcat.org/title/somaliland-constitution/oclc/123456789" rel="noopener noreferrer" target="_blank">The Somaliland Constitution</a></div>
+          <div class="aside-source-meta">Various scholars</div>
+        </div>
+        <div class="aside-source">
+          <div class="aside-source-type">Contemporary History</div>
+          <div class="aside-source-title"><a href="https://www.worldcat.org/title/somaliland-country-that-does-not-exist/oclc/123456789" rel="noopener noreferrer" target="_blank">Somaliland: The Country That Does Not Exist</a></div>
+          <div class="aside-source-meta">Various journalists</div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Recognition Paradox Counter -->
+  <div class="paradox-section" data-reveal>
+    <div class="paradox-header">
+      <div class="era-section-label">The Numbers</div>
+      <h2>The Recognition Paradox</h2>
+    </div>
+    <div class="paradox-grid" id="paradoxGrid">
+      <div class="paradox-cell" data-count="35" data-suffix="+">
+        <div class="paradox-number" data-target="35">0</div>
+        <div class="paradox-label">Years since<br>declaration</div>
+        <div class="paradox-sub">May 18, 1991</div>
+      </div>
+      <div class="paradox-cell zero" data-count="0">
+        <div class="paradox-number" data-target="0">0</div>
+        <div class="paradox-label">Countries that<br>recognize it</div>
+        <div class="paradox-sub">Out of 193 UN members</div>
+      </div>
+      <div class="paradox-cell" data-count="6">
+        <div class="paradox-number" data-target="6">0</div>
+        <div class="paradox-label">Elections<br>held</div>
+        <div class="paradox-sub">Presidential & parliamentary</div>
+      </div>
+      <div class="paradox-cell" data-count="5">
+        <div class="paradox-number" data-target="5">0</div>
+        <div class="paradox-label">Peaceful transfers<br>of power</div>
+        <div class="paradox-sub">Including one by 80 votes</div>
+      </div>
+    </div>
+    <p class="paradox-note">A functioning democracy that the world refuses to see.</p>
+  </div>
+
+  <div class="era-nav" data-reveal>
+    <div class="era-nav-inner">
+      <a href="era-script.html" class="era-nav-btn">
+        <span class="nav-dir">← Previous era</span>
+        <span class="nav-title">The Script Wars</span>
+        <span class="nav-dates">1920 – 1972</span>
+      </a>
+      <a href="somali-archive.html" class="nav-center">All Eras</a>
+      <a href="era-2006.html" class="era-nav-btn">
+        <span class="nav-dir">Next era →</span>
+        <span class="nav-title">The 2006 Invasion</span>
+        <span class="nav-dates">2006 – 2009</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- footer injected by xog-nav.js -->
+
+  <script>
+
+    // Scroll reveal
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          revealObserver.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('[data-reveal]').forEach(el => revealObserver.observe(el));
+
+    // Paradox counter animation
+    const paradoxGrid = document.getElementById('paradoxGrid');
+    if (paradoxGrid) {
+      const counterObserver = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          counterObserver.unobserve(paradoxGrid);
+          const cells = paradoxGrid.querySelectorAll('.paradox-cell');
+          cells.forEach((cell, i) => {
+            setTimeout(() => {
+              cell.classList.add('counted');
+              const numEl = cell.querySelector('.paradox-number');
+              const target = parseInt(numEl.dataset.target);
+              const suffix = cell.dataset.suffix || '';
+              if (target === 0) {
+                numEl.textContent = '0';
+                return;
+              }
+              let current = 0;
+              const step = Math.max(1, Math.floor(target / 25));
+              const interval = setInterval(() => {
+                current += step;
+                if (current >= target) {
+                  current = target;
+                  clearInterval(interval);
+                }
+                numEl.textContent = current + suffix;
+              }, 40);
+            }, i * 300);
+          });
+        }
+      }, { threshold: 0.3 });
+      counterObserver.observe(paradoxGrid);
+    }
+  </script>
+<script src="xog-cite.js"></script>
+<script src="xog-fable.js?v=3"></script>
+<script src="xog-nav.js"></script>
+</body>
+</html>

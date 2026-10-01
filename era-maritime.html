@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xog — The Maritime Networks · 1st Century BCE – 19th Century CE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=DM+Serif+Display&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300;1,8..60,400&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="xog-nav.css">
+<link rel="stylesheet" href="xog-styles.css">
+<link rel="stylesheet" href="xog-cite.css">
+<style>
+/* ── ERA-MARITIME ELEVATED STYLES ─────────────────────────────── */
+:root {
+  --ochre: #B83A22;
+  --ochre-dim: rgba(184,58,34, 0.55);
+  --ochre-glow: rgba(184,58,34, 0.10);
+  --ochre-deep: #7A2616;
+  --gold: #C49A3C;
+  --gold-dim: rgba(184,58,34, 0.55);
+  --gold-glow: rgba(184,58,34, 0.10);
+  --rust: #B83A22;
+  --rust-dim: rgba(184,58,34, 0.60);
+  --sand: #A8B8C8;
+  --text-bright: #140C04;
+  --text: #2A1E10;
+  --muted: #5A4430;
+  --faint: #8A7460;
+  --deep: #F9F6F1;
+  --surface: #F3EDE3;
+  --card: #EDE5D8;
+  --border: rgba(20, 12, 4, 0.09);
+  --border-mid: rgba(20, 12, 4, 0.16);
+  --sea: #B83A22;
+  --col-aside: 300px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  overflow-x: hidden;
+  background: var(--deep);
+  color: var(--text);
+  padding-top: 58px;
+}
+
+/* ── SCROLL REVEAL ── */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(1.8rem);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-reveal].visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── HERO ── */
+.era-hero {
+  position: relative;
+  border-bottom: 1px solid var(--border);
+  padding: 4rem 2rem 3.5rem;
+  overflow: hidden;
+  background: linear-gradient(170deg, #F9F6F1 0%, #F3EDE3 60%, #EDE5D8 100%);
+}
+.era-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 70% 50%, rgba(184,58,34,.06), transparent),
+    radial-gradient(ellipse 40% 60% at 20% 80%, rgba(184,58,34,.04), transparent);
+  pointer-events: none;
+}
+.era-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.era-hero-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.era-crumb {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.era-crumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.era-crumb a:hover { color: var(--ochre); }
+.era-crumb span { opacity: .4; }
+
+.era-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: .7rem;
+}
+.era-headline {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.8rem, 6vw, 5.2rem);
+  font-weight: 300;
+  line-height: 1.05;
+  color: var(--text-bright);
+  margin-bottom: .5rem;
+  max-width: 800px;
+}
+.era-headline em {
+  font-style: italic;
+  color: var(--ochre);
+}
+.era-dates {
+  font-family: 'DM Mono', monospace;
+  font-size: .62rem;
+  color: var(--muted);
+  letter-spacing: .1em;
+  margin-bottom: 2rem;
+}
+.era-lede {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.18rem;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.75;
+  max-width: 680px;
+  border-left: 2px solid var(--ochre);
+  padding-left: 1.4rem;
+}
+
+/* ── WORLD CONTEXT BAR ── */
+.world-bar {
+  background: rgba(184,58,34,.03);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: .9rem 2rem;
+}
+.world-bar-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.wb-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.wb-items { display: flex; gap: 1.5rem; flex-wrap: wrap; flex: 1; }
+.wb-item {
+  font-family: 'Source Serif 4', serif;
+  font-size: .6rem;
+  color: var(--muted);
+  letter-spacing: .05em;
+}
+.wb-item strong {
+  color: var(--text-bright);
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: .56rem;
+  letter-spacing: .08em;
+  margin-bottom: .15rem;
+}
+
+/* ── IMAGE PANEL ── */
+.image-panel {
+  max-width: 1100px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+}
+.image-panel figure {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+.image-panel img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: sepia(0.15) contrast(1.05);
+  transition: filter 0.4s ease;
+}
+.image-panel figure:hover img {
+  filter: sepia(0) contrast(1);
+}
+.image-panel figcaption {
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .06em;
+  color: var(--muted);
+  padding: .8rem 1.2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.image-panel figcaption .img-source {
+  font-size: .5rem;
+  color: var(--faint);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+/* ── CONTENT GRID ── */
+.era-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  display: grid;
+  grid-template-columns: 1fr var(--col-aside);
+  gap: 4rem;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .era-content { grid-template-columns: 1fr; gap: 3rem; }
+  .era-aside { order: -1; }
+}
+
+/* ── PROSE ── */
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin-bottom: .8rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid var(--border);
+}
+.era-main h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.9rem;
+  font-weight: 400;
+  color: var(--text-bright);
+  line-height: 1.2;
+  margin: 3rem 0 1rem;
+}
+.era-main h2:first-of-type { margin-top: 0; }
+.era-main p {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.02rem;
+  line-height: 1.85;
+  color: var(--muted);
+  margin-bottom: 1.4rem;
+}
+.era-main p strong {
+  color: var(--text-bright);
+  font-weight: 400;
+}
+
+/* ── PULL QUOTE ── */
+.pull {
+  border-left: 3px solid var(--ochre);
+  padding: 1.2rem 1.5rem;
+  margin: 2.5rem 0;
+  background: var(--ochre-glow);
+}
+.pull p {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.32rem;
+  font-style: italic;
+  color: var(--text-bright);
+  line-height: 1.55;
+  margin: 0 0 .5rem;
+}
+.pull cite {
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem;
+  color: var(--muted);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-style: normal;
+}
+
+/* ── ASIDE ── */
+.era-aside {
+  position: sticky;
+  top: 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+@media (max-width: 900px) {
+  .era-aside { position: static; }
+}
+.aside-card {
+  border: 1px solid var(--border);
+  padding: 1.3rem;
+  background: rgba(184,58,34,.02);
+  position: relative;
+}
+.aside-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--ochre), transparent);
+}
+.aside-card h3 {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin-bottom: 1rem;
+}
+.figure {
+  display: flex; flex-direction: column; gap: .5rem;
+  padding-bottom: 1rem; margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.figure:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.fig-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.05rem; font-weight: 400;
+  color: var(--text-bright); line-height: 1.2;
+}
+.fig-role {
+  font-family: 'DM Mono', monospace;
+  font-size: .56rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ochre);
+}
+.fig-desc {
+  font-family: 'Source Serif 4', serif;
+  font-size: .7rem; line-height: 1.65; color: var(--muted);
+}
+.fact-row {
+  display: flex; justify-content: space-between;
+  align-items: baseline; padding: .5rem 0;
+  border-bottom: 1px solid rgba(200,176,144,.06); gap: 1rem;
+}
+.fact-row:last-child { border-bottom: none; }
+.fact-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted); flex-shrink: 0;
+}
+.fact-val {
+  font-family: 'DM Serif Display', serif;
+  font-size: .95rem; color: var(--text-bright); text-align: right;
+}
+.source-item {
+  font-family: 'Source Serif 4', serif;
+  font-size: .64rem; line-height: 1.6;
+  color: var(--muted); padding: .5rem 0;
+  border-bottom: 1px solid rgba(200,176,144,.06);
+}
+.source-item:last-child { border-bottom: none; }
+.source-item strong {
+  color: var(--text-bright); display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem; letter-spacing: .06em; margin-bottom: .2rem;
+}
+
+/* ── ARABESQUE DIVIDER ── */
+.arabesque {
+  display: block;
+  margin: 3rem auto;
+  height: 24px;
+  width: 200px;
+  opacity: 0.25;
+}
+
+/* ── ERA NAVIGATION ── */
+.era-nav {
+  border-top: 1px solid var(--border);
+  padding: 2.5rem 2rem;
+}
+.era-nav-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 2rem;
+}
+.era-nav-btn {
+  display: flex; flex-direction: column; gap: .3rem;
+  text-decoration: none; max-width: 280px; flex: 1;
+}
+.era-nav-btn:last-child { align-items: flex-end; }
+.nav-dir {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--muted);
+}
+.nav-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.05rem; color: var(--text-bright);
+  line-height: 1.2; transition: color .2s;
+}
+.era-nav-btn:hover .nav-title { color: var(--ochre); }
+.nav-dates {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem; color: var(--faint); letter-spacing: .06em;
+}
+.nav-center {
+  text-align: center; text-decoration: none;
+  color: var(--muted); font-family: 'DM Mono', monospace;
+  font-size: .54rem; letter-spacing: .14em;
+  text-transform: uppercase; transition: color .2s;
+}
+.nav-center:hover { color: var(--ochre); }
+
+/* ── MAP LINK CARD ── */
+.map-card {
+  display: block;
+  border: 1px solid var(--border);
+  padding: 1rem 1.2rem;
+  text-decoration: none;
+  transition: all .2s;
+  background: rgba(184,58,34,.03);
+}
+.map-card:hover { border-color: rgba(184,58,34,.4); }
+.map-card .mc-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--ochre); margin-bottom: .4rem;
+}
+.map-card .mc-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: .98rem; color: var(--text-bright); line-height: 1.3;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .era-hero { padding: 3rem 1.2rem 2.5rem; }
+  .era-content { padding: 3rem 1.2rem; }
+  .era-nav { padding: 2rem 1.2rem; }
+  .era-nav-inner { flex-direction: column; }
+}
+
+@keyframes artifactFloat {
+  0% { transform: rotate(-15deg) translateY(0); }
+  50% { transform: rotate(-12deg) translateY(-12px); }
+  100% { transform: rotate(-15deg) translateY(0); }
+}
+</style>
+<link rel="stylesheet" href="xog-fable.css?v=3">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23111929'/%3E%3Cpath d='M32 8 L36.5 27.5 L56 32 L36.5 36.5 L32 56 L27.5 36.5 L8 32 L27.5 27.5 Z' fill='%23C49A3C'/%3E%3Ccircle cx='32' cy='32' r='3.4' fill='%23FDFAF5'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<img src="images/acacia-tree.svg" alt="" aria-hidden="true" style="position:fixed;left:-7%;top:18%;width:23vw;max-width:280px;opacity:0.06;pointer-events:none;transform:rotate(8deg);z-index:0;animation:artifactFloat 18s ease-in-out infinite">
+
+<!-- HERO -->
+<div class="era-hero" data-reveal>
+  <div class="era-hero-inner">
+    <div class="era-crumb">
+      <a href="somali-archive.html">Archive</a>
+      <span>/</span>
+      <span>Maritime Networks</span>
+    </div>
+    <div class="era-kicker">1st Century BCE – 19th Century CE · Indian Ocean</div>
+    <h1 class="era-headline">The <em>Maritime Networks</em></h1>
+    <div class="era-dates">Monsoon Trade · Red Sea to East Africa</div>
+    <p class="era-lede">The Somali coast sat at the junction of three trade systems: the Red Sea, the Persian Gulf, and East Africa. Ships came when the monsoons allowed, returned when the winds reversed. For two thousand years, this rhythm dictated when merchants could depart, what cargo they carried, and where they could sell it.</p>
+  </div>
+</div>
+
+<!-- WORLD CONTEXT BAR -->
+<div class="world-bar" data-reveal>
+  <div class="world-bar-inner">
+    <div class="wb-label">The Indian Ocean in 100 CE</div>
+    <div class="wb-items">
+      <div class="wb-item"><strong>Rome</strong>Importing frankincense from Arabian ports</div>
+      <div class="wb-item"><strong>Kushan Empire</strong>At height, controlling Silk Road termini</div>
+      <div class="wb-item"><strong>Han China</strong>Trading silk westward through Central Asia</div>
+      <div class="wb-item"><strong>Axum</strong>Rising as Red Sea power, minting coins</div>
+      <div class="wb-item"><strong>Periplus written</strong>Greeks document the East African coast</div>
+    </div>
+  </div>
+</div>
+
+<div class="image-panel" data-reveal>
+  <figure>
+    <img src="images/img-1.png"
+         alt="Late nineteenth-century photograph of Berbera, showing dhow-type vessels moored in the harbor with coastal buildings visible on shore."
+         loading="lazy">
+    <figcaption>
+      Berbera harbor in the late 19th century, showing dhows and the stone buildings of the merchant quarters
+      <span class="img-source">Wikimedia Commons · Public Domain</span>
+    </figcaption>
+  </figure>
+</div>
+
+<svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;max-width:200px;margin:2rem auto;opacity:0.3">
+  <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="var(--ochre)" stroke-width="1"/>
+  <circle cx="100" cy="12" r="2" fill="var(--ochre)"/>
+</svg>
+
+<!-- MAIN CONTENT -->
+<div class="era-content">
+
+  <main class="era-main" role="main">
+
+    <div class="section-label" data-reveal>The System</div>
+    <h2 data-reveal>The Monsoon Calendar</h2>
+
+    <p data-reveal>Trade followed the wind. The southwest monsoon—called <em>Xagaa</em> in Somali—brought ships from India and the Persian Gulf from May through October. The northeast monsoon—the <em>Jilaal</em>—returned them homeward from November through April. No merchant could fight this rhythm. The ports themselves were timed to it.</p>
+
+    <p data-reveal>The Periplus of the Erythraean Sea<span class="c">1<span>Lionel Casson, trans., <em>The Periplus Maris Erythraei</em> (Princeton University Press, 1989), pp. 53-61.</span></span>, written between 40 and 70 CE, gives the names that survived into the medieval period: Malao (now Berbera)<span class="c">2<span>George Hourani, <em>Arab Seafaring in the Indian Ocean in Ancient and Early Medieval Times</em> (Princeton, 1951), pp. 32-40.</span></span>, Mundus, Mosylon, and Oponē (Ras Hafun). Each port controlled different trade routes into the interior. Each specialized in a specific cargo.</p>
+
+    <div class="pull" data-reveal>
+      <p>"Vessels are built from Indian timber, from shipwrights of the Euxine, and are provided with a complement of sailors. There is a market-town on the coast, a fine natural harbor, and the navigators sail down the coast here with safety."</p>
+      <cite>Periplus of the Erythraean Sea, c. 40–70 CE (Casson translation)</cite>
+    </div>
+
+    <div class="section-label" data-reveal>The Cargo</div>
+    <h2 data-reveal>What the Ports Traded</h2>
+
+    <p data-reveal>From Oponē, merchants exported cinnamon brought from interior highlands and the frankincense groves of what is now Dhofar. Myrrh came from Malao. Tortoiseshell, ambergris, and ivory flowed north to the Red Sea and south to the Indian Ocean. In return, ships brought Indian cotton from Cambay, Roman glassware, Egyptian grain, and coins<span class="c">3<span>Casson, <em>Periplus</em>, pp. 79-81.</span></span>.</p>
+
+    <p data-reveal>This was not incidental trade. The Periplus records that the traders at Oponē "are better men"—a phrase indicating their status and the importance of the port. Frankincense was not a luxury; it was a necessity in Rome, valued at times more than gold. When the supply dried, prices rose in the imperial capital. The merchants of Oponē understood exactly what they possessed.</p>
+
+    <div class="section-label" data-reveal>The Medieval City</div>
+    <h2 data-reveal>Ibn Battuta's Mogadishu, 1331</h2>
+
+    <p data-reveal>In 1331, the Moroccan traveler Ibn Battuta arrived in Mogadishu during the high trading season. He recorded a city where textiles were "unequalled," exported northward to Egypt and Syria in such quantity that entire neighborhoods produced cloth for foreign markets. The Sultan was Abu Bakr ibn Shaikh 'Umar, who received foreign merchants according to protocols that presume constant commerce. Battuta notes the presence of a scholar, Sa'i, who had traveled to India and China and could speak to the merchant class in their own languages<span class="c">4<span>Ibn Battuta, trans. H.A.R. Gibb, <em>The Travels of Ibn Battuta, A.D. 1325–1354</em>, vol. 2 (Hakluyt Society, 1962), pp. 374-377.</span></span>.</p>
+
+    <p data-reveal>The city was organized around exchange. Merchants did not visit for a few months and depart; they settled into quarters, married, built houses, and remained for years. Mogadishu's economy was not based on the export of raw materials extracted from the interior. It was a manufacturing center.</p>
+
+    <div class="section-label" data-reveal>The Textile System</div>
+    <h2 data-reveal>The Toob Benadir</h2>
+
+    <p data-reveal>By the nineteenth century, one in every five residents of Mogadishu was a weaver. The toob benadir—the cloth of the Benadir coast—was a specialized product. Between 1840 and 1860, Mogadishu, Merca, and Barawa exported between 360,000 and 380,000 pieces annually<span class="c">5<span>Lee V. Cassanelli, <em>The Shaping of Somali Society</em> (University of Pennsylvania Press, 1982), pp. 125-131.</span></span>. This was not incidental production. This was an industrial economy scaled to the logistics of ocean trade. The cloth was dyed to specific standards for Egyptian and Syrian markets. Designs changed based on demand signals sent back from Cairo. The weaving guilds of Mogadishu understood their customer base precisely because they lived at the intersection of two worlds: Indian Ocean traders and Somali interior merchants who carried goods to and from the Harar region.</p>
+
+    <div class="section-label" data-reveal>The Chinese Connection</div>
+    <h2 data-reveal>Duan Chengshi to Zheng He</h2>
+
+    <p data-reveal>The first Chinese written account of East Africa appears in the work of Duan Chengshi, a Tang Dynasty scholar who compiled the <em>Youyang Zazu</em> around 863 CE. He mentions "Bobali"—Berbera—as a trading center for ivory, ambergris, and enslaved persons<span class="c">6<span>Duan Chengshi, <em>Youyang Zazu</em>, c. 863 CE, cited in J.J.L. Duyvendak, <em>China's Discovery of Africa</em> (Arthur Probsthain, 1949), pp. 13-15.</span></span>. This was not accidental knowledge. The trade goods Duan lists match precisely what was being shipped north on merchant vessels: luxury items and human cargo bound for Arab and Persian markets.</p>
+
+    <p data-reveal>Five and a half centuries later, the Ming admiral Zheng He reached Mogadishu and Brava on his fifth voyage (1417–1419) with a fleet so large that contemporary observers described the ships as cities. Ma Huan, the translator aboard the fleet, recorded the visit in his <em>Yingya Shenglan</em><span class="c">7<span>Ma Huan, <em>Yingya Shenglan</em> [Overall Survey of the Ocean's Shores], trans. J.V.G. Mills (Hakluyt Society, 1970), pp. 150-153.</span></span> (1451). Fei Xin's <em>Xingcha Shenglan</em> (1436) corroborates the account. Both describe the ports as trading centers with established merchant communities and sophisticated harbor facilities.</p>
+
+    <p data-reveal>Chinese ceramics found at Mogadishu archaeological sites span from the Tang Dynasty (618–907) through the Portuguese period, suggesting unbroken ceramic trade for nearly nine hundred years<span class="c">8<span>Marie-Pierre Ballarin, "Chinese-Style Ceramics in East Africa from the 9th to the 16th Century," <em>Afriques</em> 5 (2014).</span></span>. Tang Dynasty copper coins bearing the Kaiyuan reign mark have been excavated at Mogadishu, evidence that Chinese commerce reached the coast as a monetary economy, not barter.</p>
+
+    <div class="section-label" data-reveal>The Portuguese Arrival</div>
+    <h2 data-reveal>Duarte Barbosa and the Transformation</h2>
+
+    <p data-reveal>Around 1516–1518, the Portuguese merchant and official Duarte Barbosa compiled accounts from the Indian Ocean network. His observations of Mogadishu record "much gold, ivory, beeswax" being exported. He notes that ships regularly arrived from Cambay in Gujarat carrying "stuffs of all kinds and spices." He also records, with apparent indifference, that Brava was "already destroyed by the Portuguese, with great slaughter"<span class="c">9<span>Duarte Barbosa, <em>The Book of Duarte Barbosa</em>, trans. M.L. Dames (Hakluyt Society, 1918), vol. 1, pp. 24-26.</span></span>.</p>
+
+    <p data-reveal>Vasco da Gama's anonymous diarist, recording the first Portuguese expedition (1499), described Mogadishu as "a large city with houses of four or five storeys high." Within a generation, those houses were ruins<span class="c">10<span><em>A Journal of the First Voyage of Vasco da Gama, 1497–1499</em>, trans. E.G. Ravenstein (Hakluyt Society, 1898), pp. 48-49.</span></span>.</p>
+
+    <div class="section-label" data-reveal>Navigation and Seamanship</div>
+    <h2 data-reveal>Ahmad ibn Majid and the Science of Monsoons</h2>
+
+    <p data-reveal>Ahmad ibn Majid was born around 1432 in Julfar, on the coast of present-day Oman. He became the most renowned navigator of the Indian Ocean, serving sultans and recording his knowledge in the <em>Kitab al-Fawa'id fi Usul 'Ilm al-Bahr wa'l-Qawa'id</em> (Book of the Benefits of Principles and Foundations of Seamanship). This work systematizes what all the merchants and pilots knew through experience: the exact timing of monsoons, the location of hazards, the positions of ports from East Africa to Indonesia, and the seasonal winds that governed every voyage<span class="c">11<span>Ahmad ibn Majid, <em>Kitab al-Fawa'id</em>, cited in G.R. Tibbetts, <em>Arab Navigation in the Indian Ocean before the Coming of the Portuguese</em> (Royal Asiatic Society, 1971), pp. 175-200.</span></span>.</p>
+
+    <p data-reveal>Ibn Majid's text creates a unified system. Aden, Mogadishu, Kilwa, and Madagascar are not separate ports. They are nodes in a network linked by shared winds, shared currents, and shared commerce. A merchant who understood ibn Majid's system could navigate from the Somali coast to the Swahili coast to the Indian coast and back again, timing each voyage to arrive in the season when customers were ready to buy and winds were ready to carry ships home.</p>
+
+  </main>
+
+  <!-- ASIDE -->
+  <aside class="era-aside" role="complementary">
+
+    <div class="aside-card" data-reveal>
+      <h3>Quick Facts</h3>
+      <div class="fact-row">
+        <span class="fact-label">Periplus written</span>
+        <span class="fact-val">40–70 CE</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Trade season</span>
+        <span class="fact-val">Oct–Apr (NE monsoon)</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Return season</span>
+        <span class="fact-val">May–Oct (SW monsoon)</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Major ports</span>
+        <span class="fact-val">4–5 main harbors</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Peak textile output</span>
+        <span class="fact-val">360k–380k pieces/year</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Mogadishu weavers</span>
+        <span class="fact-val">1 in 5 residents</span>
+      </div>
+    </div>
+
+    <div class="aside-card" data-reveal>
+      <h3>Key Ports</h3>
+      <div class="figure">
+        <div class="fig-name">Oponē (Ras Hafun)</div>
+        <div class="fig-role">Frankincense & Cinnamon</div>
+        <div class="fig-desc">Gateway to Arabian spice routes. Traders had high status in Mediterranean markets.</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">Malao (Berbera)</div>
+        <div class="fig-role">Myrrh & Aromatics</div>
+        <div class="fig-desc">First documented Chinese contact with East Africa via Duan Chengshi (863 CE).</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">Mogadishu</div>
+        <div class="fig-role">Textiles & Manufacturing</div>
+        <div class="fig-desc">By 19th century, major industrial center producing cloth for Egypt and Syria markets.</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">Merca & Barawa</div>
+        <div class="fig-role">Secondary textile hubs</div>
+        <div class="fig-desc">Part of integrated production network supporting Benadir cloth exports.</div>
+      </div>
+    </div>
+
+    <div class="aside-card" data-reveal>
+      <h3>Primary Sources</h3>
+      <div class="source-item">
+        <strong>Periplus of the Erythraean Sea</strong>
+        c. 40–70 CE. Greek merchant's guide to Red Sea and Indian Ocean ports. Names Malao, Oponē, Mundus, Mosylon. Translated by Lionel Casson (1989).
+      </div>
+      <div class="source-item">
+        <strong>Ibn Battuta's Travels</strong>
+        1325–1354. Moroccan geographer visits Mogadishu in 1331. Documents textile production, sultanate protocol, merchant quarters, scholar networks.
+      </div>
+      <div class="source-item">
+        <strong>Zheng He's Expeditions</strong>
+        Ma Huan and Fei Xin document the fifth voyage (1417–1419) to Mogadishu. Chinese records confirm port status and facilities.
+      </div>
+      <div class="source-item">
+        <strong>Ahmad ibn Majid's Navigation Text</strong>
+        <em>Kitab al-Fawa'id</em>. Systematizes monsoon timing, port locations, and seamanship for Indian Ocean network.
+      </div>
+    </div>
+
+    <a href="xog-map.html" class="map-card" data-reveal>
+      <div class="mc-label">Interactive Map</div>
+      <div class="mc-title">See the maritime<br>trade routes in context</div>
+    </a>
+
+  </aside>
+</div>
+
+<svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;max-width:200px;margin:2rem auto;opacity:0.3">
+  <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="var(--ochre)" stroke-width="1"/>
+  <circle cx="100" cy="12" r="2" fill="var(--ochre)"/>
+</svg>
+
+<!-- ERA NAVIGATION -->
+<div class="era-nav" data-reveal>
+  <div class="era-nav-inner">
+    <a href="era-genealogies.html" class="era-nav-btn">
+      <span class="nav-dir">← Previous era</span>
+      <span class="nav-title">The Founding Genealogies</span>
+      <span class="nav-dates">~2500 BCE – present</span>
+    </a>
+    <a href="somali-archive.html" class="nav-center">All Eras</a>
+    <a href="era-benadir.html" class="era-nav-btn">
+      <span class="nav-dir">Next era →</span>
+      <span class="nav-title">Benadiri City-States</span>
+      <span class="nav-dates">900 – 1500 CE</span>
+    </a>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script>
+(function() {
+  'use strict';
+
+  // ── Scroll Reveal ──
+  var revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('[data-reveal]').forEach(function(el) {
+    revealObserver.observe(el);
+  });
+})();
+</script>
+<script src="xog-cite.js"></script>
+<script src="xog-fable.js?v=3"></script>
+<script src="xog-nav.js"></script>
+
+</body>
+</html>

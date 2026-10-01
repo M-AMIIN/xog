@@ -1,0 +1,285 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Osmanya&display=swap');
+/* ═══════════════════════════════════════════
+   Xog Archive — Shared Navigation & Footer
+   ═══════════════════════════════════════════ */
+
+/* ─── SKIP TO CONTENT ─── */
+.xn-skip {
+  position: fixed;
+  top: -100px;
+  left: 1rem;
+  background: var(--ochre, #B83A22);
+  color: #fff;
+  padding: 0.5rem 1.2rem;
+  z-index: 10001;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  text-decoration: none;
+  border-radius: 0 0 4px 4px;
+  transition: top 0.2s ease;
+}
+.xn-skip:focus {
+  top: 0;
+  outline: 2px solid var(--ochre, #B83A22);
+  outline-offset: 2px;
+}
+
+/* ─── PROGRESS BAR ─── */
+#xog-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background: var(--ochre, #B83A22);
+  z-index: 10000;
+  transition: width 0.1s linear;
+}
+
+/* ─── TOP NAVIGATION ─── */
+#xog-nav {
+  position: fixed;
+  top: 2px;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  background: rgba(250, 246, 239, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(20, 12, 4, 0.06);
+}
+
+.xn-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.xn-logo {
+  font-family: 'DM Serif Display', 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  color: var(--ochre, #B83A22);
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  transition: color 0.2s ease;
+}
+.xn-logo:hover { color: var(--ink, #110E0A); }
+
+.xn-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--ochre, #B83A22);
+  border-radius: 50%;
+  margin-left: 2px;
+  margin-bottom: 2px;
+  vertical-align: baseline;
+}
+
+.xn-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.xn-links a {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted, #5A4430);
+  text-decoration: none;
+  padding: 4px 0;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.xn-links a:hover,
+.xn-links a.active {
+  color: var(--ochre, #B83A22);
+  border-bottom-color: var(--ochre, #B83A22);
+}
+.xn-links a:focus-visible {
+  outline: 2px solid var(--ochre, #B83A22);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+/* ─── HAMBURGER (MOBILE) ─── */
+.xn-burger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 4px;
+}
+.xn-burger span {
+  display: block;
+  width: 22px;
+  height: 1.5px;
+  background: var(--text, #2A1E10);
+  transition: transform 0.3s ease, opacity 0.2s ease;
+}
+.xn-burger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.xn-burger.open span:nth-child(2) { opacity: 0; }
+.xn-burger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* ─── MOBILE MENU ─── */
+.xn-mobile {
+  display: none;
+  flex-direction: column;
+  padding: 1rem 2rem 1.5rem;
+  background: rgba(250, 246, 239, 0.98);
+  border-bottom: 1px solid rgba(20, 12, 4, 0.08);
+}
+.xn-mobile a {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text, #2A1E10);
+  text-decoration: none;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(20, 12, 4, 0.05);
+  transition: color 0.2s ease;
+}
+.xn-mobile a:hover { color: var(--ochre, #B83A22); }
+.xn-mobile.open { display: flex; }
+
+/* ─── FOOTER ─── */
+#xog-footer {
+  background: #111929;
+  color: rgba(250, 246, 239, 0.7);
+  padding: 4rem 2rem 2rem;
+  margin-top: 0;
+  font-family: 'Source Serif 4', serif;
+}
+
+.xf-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 3rem;
+}
+
+.xf-logo {
+  font-family: 'DM Serif Display', 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  color: rgba(250, 246, 239, 0.9);
+  letter-spacing: 0.06em;
+  margin-bottom: 0.5rem;
+}
+
+.xf-tagline {
+  font-size: 0.85rem;
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(250, 246, 239, 0.5);
+  line-height: 1.5;
+}
+
+.xf-cols {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+}
+
+.xf-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.xf-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(250, 246, 239, 0.35);
+  margin-bottom: 0.5rem;
+}
+
+.xf-col a {
+  color: rgba(250, 246, 239, 0.6);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 300;
+  transition: color 0.2s ease;
+  line-height: 1.4;
+}
+.xf-col a:hover { color: rgba(250, 246, 239, 1); }
+.xf-col a:focus-visible {
+  outline: 1px solid rgba(250, 246, 239, 0.5);
+  outline-offset: 2px;
+}
+
+.xf-col-eras {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  gap: 0.35rem 2rem;
+}
+.xf-col-eras .xf-label {
+  grid-column: 1 / -1;
+}
+
+.xf-bottom {
+  max-width: 1400px;
+  margin: 3rem auto 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(250, 246, 239, 0.08);
+  display: flex;
+  justify-content: space-between;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  color: rgba(250, 246, 239, 0.25);
+}
+
+/* ─── GLOBAL FOCUS STYLES ─── */
+*:focus-visible {
+  outline: 2px solid var(--ochre, #B83A22);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+/* Remove default outline for mouse users */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  .xn-links { display: none; }
+  .xn-burger { display: flex; }
+  .xf-inner { grid-template-columns: 1fr; gap: 2rem; }
+  .xf-cols { grid-template-columns: 1fr 1fr; }
+  .xf-col-eras { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .xn-inner { padding: 0 1.2rem; }
+  #xog-footer { padding: 3rem 1.2rem 1.5rem; }
+  .xf-cols { grid-template-columns: 1fr; }
+  .xf-bottom { flex-direction: column; gap: 0.5rem; }
+}
+
+/* ── Fable identity: the word xog in its own script, beside every logo ── */
+.xn-osm, .logo-osm {
+  font-family: 'Noto Sans Osmanya', serif;
+  font-size: 0.62em; letter-spacing: 0.14em;
+  margin-left: 0.55rem; opacity: 0.75;
+}
+.xf-osm {
+  font-family: 'Noto Sans Osmanya', serif;
+  font-size: 0.55em; letter-spacing: 0.14em;
+  margin-left: 0.6rem; color: #C49A3C; opacity: 0.9;
+}

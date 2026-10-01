@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xog — The Xeer · Ancient – present</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=DM+Serif+Display&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300;1,8..60,400&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="xog-nav.css">
+<link rel="stylesheet" href="xog-styles.css">
+<link rel="stylesheet" href="xog-cite.css">
+<style>
+/* ── ERA-XEER ELEVATED STYLES ─────────────────────────────── */
+:root {
+  --ochre: #B83A22;
+  --ochre-dim: rgba(184,58,34, 0.55);
+  --ochre-glow: rgba(184,58,34, 0.10);
+  --ochre-deep: #7A2616;
+  --gold: #C49A3C;
+  --gold-dim: rgba(184,58,34, 0.55);
+  --gold-glow: rgba(184,58,34, 0.10);
+  --rust: #8A5800;
+  --rust-dim: rgba(138, 88, 0, 0.60);
+  --sand: #C8A882;
+  --text-bright: #140C04;
+  --text: #2A1E10;
+  --muted: #5A4430;
+  --faint: #8A7460;
+  --deep: #F9F6F1;
+  --surface: #F3EDE3;
+  --card: #EDE5D8;
+  --border: rgba(20, 12, 4, 0.09);
+  --border-mid: rgba(20, 12, 4, 0.16);
+  --sea: #1C3272;
+  --col-aside: 300px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  overflow-x: hidden;
+  background: var(--deep);
+  color: var(--text);
+  padding-top: 58px;
+}
+
+/* ── SCROLL REVEAL ── */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(1.8rem);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-reveal].visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── HERO ── */
+.era-hero {
+  position: relative;
+  border-bottom: 1px solid var(--border);
+  padding: 4rem 2rem 3.5rem;
+  overflow: hidden;
+  background: linear-gradient(170deg, #F9F6F1 0%, #F3EDE3 60%, #EDE5D8 100%);
+}
+.era-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 70% 50%, rgba(184,58,34,.06), transparent),
+    radial-gradient(ellipse 40% 60% at 20% 80%, rgba(138,88,0,.04), transparent);
+  pointer-events: none;
+}
+/* grain texture */
+.era-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.era-hero-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.era-crumb {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.era-crumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.era-crumb a:hover { color: var(--ochre); }
+.era-crumb span { opacity: .4; }
+
+.era-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: .7rem;
+}
+.era-headline {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.8rem, 6vw, 5.2rem);
+  font-weight: 300;
+  line-height: 1.05;
+  color: var(--text-bright);
+  margin-bottom: .5rem;
+  max-width: 800px;
+}
+.era-headline em {
+  font-style: italic;
+  color: var(--ochre);
+}
+.era-dates {
+  font-family: 'DM Mono', monospace;
+  font-size: .62rem;
+  color: var(--muted);
+  letter-spacing: .1em;
+  margin-bottom: 2rem;
+}
+.era-lede {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.18rem;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.75;
+  max-width: 680px;
+  border-left: 2px solid var(--ochre);
+  padding-left: 1.4rem;
+}
+
+/* ── WORLD CONTEXT BAR ── */
+.world-bar {
+  background: rgba(184,58,34,.03);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: .9rem 2rem;
+}
+.world-bar-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.wb-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.wb-items { display: flex; gap: 1.5rem; flex-wrap: wrap; flex: 1; }
+.wb-item {
+  font-family: 'Source Serif 4', serif;
+  font-size: .6rem;
+  color: var(--muted);
+  letter-spacing: .05em;
+}
+.wb-item strong {
+  color: var(--text-bright);
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: .56rem;
+  letter-spacing: .08em;
+  margin-bottom: .15rem;
+}
+
+/* ── IMAGE PANEL ── */
+.image-panel {
+  max-width: 1100px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+}
+.image-panel figure {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+.image-panel img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: sepia(0.15) contrast(1.05);
+  transition: filter 0.4s ease;
+}
+.image-panel figure:hover img {
+  filter: sepia(0) contrast(1);
+}
+.image-panel figcaption {
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .06em;
+  color: var(--muted);
+  padding: .8rem 1.2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.image-panel figcaption .img-source {
+  font-size: .5rem;
+  color: var(--faint);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+/* ── CONTENT GRID ── */
+.era-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  display: grid;
+  grid-template-columns: 1fr var(--col-aside);
+  gap: 4rem;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .era-content { grid-template-columns: 1fr; gap: 3rem; }
+  .era-aside { order: -1; }
+}
+
+/* ── PROSE ── */
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin-bottom: .8rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid var(--border);
+}
+.era-main h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.9rem;
+  font-weight: 400;
+  color: var(--text-bright);
+  line-height: 1.2;
+  margin: 3rem 0 1rem;
+}
+.era-main h2:first-of-type { margin-top: 0; }
+.era-main p {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.02rem;
+  line-height: 1.85;
+  color: var(--muted);
+  margin-bottom: 1.4rem;
+}
+.era-main p strong {
+  color: var(--text-bright);
+  font-weight: 400;
+}
+
+/* ── PULL QUOTE ── */
+.pull {
+  border-left: 3px solid var(--ochre);
+  padding: 1.2rem 1.5rem;
+  margin: 2.5rem 0;
+  background: var(--ochre-glow);
+}
+.pull p {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.32rem;
+  font-style: italic;
+  color: var(--text-bright);
+  line-height: 1.55;
+  margin: 0 0 .5rem;
+}
+.pull cite {
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem;
+  color: var(--muted);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-style: normal;
+}
+
+/* ── ASIDE ── */
+.era-aside {
+  position: sticky;
+  top: 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+@media (max-width: 900px) {
+  .era-aside { position: static; }
+}
+.aside-card {
+  border: 1px solid var(--border);
+  padding: 1.3rem;
+  background: rgba(184,58,34,.02);
+  position: relative;
+}
+.aside-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--ochre), transparent);
+}
+.aside-card h3 {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin-bottom: 1rem;
+}
+.figure {
+  display: flex; flex-direction: column; gap: .5rem;
+  padding-bottom: 1rem; margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.figure:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.fig-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.05rem; font-weight: 400;
+  color: var(--text-bright); line-height: 1.2;
+}
+.fig-role {
+  font-family: 'DM Mono', monospace;
+  font-size: .56rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ochre);
+}
+.fig-desc {
+  font-family: 'Source Serif 4', serif;
+  font-size: .7rem; line-height: 1.65; color: var(--muted);
+}
+.fact-row {
+  display: flex; justify-content: space-between;
+  align-items: baseline; padding: .5rem 0;
+  border-bottom: 1px solid rgba(200,176,144,.06); gap: 1rem;
+}
+.fact-row:last-child { border-bottom: none; }
+.fact-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted); flex-shrink: 0;
+}
+.fact-val {
+  font-family: 'DM Serif Display', serif;
+  font-size: .95rem; color: var(--text-bright); text-align: right;
+}
+.source-item {
+  font-family: 'Source Serif 4', serif;
+  font-size: .64rem; line-height: 1.6;
+  color: var(--muted); padding: .5rem 0;
+  border-bottom: 1px solid rgba(200,176,144,.06);
+}
+.source-item:last-child { border-bottom: none; }
+.source-item strong {
+  color: var(--text-bright); display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem; letter-spacing: .06em; margin-bottom: .2rem;
+}
+
+/* ── ARABESQUE DIVIDER ── */
+.arabesque {
+  display: block;
+  margin: 3rem auto;
+  height: 24px;
+  width: 200px;
+  opacity: 0.25;
+}
+
+/* ── ERA NAVIGATION ── */
+.era-nav {
+  border-top: 1px solid var(--border);
+  padding: 2.5rem 2rem;
+}
+.era-nav-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 2rem;
+}
+.era-nav-btn {
+  display: flex; flex-direction: column; gap: .3rem;
+  text-decoration: none; max-width: 280px; flex: 1;
+}
+.era-nav-btn:last-child { align-items: flex-end; }
+.nav-dir {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--muted);
+}
+.nav-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.05rem; color: var(--text-bright);
+  line-height: 1.2; transition: color .2s;
+}
+.era-nav-btn:hover .nav-title { color: var(--ochre); }
+.nav-dates {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem; color: var(--faint); letter-spacing: .06em;
+}
+.nav-center {
+  text-align: center; text-decoration: none;
+  color: var(--muted); font-family: 'DM Mono', monospace;
+  font-size: .54rem; letter-spacing: .14em;
+  text-transform: uppercase; transition: color .2s;
+}
+.nav-center:hover { color: var(--ochre); }
+
+/* ── BACKGROUND ARTIFACT ANIMATION ── */
+@keyframes artifactFloat {
+  0% { transform: rotate(-18deg) translateY(0); }
+  50% { transform: rotate(-15deg) translateY(-12px); }
+  100% { transform: rotate(-18deg) translateY(0); }
+}
+
+/* ── MAP LINK CARD ── */
+.map-card {
+  display: block;
+  border: 1px solid var(--border);
+  padding: 1rem 1.2rem;
+  text-decoration: none;
+  transition: all .2s;
+  background: rgba(184,58,34,.03);
+}
+.map-card:hover { border-color: rgba(184,58,34,.4); }
+.map-card .mc-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--ochre); margin-bottom: .4rem;
+}
+.map-card .mc-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: .98rem; color: var(--text-bright); line-height: 1.3;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .era-hero { padding: 3rem 1.2rem 2.5rem; }
+  .era-content { padding: 3rem 1.2rem; }
+  .era-nav { padding: 2rem 1.2rem; }
+  .era-nav-inner { flex-direction: column; }
+}
+
+/* The case: one dispute walked from harm to settlement, scoped to itself */
+.xeercase{ --xpaper:#F6F0E4; --xedge:#E6DAC2; --xink:#2A1E10; --xsoft:#5A4430; --xfaint:#8A7460; --xochre:#B83A22; max-width:760px; margin:0 auto; padding:1rem 2rem 3.4rem; }
+.xeercase .xc-wrap{ max-width:680px; margin:0 auto; }
+.xeercase h2.xc-h2{ font-family:'DM Serif Display',serif; font-weight:300; font-size:clamp(1.6rem,3vw,2.3rem); color:var(--xink); text-align:center; margin:.3rem 0 0; line-height:1.1; }
+.xeercase .tree{ display:block; width:100%; height:108px; margin:1.4rem 0 .3rem; }
+.xeercase .canopy{ transform-box:fill-box; transform-origin:50% 100%; animation:xsway 9s ease-in-out infinite; }
+@keyframes xsway{ 0%,100%{transform:rotate(-.5deg);} 50%{transform:rotate(.5deg);} }
+.xeercase .ground{ height:1px; background:linear-gradient(90deg,transparent,var(--xedge) 14%,var(--xedge) 86%,transparent); }
+.xeercase .steps{ display:flex; justify-content:center; flex-wrap:wrap; gap:.4rem; margin:1.8rem 0 1.3rem; }
+.xeercase .xc-step{ font-family:'DM Mono',monospace; font-size:.58rem; letter-spacing:.06em; padding:.45rem .9rem; border:1px solid var(--xedge); background:var(--xpaper); color:var(--xsoft); cursor:pointer; transition:all .2s ease; }
+.xeercase .xc-step:hover{ border-color:var(--xochre); color:var(--xochre); }
+.xeercase .xc-step.on{ background:var(--xink); color:var(--xpaper); border-color:var(--xink); }
+.xeercase .stage{ position:relative; background:var(--xpaper); border:1px solid var(--xedge); box-shadow:0 1px 0 #FFFFFFAA inset,0 16px 40px rgba(40,24,8,.08); padding:2.3rem 2.5rem; min-height:218px; }
+.xeercase .xc-panel{ display:none; }
+.xeercase .xc-panel.on{ display:block; animation:xfade .5s ease; }
+@keyframes xfade{ from{opacity:0;transform:translateY(6px);} to{opacity:1;transform:none;} }
+.xeercase .xc-panel .no{ font-family:'DM Mono',monospace; font-size:.62rem; letter-spacing:.12em; text-transform:uppercase; color:var(--xochre); }
+.xeercase .xc-panel h3{ font-family:'DM Serif Display',serif; font-weight:400; font-size:1.45rem; color:var(--xink); margin:.4rem 0 .85rem; }
+.xeercase .xc-panel p{ font-size:1.03rem; line-height:1.65; color:var(--xink); }
+.xeercase .reck{ text-align:center; margin:.3rem 0 1rem; }
+.xeercase .reck .n{ font-family:'DM Serif Display',serif; font-size:clamp(3.2rem,11vw,5rem); line-height:1; color:var(--xochre); }
+.xeercase .reck .u{ font-family:'DM Mono',monospace; font-size:.68rem; letter-spacing:.2em; text-transform:uppercase; color:var(--xsoft); margin-top:.3rem; }
+.xeercase .reck .u b{ color:var(--xink); font-weight:400; }
+.xeercase .foot{ margin-top:1.2rem; text-align:center; font-family:'DM Mono',monospace; font-size:.58rem; letter-spacing:.04em; color:var(--xfaint); }
+@media (prefers-reduced-motion: reduce){ .xeercase .canopy{animation:none;} .xeercase .xc-panel.on{animation:none;} }
+@media (max-width:560px){ .xeercase .stage{ padding:1.7rem 1.3rem; } }
+</style>
+<link rel="stylesheet" href="xog-fable.css?v=3">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23111929'/%3E%3Cpath d='M32 8 L36.5 27.5 L56 32 L36.5 36.5 L32 56 L27.5 36.5 L8 32 L27.5 27.5 Z' fill='%23C49A3C'/%3E%3Ccircle cx='32' cy='32' r='3.4' fill='%23FDFAF5'/%3E%3C/svg%3E">
+</head>
+<body>
+<img src="images/fandhaal-spoon.svg" alt="" aria-hidden="true" style="position:fixed;right:-5%;top:15%;width:25vw;max-width:300px;opacity:0.06;pointer-events:none;transform:rotate(-18deg);z-index:0;animation:artifactFloat 18s ease-in-out infinite">
+
+<!-- HERO -->
+<div class="era-hero" data-reveal>
+  <div class="era-hero-inner">
+    <div class="era-crumb">
+      <a href="somali-archive.html">Archive</a>
+      <span>/</span>
+      <span>The Xeer</span>
+    </div>
+    <div class="era-kicker">Ancient – present · Living tradition</div>
+    <h1 class="era-headline">The <em>Xeer</em><br>Somali Customary Law</h1>
+    <div class="era-dates">No police · No courts · No prisons</div>
+    <p class="era-lede">A man is killed. His clan demands one hundred camels from the killer's clan. The elders of both sides meet. The genealogies are recited to establish the relationships. The precedents are reviewed. The compensation is paid. No court, no police, no prison, no state. The xeer — Somali customary law — has been settling disputes this way for longer than anyone can date. Colonial powers tried to replace it. The Somali state tried to replace it. Both failed. The xeer is still in use.</p>
+  </div>
+</div>
+
+<!-- WORLD CONTEXT BAR -->
+<div class="world-bar" data-reveal>
+  <div class="world-bar-inner">
+    <div class="wb-label">While Europe was</div>
+    <div class="wb-items">
+      <div class="wb-item"><strong>Medieval Europe</strong>Burning witches, settling disputes by ordeal</div>
+      <div class="wb-item"><strong>Ottoman Empire</strong>Building centralized state bureaucracy</div>
+      <div class="wb-item"><strong>Somalia</strong>Maintaining legal system based on negotiated compensation</div>
+    </div>
+  </div>
+</div>
+
+<!-- THE CASE — one dispute walked from harm to settlement -->
+<div class="xeercase">
+  <div class="xc-wrap">
+    <div class="section-label" data-reveal>A case under the acacia</div>
+    <h2 class="xc-h2">Walk one dispute, from the killing to the peace</h2>
+
+    <svg class="tree" viewBox="0 0 400 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g class="canopy" fill="none" stroke="#8A7460" stroke-opacity="0.55" stroke-width="1.2">
+        <path d="M120,80 L150,48 M200,86 L186,36 M200,86 L214,38 M280,80 L250,46"/>
+        <path fill="#8A7460" fill-opacity="0.12" stroke="none" d="M70,42 C110,27 160,25 200,31 C242,25 292,27 332,42 C300,46 250,48 200,48 C150,48 100,46 70,42 Z"/>
+        <path d="M64,42 C120,31 170,29 200,33 C232,29 284,31 338,42" stroke-opacity="0.7"/>
+      </g>
+      <path d="M198,86 L197,108 M202,86 L203,108" stroke="#8A7460" stroke-opacity="0.6" stroke-width="2.4"/>
+    </svg>
+    <div class="ground"></div>
+
+    <div class="steps">
+      <button class="xc-step">The harm</button>
+      <button class="xc-step">The council</button>
+      <button class="xc-step">The reckoning</button>
+      <button class="xc-step">Why it holds</button>
+      <button class="xc-step">The peace</button>
+    </div>
+
+    <div class="stage">
+      <div class="xc-panel"><div class="no">1 / the harm</div><h3>A man is killed</h3><p>A man of one clan kills a man of another. There is no state to arrest him and no court to summon him. What stands in their place is the xeer, and the elders who carry it in memory.</p></div>
+      <div class="xc-panel"><div class="no">2 / the council</div><h3>The elders convene</h3><p>Elders of both clans sit together. No king appoints them and no king pays them. They judge from precedent, which they hold by heart, because the xeer was never written down and has not needed to be.</p></div>
+      <div class="xc-panel"><div class="no">3 / the reckoning</div><h3>The price of a life</h3><div class="reck"><div class="n" id="xcount">100</div><div class="u">camels &middot; <b>the life of a man</b></div></div><p>The xeer sets a price on every harm, and runs a graduated scale below this one for lesser injuries, each figure as fixed as any written civil code. A death is reckoned at one hundred camels, paid in livestock, not taken in blood.</p></div>
+      <div class="xc-panel"><div class="no">4 / why it holds</div><h3>Even the strong pay</h3><p>In a system of revenge, a powerful clan can kill and fear no answer. Under the xeer, even a powerful clan pays, and one hundred camels is a cost heavy enough that both sides would rather settle than let claim breed counter-claim until the herds are gone.</p></div>
+      <div class="xc-panel"><div class="no">5 / the peace</div><h3>The clan pays together</h3><p>The killer does not pay alone. His whole clan carries the debt, so his whole clan had reason to restrain him before the act and to counsel him after it. The camels change hands, an oath seals the judgment, and the feud is closed before revenge can begin its cycle. No state stood anywhere in this.</p></div>
+    </div>
+
+    <div class="foot">after I.M. Lewis, A Pastoral Democracy, 1961</div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="era-content">
+
+  <main class="era-main" role="main">
+
+    <div class="section-label" data-reveal>How Xeer Works</div>
+    <h2 data-reveal>Law Without Lawyers</h2>
+
+    <p data-reveal>Nothing is written down. The core principle is <strong>mag</strong> — blood compensation, also called <strong>diya</strong>. A man kills another man: his clan owes the victim's clan one hundred camels.<a class="c">1<span><strong>I.M. Lewis</strong>, <em>A Pastoral Democracy</em> (1961), ch. 8, pp. 161–170<span class="tip-note">Detailed account of mag rates and the dia-paying group structure</span></span></a> A woman killed: fifty camels. The numbers are not negotiable. They are fixed, known to everyone, graded by the severity of injury from murder down to insult. The scale has been stable for as long as anyone has recorded it.</p>
+
+    <p data-reveal>The logic is economic. In a revenge system, a powerful clan can kill with impunity — who will punish them? In a compensation system, even a powerful clan pays. One hundred camels is a serious cost. It gives every clan an incentive to settle rather than escalate, because escalation means counter-claims, counter-compensation, and eventual depletion of the herd. The system turns justice into a problem both sides have a financial interest in solving.</p>
+
+    <p data-reveal>There are no courts. A dispute goes before clan elders — men whose authority comes from age, reputation, and knowledge of precedent. The elders hear both sides. They consult previous cases held in oral memory: what was decided the last time this kind of dispute arose, and the time before that.<a class="c">2<span><strong>I.M. Lewis</strong>, <em>A Pastoral Democracy</em> (1961), ch. 7<span class="tip-note">On the role of elders as arbiters and the oral precedent system</span></span></a> They issue a judgment. If both sides accept, the matter is closed. If one side refuses, the dispute escalates — and at that point, neighboring clans intervene, because unresolved disputes threaten everyone's grazing access and trade.</p>
+
+    <p data-reveal>There is no police force. If a judgment is issued and a clan refuses to pay compensation, the remedy is economic or military pressure from the clan of the victim. This creates mutual incentive: the victim's clan has incentive to see the judgment respected; the defendant's clan has incentive to convince the defendant to pay rather than face escalation.</p>
+
+    <div class="pull" data-reveal>
+      <p>"The Xeer system has operated for centuries without a state, maintaining public order through collective enforcement and mutual interest in keeping disputes from spiraling into endless vendetta."</p>
+      <cite>I.M. Lewis, A Pastoral Democracy (1961)</cite>
+    </div>
+
+    <div class="section-label" data-reveal>The Scale of Compensation</div>
+    <h2 data-reveal>Graduated Justice</h2>
+
+    <p data-reveal>The Xeer developed a graduated scale of compensation that parallels the specificity of codified civil law. Consider the scale of injury compensation:</p>
+
+    <p data-reveal><strong>Murder:</strong> 100 camels (sometimes reckoned as 1,000 shillings in modern cash equivalents). <strong>Blinding of one eye:</strong> 50 camels. <strong>Permanent disability:</strong> compensation scaled by severity. <strong>Temporary injury:</strong> compensation scaled by healing time. <strong>Insult to honor:</strong> smaller compensation. <strong>Theft:</strong> return of the stolen item plus additional compensation. <strong>Rape:</strong> 100 camels plus marriage if the victim wishes. <strong>Breach of marriage contract:</strong> return of bride-price plus additional compensation.</p>
+
+    <p data-reveal>The system distinguishes between types of harm, grades compensation by severity, and includes remedies for both physical and reputational injury.<span class="c">3<span><strong>Michael van Notten</strong>, <em>The Law of the Somalis</em> (Red Sea Press, 2005), pp. 45–68<span class="tip-note">Van Notten's analysis of the xeer compensation schedule, compiled from interviews with Somali elders in the 1990s</span></span></span> The system creates incentive for settlement rather than vendetta because the payment is known, fixed, and within the capability of most clans to pay if they must.</p>
+
+    <div class="section-label" data-reveal>Collective Responsibility</div>
+    <h2 data-reveal>How the Clan Enforces Law</h2>
+
+    <p data-reveal>The Xeer functions through collective responsibility. If one man of a clan commits murder, the entire clan is responsible for paying the compensation or facing the consequences. This creates powerful incentive for the clan to control its members. A man contemplating violence knows that his action will burden his entire clan with the cost of compensation. His kinsmen will pressure him not to act. His elders will counsel restraint.</p>
+
+    <p data-reveal>If a member refuses to respect the judgment of the elders, the clan has remedies: they can seize his property, exclude him from benefits, or declare him expelled from the clan. Expulsion from the clan is an extreme penalty — it removes a man from the kinship network that provides security, provides water rights, provides marriage alliance. It is functionally equivalent to execution, though without the bloodshed.</p>
+
+    <p data-reveal>The system also applies to grazing rights, water access, and territorial disputes. If two clans have a dispute over access to a well, the elders of both clans meet and consult precedent. Historically, was the well shared? Who had priority in drought seasons? What arrangements were made in prior generations? The elders draw on this collective memory to issue judgment. The judgment is enforced through the same collective mechanism: acceptance by both clans or escalation until pressure forces acceptance.</p>
+
+    <div class="section-label" data-reveal>Colonial Encounter</div>
+    <h2 data-reveal>Resistance to Replacement</h2>
+
+    <p data-reveal>When British and Italian colonizers arrived in the 19th century, they attempted to replace xeer with European law codes. They established courts, appointed judges, and declared xeer to be "customary law" — a designation that was intended to marginalize it as less legitimate than the written colonial code.</p>
+
+    <p data-reveal>It persisted in parallel with colonial courts. Disputes brought to colonial courts would be re-litigated in xeer courts. Judgments from the magistrate would be overridden by elder decisions if they conflicted with xeer precedent. The colonial authorities eventually learned to accommodate the system rather than suppress it — partly out of pragmatism (the xeer system worked), partly out of administrative necessity (they could not police the vast pastoralist territories without local cooperation).</p>
+
+    <p data-reveal>Xeer survived colonialism, the Siad Barre government's attempts to replace it with state law in the 1970s, and the collapse of central authority in 1991.<span class="c">4<span><strong>I.M. Lewis</strong>, <em>A Modern History of the Somali</em>, 4th ed. (Ohio University Press, 2002), pp. 264–268<span class="tip-note">Lewis documents Siad Barre's 1975 Family Law that attempted to override xeer's marriage and inheritance provisions — the law was widely ignored in rural areas</span></span></span> The system persists because the communities that use it find it more legitimate than any alternative imposed from outside.</p>
+
+  </main>
+
+  <!-- ASIDE -->
+  <aside class="era-aside" role="complementary">
+
+    <div class="aside-card" data-reveal>
+      <h3>Quick Facts</h3>
+      <div class="fact-row">
+        <span class="fact-label">Age</span>
+        <span class="fact-val">Ancient – present</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Form</span>
+        <span class="fact-val">Oral tradition</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Courts</span>
+        <span class="fact-val">None (elder councils)</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Police</span>
+        <span class="fact-val">None (clan enforcement)</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Murder compensation</span>
+        <span class="fact-val">100 camels</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Still active</span>
+        <span class="fact-val">Rural Somalia today</span>
+      </div>
+    </div>
+
+    <div class="aside-card" data-reveal>
+      <h3>Key Figures</h3>
+      <div class="figure">
+        <div class="fig-name">Clan Elders</div>
+        <div class="fig-role">System maintained collectively</div>
+        <div class="fig-desc">Xeer is not maintained by individual founders or leaders. It is maintained by the collective recognition and practice of all clan members. Elders serve as judges and arbiters, but they are accountable to the clan for their decisions.</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">I.M. Lewis</div>
+        <div class="fig-role">Modern scholar</div>
+        <div class="fig-desc">British anthropologist who documented xeer in the 1950s–60s. His work A Pastoral Democracy remains the standard reference for understanding how the system functions.</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">Michael van Notten</div>
+        <div class="fig-role">Modern legal theorist</div>
+        <div class="fig-desc">Analyzed xeer as example of stateless law. Argued the system provides functional legal order without central authority, with implications for legal theory.</div>
+      </div>
+    </div>
+
+    <div class="aside-card" data-reveal>
+      <h3>Primary Sources</h3>
+      <div class="source-item">
+        <strong>A Pastoral Democracy</strong>
+        I.M. Lewis (1961). Comprehensive documentation of xeer structure, procedures, and enforcement. Includes specific case studies of disputes and their resolution.
+      </div>
+      <div class="source-item">
+        <strong>The Law of the Somalis: A Stable System of Stateless Law</strong>
+        Michael van Notten (2005). Theoretical analysis of how xeer functions as complete legal system without state apparatus. Discusses water rights, grazing rights, marriage law, criminal compensation.
+      </div>
+      <div class="source-item">
+        <strong>Understanding Somalia and Somaliland</strong>
+        Various. Modern assessments of how xeer has adapted to modern conflicts and post-state Somalia. Documents xeer's role in managing resources and resolving disputes in contemporary pastoral contexts.
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<!-- Arabesque divider -->
+<svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="#B83A22" stroke-width="1"/>
+  <circle cx="100" cy="12" r="2" fill="#B83A22"/>
+</svg>
+
+<!-- SECOND HALF — Xeer Today -->
+<div class="era-content" style="padding-top:0;">
+  <main class="era-main" role="main">
+
+    <div class="section-label" data-reveal>Xeer in Practice</div>
+    <h2 data-reveal>Water, Marriage, Grazing</h2>
+
+    <p data-reveal>In pastoral Somalia, xeer continues to regulate the resources that matter most: water, land, marriage, and the conduct of warfare.</p>
+
+    <p data-reveal><strong>Water rights.</strong> Wells and boreholes are owned by clans or jointly by clans. Xeer specifies who can draw water, in what season, in what quantity. In drought, the rules change — access is shared more broadly to prevent wells from being monopolized by any single clan. The elders of the well-owning clans meet with elders of surrounding clans and renegotiate temporary access. No written contract exists. The arrangement is enforced through recognition of its legitimacy and through the threat of exclusion or violence if it is violated.</p>
+
+    <p data-reveal><strong>Marriage.</strong> Xeer specifies bride-price, defines obligations of husband and wife, and provides remedies for breach of marriage contract. If a man divorces his wife unjustly, he must return the bride-price. If a wife leaves her husband without cause, her family must return it. These are the terms known and accepted by all parties when they enter the agreement.</p>
+
+    <p data-reveal><strong>Grazing and pasture.</strong> Xeer divides pasture lands by clan, defines seasonal grazing rights, and mediates disputes when drought forces competition for resources. In good years, the boundaries are clear and enforced. In drought, they become flexible through negotiation among elders, guided by precedent and principle rather than written rules.</p>
+
+    <p data-reveal><strong>Conduct of warfare.</strong> When clans do go to war, xeer specifies rules of engagement: non-combatants are protected, wounded are not pursued, women and children are not targeted. These rules are not always obeyed, but they are the standard that communities recognize and enforce through judgment of war leaders who violate them.</p>
+
+    <svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="var(--ochre)" stroke-width="1"/>
+      <circle cx="100" cy="12" r="2" fill="var(--ochre)"/>
+    </svg>
+
+    <div class="section-label" data-reveal>Survival and Adaptation</div>
+    <h2 data-reveal>Why Xeer Persists</h2>
+
+    <p data-reveal>The Xeer has survived colonialism, attempted state-building, civil war, and the pressures of modernity because it solves a problem that no external system can solve as effectively: how to maintain order in a society without a centralized police force or court system.</p>
+
+    <p data-reveal>The system is not perfect. It depends on broad consensus, which can break down. It favors established power structures — wealthy clan leaders have more influence than poor ones. It can be harsh: expulsion from the clan can mean death in a hostile pastoralist environment.<span class="c">5<span><strong>André Le Sage</strong>, "Stateless Justice in Somalia," Centre for Humanitarian Dialogue (2005), pp. 15–22<span class="tip-note">Le Sage documents both the strengths and limitations of xeer in contemporary southern Somalia, noting its bias toward powerful clans and its difficulty handling inter-clan disputes in urban settings</span></span></span> But it works. Communities that rely on xeer maintain internal order, resolve disputes, and manage shared resources without external enforcement.</p>
+
+    <p data-reveal>Modern scholars have noted that xeer functions as a complete legal system: it addresses property rights, contract law, family law, criminal law, and tort. It includes remedies (compensation), enforcement mechanisms (clan pressure), and a system for updating law (elder consensus on new cases). The only thing it lacks is writing. But for societies where oral transmission is reliable and collective memory is enforced by common interest, writing may be less important than theorists assume.</p>
+
+    <p data-reveal>The persistence of xeer into the 21st century, despite state prohibition and external pressure, suggests that legal systems built on consensus and collective benefit are more resilient than those imposed from outside. The Somali state has collapsed and reformed multiple times. Xeer has continued.<span class="c">6<span><strong>Ken Menkhaus</strong>, "Governance without Government in Somalia," <em>International Security</em> 31, no. 3 (2007), pp. 74–106<span class="tip-note">Menkhaus documents how xeer and other customary systems filled the governance vacuum after 1991</span></span></span></p>
+
+  </main>
+
+  <!-- Empty aside column for alignment -->
+  <aside class="era-aside" style="position:static;" aria-hidden="true"></aside>
+</div>
+
+<!-- ERA NAVIGATION -->
+<div class="era-nav" data-reveal>
+  <div class="era-nav-inner">
+    <a href="era-benadir.html" class="era-nav-btn">
+      <span class="nav-dir">← Previous era</span>
+      <span class="nav-title">The Benadiri City-States</span>
+      <span class="nav-dates">900 – 1500 CE</span>
+    </a>
+    <a href="somali-archive.html" class="nav-center">All Eras</a>
+    <a href="era-sufi.html" class="era-nav-btn">
+      <span class="nav-dir">Next era →</span>
+      <span class="nav-title">The Sufi Brotherhoods</span>
+      <span class="nav-dates">1500 – present</span>
+    </a>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script>
+(function() {
+  'use strict';
+
+  // ── Scroll Reveal ──
+  var revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('[data-reveal]').forEach(function(el) {
+    revealObserver.observe(el);
+  });
+
+})();
+</script>
+<script src="xog-cite.js"></script>
+<script>
+(function(){
+  var steps  = Array.prototype.slice.call(document.querySelectorAll('.xeercase .xc-step'));
+  var panels = Array.prototype.slice.call(document.querySelectorAll('.xeercase .xc-panel'));
+  if(!steps.length) return;
+  var timer = null;
+  function tick(){
+    var el = document.getElementById('xcount'); if(!el) return;
+    if (timer) clearInterval(timer);
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){ el.textContent='100'; return; }
+    var n=0; el.textContent='0';
+    timer=setInterval(function(){ n+=4; if(n>=100){n=100;clearInterval(timer);} el.textContent=n; }, 22);
+  }
+  function show(i){ steps.forEach(function(s,j){ s.classList.toggle('on', j===i); }); panels.forEach(function(p,j){ p.classList.toggle('on', j===i); }); if(i===2) tick(); }
+  steps.forEach(function(s,i){ s.addEventListener('click', function(){ show(i); }); });
+  show(0);
+})();
+</script>
+<script src="xog-fable.js?v=3"></script>
+<script src="xog-nav.js"></script>
+</body>
+</html>

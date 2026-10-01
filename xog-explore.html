@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xog — Explore the Archive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=DM+Serif+Display:ital@0;1&family=Instrument+Serif:ital@0;1&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,300;1,8..60,400&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="xog-nav.css">
+<style>
+:root{--bg:#FAF6EF;--bg-warm:#F0E8DA;--bg-deep:#E5D9C7;--ink:#110E0A;--text:#2E2518;--muted:#3D3024;--faint:#4A3C28;--ochre:#B83A22;--ochre-soft:rgba(184,58,34,0.08);--gold:#C49A3C;--violet:#7B5EA7;--rule:rgba(184,58,34,0.12);--white:#FDFAF5;--display:'DM Serif Display',Georgia,serif;--editorial:'Instrument Serif',Georgia,serif;--body:'Source Serif 4',Georgia,serif;--gabay:'Spectral',Georgia,serif;--mono:'DM Mono','Courier New',monospace}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:clamp(15px,1.1vw,18px);scroll-behavior:smooth}
+body{font-family:var(--body);font-weight:300;font-size:1rem;line-height:1.78;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+
+.col-lines{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:0;max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1fr;padding:0 3rem}
+.col-lines span{border-right:1px solid var(--rule);opacity:0.5}
+.col-lines span:last-child{border-right:none}
+
+header{position:sticky;top:0;z-index:100;background:rgba(250,246,239,0.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--rule)}
+.header-inner{max-width:1400px;margin:0 auto;padding:0.6rem 3rem;display:flex;justify-content:space-between;align-items:center}
+.logo{font-family:var(--display);font-size:1.8rem;color:var(--ochre);letter-spacing:0.06em}
+.logo-dot{display:inline-block;width:6px;height:6px;background:var(--ochre);border-radius:50%;margin-left:2px}
+nav{display:flex;gap:2.2rem;align-items:center}
+nav a{font-family:var(--mono);font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);transition:color 0.2s}
+nav a:hover,nav a.active{color:var(--ochre)}
+.nav-search{border:1px solid var(--rule);padding:0.3rem 1rem;font-family:var(--mono);font-size:0.6rem;color:var(--faint);background:transparent;letter-spacing:0.08em;width:140px;outline:none}
+.nav-search:focus{border-color:var(--ochre)}
+
+.wrap{max-width:1400px;margin:0 auto;padding:0 3rem;position:relative;z-index:1}
+
+/* ═══ EXPLORE HERO ═══ */
+.ex-hero{padding:4rem 0 0;position:relative;z-index:1}
+.ex-hero-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1rem}
+.ex-kicker{font-family:var(--mono);font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--ochre);display:flex;align-items:center;gap:0.8rem;margin-bottom:0.5rem}
+.ex-kicker::before{content:'';width:24px;height:1.5px;background:var(--ochre)}
+.ex-title{font-family:var(--display);font-size:clamp(2.4rem,4.5vw,3.8rem);color:var(--ink);line-height:1.05}
+.ex-title em{font-family:var(--editorial);font-style:italic;color:var(--ochre)}
+.ex-sub{font-size:1rem;color:var(--muted);max-width:500px;margin-top:0.8rem}
+.ex-count{font-family:var(--mono);font-size:0.6rem;color:var(--faint);letter-spacing:0.06em;padding-bottom:0.5rem}
+
+/* ═══ FILTER BAR ═══ */
+.filter-bar{padding:0.8rem 0;border-top:2px solid var(--ochre);border-bottom:1px solid var(--rule);display:flex;gap:0.4rem;flex-wrap:wrap;align-items:center;position:sticky;top:46px;z-index:50;background:rgba(250,246,239,0.97);backdrop-filter:blur(12px)}
+.filter-label{font-family:var(--mono);font-size:0.52rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--faint);margin-right:0.3rem}
+.fb{font-family:var(--mono);font-size:0.5rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.25rem 0.7rem;border:1px solid var(--rule);background:transparent;color:var(--muted);cursor:pointer;transition:all 0.2s}
+.fb:hover{border-color:var(--ochre);color:var(--ochre)}
+.fb.active{background:var(--ochre);border-color:var(--ochre);color:var(--white)}
+.filter-sep{width:auto;height:auto;margin:0 0.4rem;display:flex;align-items:center}
+
+/* ═══ FEATURED LEAD — the argument, not the index ═══ */
+.lead{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--rule);position:relative;z-index:1}
+.lead:hover{background:var(--ochre-soft);box-shadow:0 8px 30px rgba(17,14,10,0.1)}
+.lead-img{overflow:hidden;min-height:400px;position:relative;padding:10px;background:var(--bg)}
+.lead-img::before{
+  content:'';position:absolute;inset:0;
+  border:1.5px solid var(--gold);opacity:0.35;
+  pointer-events:none;z-index:2;
+}
+.lead-img::after{
+  content:'';position:absolute;inset:5px;
+  border:0.8px solid var(--ochre);opacity:0.2;
+  pointer-events:none;z-index:2;
+}
+
+.lead-img .arch-crown{
+  position:absolute;top:-12px;left:50%;transform:translateX(-50%);z-index:3;
+}
+.lead-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s;position:relative;z-index:1}
+.lead:hover 
+.lead-img .arch-crown{
+  position:absolute;top:-12px;left:50%;transform:translateX(-50%);z-index:3;
+}
+.lead-img img{transform:scale(1.03)}
+.lead-body{padding:3rem;display:flex;flex-direction:column;justify-content:center}
+.lead-tags{margin-bottom:0.8rem}
+.tag{font-family:var(--mono);font-size:0.5rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--ochre);background:var(--ochre-soft);padding:0.12rem 0.45rem;display:inline-block}
+.badge{font-family:var(--mono);font-size:0.44rem;letter-spacing:0.08em;text-transform:uppercase;border:1px solid var(--ochre);color:var(--ochre);padding:0.08rem 0.35rem;display:inline-block;margin-left:0.3rem}
+.lead-title{font-family:var(--display);font-size:clamp(1.6rem,2.5vw,2.2rem);color:var(--ink);line-height:1.12;margin-bottom:0.8rem;transition:color 0.2s}
+.lead:hover .lead-title{color:var(--ochre)}
+.lead-quote{font-family:var(--gabay);font-style:italic;font-size:1rem;color:var(--ochre);padding-left:1rem;border-left:3px solid var(--gold);margin-bottom:1rem;line-height:1.6}
+.lead-desc{font-size:0.9rem;line-height:1.8;color:var(--muted);margin-bottom:1.2rem}
+.lead-go{font-family:var(--mono);font-size:0.56rem;letter-spacing:0.08em;color:var(--ochre);display:inline-flex;align-items:center;gap:0.4rem}
+.lead-go::after{content:'';display:none}
+.lead:hover .lead-go::after{transform:translateX(4px)}
+
+/* ═══ DENSE GRID — the browse ═══ */
+.browse{display:grid;grid-template-columns:1fr 1fr 1fr;position:relative;z-index:1}
+.bcard{border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:1.6rem;transition:background 0.2s,transform 0.25s,box-shadow 0.25s;display:flex;flex-direction:column}
+.bcard:nth-child(3n){border-right:none}
+.bcard:hover{background:var(--ochre-soft);transform:translateY(-3px);box-shadow:0 6px 20px rgba(17,14,10,0.08)}
+.bcard-tag{font-family:var(--mono);font-size:0.48rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--ochre);background:var(--ochre-soft);padding:0.1rem 0.4rem;display:inline-block;margin-bottom:0.4rem;align-self:flex-start}
+.bcard-title{font-family:var(--editorial);font-size:1.15rem;color:var(--ink);line-height:1.2;margin-bottom:0.35rem;transition:color 0.2s}
+.bcard:hover .bcard-title{color:var(--ochre)}
+.bcard-desc{font-size:0.8rem;line-height:1.65;color:var(--muted);flex:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;transition:all 0.3s}
+.bcard:hover .bcard-desc{-webkit-line-clamp:unset;overflow:visible}
+.bcard-foot{margin-top:0.6rem;display:flex;justify-content:space-between;align-items:center}
+.bcard-pills{display:flex;gap:0.2rem;flex-wrap:wrap}
+.pill{font-family:var(--mono);font-size:0.42rem;letter-spacing:0.06em;text-transform:uppercase;padding:0.1rem 0.35rem;border:1px solid var(--rule);color:var(--faint)}
+.bcard-arrow{color:var(--ochre);font-size:0.8rem;transition:transform 0.2s}
+.bcard:hover .bcard-arrow{transform:translateX(3px)}
+
+/* Source titles italic */
+.bcard-title.src-title{font-style:italic}
+
+/* Gabay accent */
+.bcard-gabay{border-left:4px solid var(--ochre)}
+
+/* ═══ IMAGE BREAK — full width moment ═══ */
+.img-break{position:relative;z-index:1;height:320px;overflow:hidden;border-bottom:1px solid var(--rule)}
+.img-break::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:30px;
+  background:var(--bg);z-index:2;
+  clip-path:ellipse(52% 100% at 50% 0%);
+}
+.img-break::after{
+  content:'';position:absolute;inset:0;
+  border:1.5px solid var(--gold);opacity:0.15;
+  pointer-events:none;z-index:3;
+}
+.img-break img{width:100%;height:100%;object-fit:cover;object-position:center 35%}
+
+.img-break .ib-notch{
+  position:absolute;top:14px;left:50%;transform:translateX(-50%);
+  z-index:4;opacity:0.25;
+}
+.img-break-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(17,14,10,0.6) 0%,transparent 60%);display:flex;align-items:flex-end;padding:2rem 3rem}
+.img-break-text{color:var(--white)}
+.ib-kicker{font-family:var(--mono);font-size:0.54rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:0.3rem}
+.ib-title{font-family:var(--display);font-size:2rem;line-height:1.1;margin-bottom:0.3rem}
+.ib-sub{font-family:var(--mono);font-size:0.52rem;letter-spacing:0.08em;opacity:0.7}
+
+/* ═══ GABAY INTERSTITIAL ═══ */
+.gabay-break{padding:3.5rem 3rem;background:var(--bg-warm);border-bottom:1px solid var(--rule);border-top:1px solid var(--rule);position:relative;z-index:1;display:flex;justify-content:center}
+.gabay-break::before{
+  content:'';position:absolute;inset:8px;
+  border:1px solid var(--gold);opacity:0.2;
+  pointer-events:none;
+}
+.gabay-break::after{
+  content:'';position:absolute;inset:14px;
+  border:0.5px solid var(--gold);opacity:0.12;
+  pointer-events:none;
+}
+.gabay-break-inner{max-width:700px;text-align:center}
+.gb-kicker{font-family:var(--mono);font-size:0.54rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--ochre);margin-bottom:1rem}
+.gb-quote{font-family:var(--gabay);font-style:italic;font-size:clamp(1.2rem,2vw,1.6rem);color:var(--ink);line-height:1.5;margin-bottom:0.8rem}
+.gb-attr{font-size:0.85rem;color:var(--faint)}
+.gb-attr em{font-style:italic}
+.gb-structure{font-family:var(--mono);font-size:0.52rem;color:var(--ochre);letter-spacing:0.08em;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--rule)}
+
+/* ═══ COUNTER-NARRATIVE ROW — the second punch ═══ */
+.counter-row{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--rule);position:relative;z-index:1}
+.cr-card{padding:2.5rem 2.5rem 2.5rem 3rem;border-right:1px solid var(--rule);transition:background 0.2s,transform 0.25s,box-shadow 0.25s;position:relative}
+.cr-card::before{
+  content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:4px;height:60px;
+  background:linear-gradient(180deg, transparent 0%, var(--ochre) 30%, var(--ochre) 70%, transparent 100%);
+  opacity:0.4;
+}
+.cr-card:last-child{border-right:none}
+.cr-card:hover{background:var(--ochre-soft);transform:translateY(-3px);box-shadow:0 6px 20px rgba(17,14,10,0.08)}
+.cr-title{font-family:var(--display);font-size:1.4rem;color:var(--ink);line-height:1.15;margin-bottom:0.6rem;transition:color 0.2s}
+.cr-card:hover .cr-title{color:var(--ochre)}
+.cr-desc{font-size:0.88rem;line-height:1.75;color:var(--muted);margin-bottom:0.8rem}
+.cr-go{font-family:var(--mono);font-size:0.54rem;color:var(--ochre);display:inline-flex;align-items:center;gap:0.4rem}
+.cr-go::after{content:'';display:none}
+
+/* ═══ LOAD MORE ═══ */
+.load-more{text-align:center;padding:3rem 0 5rem;position:relative;z-index:1}
+.load-btn{font-family:var(--mono);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.9rem 3rem;border:1.5px solid var(--ochre);color:var(--ochre);background:transparent;cursor:pointer;transition:all 0.25s}
+.load-btn:hover{background:var(--ochre);color:var(--white)}
+
+footer{border-top:2px solid var(--ochre);padding:3rem 0 1.5rem;position:relative;z-index:1}
+.footer-grid{max-width:1400px;margin:0 auto;padding:0 3rem;display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;margin-bottom:2.5rem}
+.f-col-label{font-family:var(--mono);font-size:0.54rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--ochre);margin-bottom:0.6rem}
+.f-col a{display:block;font-size:0.82rem;color:var(--muted);padding:0.15rem 0;transition:color 0.15s}
+.f-col a:hover{color:var(--ochre)}
+.f-bottom{max-width:1400px;margin:0 auto;padding:1.5rem 3rem 0;border-top:1px solid var(--rule);display:flex;justify-content:space-between;font-family:var(--mono);font-size:0.52rem;color:var(--faint)}
+
+@media(max-width:1024px){
+  .lead{grid-template-columns:1fr}
+  .lead-img{min-height:280px}
+  .browse{grid-template-columns:1fr 1fr}
+  .bcard:nth-child(3n){border-right:1px solid var(--rule)}
+  .bcard:nth-child(2n){border-right:none}
+  .counter-row{grid-template-columns:1fr}
+  .cr-card{border-right:none;border-bottom:1px solid var(--rule)}
+  .col-lines{display:none}
+}
+@media(max-width:640px){
+  .wrap{padding:0 1.2rem}
+  .header-inner{padding:0.5rem 1.2rem}
+  nav{gap:1rem}
+  .nav-search{display:none}
+  .browse{grid-template-columns:1fr}
+  .bcard{border-right:none !important}
+  .filter-bar{top:40px}
+  .img-break{height:220px}
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+
+
+
+
+/* Badge pulse on reveal */
+@keyframes badgePulse{
+  0%{box-shadow:0 0 0 0 rgba(184,58,34,0.4)}
+  70%{box-shadow:0 0 0 8px rgba(184,58,34,0)}
+  100%{box-shadow:0 0 0 0 rgba(184,58,34,0)}
+}
+[data-r].v .badge{animation:badgePulse 0.8s ease-out 0.3s}
+
+
+/* Silk Road — hover reveals connections */
+.filterable.silk-fade{opacity:0.3;transition:opacity 0.3s}
+.filterable.silk-glow{box-shadow:inset 3px 0 0 var(--gold);transition:box-shadow 0.3s,opacity 0.3s}
+.filterable.silk-source{transition:opacity 0.3s}
+
+[data-r]{opacity:0;transform:translateY(16px);transition:opacity 0.6s ease,transform 0.6s cubic-bezier(0.16,1,0.3,1)}
+[data-r].v{opacity:1;transform:none}
+[data-r="slow"]{transition-duration:0.9s}
+</style>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23111929'/%3E%3Cpath d='M32 8 L36.5 27.5 L56 32 L36.5 36.5 L32 56 L27.5 36.5 L8 32 L27.5 27.5 Z' fill='%23C49A3C'/%3E%3Ccircle cx='32' cy='32' r='3.4' fill='%23FDFAF5'/%3E%3C/svg%3E">
+<style id="xg-align">
+/* page-top alignment with the era pages: crumb, kicker, headline, lede */
+.xg-crumb { font-family: 'DM Mono', monospace; font-size: .54rem; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--muted, #3D3024); margin-bottom: 1.2rem;
+  display: flex; gap: .6em; align-items: center; }
+.xg-crumb a { color: var(--ochre, #B83A22); text-decoration: none; }
+.xg-crumb a:hover { text-decoration: underline; }
+.hero-kicker, .ex-kicker { font-size: .58rem !important; letter-spacing: .22em !important; }
+.hero-title, .hero-word, .ex-title {
+  font-family: 'DM Serif Display', serif !important;
+  font-size: clamp(2.8rem, 6vw, 5.2rem) !important;
+  font-weight: 300 !important; line-height: 1.05 !important;
+}
+.hero-intro, .ex-sub { font-size: 1.18rem !important; line-height: 1.75 !important; max-width: 640px; }
+</style>
+
+</head>
+<body>
+
+<div class="col-lines"><span></span><span></span><span></span></div>
+
+<header>
+  <div class="header-inner">
+    <a href="somali-archive.html" class="logo">Xog<span class="logo-dot"></span><span class="logo-osm" lang="so">𐒄𐒙𐒌</span></a>
+    <nav>
+      <a href="xog-explore.html" class="active">Archive</a>
+      <a href="xog-map.html">Map</a>
+      <a href="files/xog-somali-poetry.html">Gabay</a>
+      <a href="xog-sources.html">Sources</a>
+      <a href="xog-about.html">About</a>
+      <input type="text" class="nav-search" placeholder="SEARCH" id="searchInput">
+    </nav>
+  </div>
+</header>
+
+<!-- ═══ HERO ═══ -->
+<div class="wrap">
+  <div class="ex-hero">
+    <div class="ex-hero-top">
+      <div>
+        <div class="xg-crumb"><a href="somali-archive.html">Archive</a><span>/</span><span>Explore</span></div>
+  <div class="ex-kicker">Deep-Research Archive</div>
+        <h1 class="ex-title">Explore the <em>Archive</em></h1>
+        <p class="ex-sub">Counter-narratives, primary sources, oral tradition, and eleven eras of history the record left out.</p>
+      </div>
+      <div class="ex-count" id="resultCount">21 entries</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FILTERS ═══ -->
+<div class="wrap">
+  <div class="filter-bar" id="filterBar">
+    <span class="filter-label">Era</span>
+    <button class="fb active" data-f="all" onclick="setFilter('all')">All</button>
+    <button class="fb" data-f="ancient" onclick="setFilter('ancient')">Ancient</button>
+    <button class="fb" data-f="medieval" onclick="setFilter('medieval')">Medieval</button>
+    <button class="fb" data-f="colonial" onclick="setFilter('colonial')">Colonial</button>
+    <button class="fb" data-f="modern" onclick="setFilter('modern')">Modern</button>
+    <div class="filter-sep"><svg viewBox="0 0 12 12" style="width:10px;height:10px;opacity:0.35"><circle cx="6" cy="6" r="5" fill="none" stroke="#B83A22" stroke-width="0.8"/><circle cx="6" cy="6" r="2" fill="none" stroke="#C49A3C" stroke-width="0.5"/><line x1="6" y1="1" x2="6" y2="11" stroke="#B83A22" stroke-width="0.3" opacity="0.4"/><line x1="1" y1="6" x2="11" y2="6" stroke="#B83A22" stroke-width="0.3" opacity="0.4"/></svg></div>
+    <span class="filter-label">Type</span>
+    <button class="fb" data-f="counter" onclick="setFilter('counter')">Counter-Narrative</button>
+    <button class="fb" data-f="source" onclick="setFilter('source')">Primary Source</button>
+    <button class="fb" data-f="gabay" onclick="setFilter('gabay')">Gabay</button>
+    <button class="fb" data-f="essay" onclick="setFilter('essay')">Era Deep Dive</button>
+  </div>
+</div>
+
+<div style="text-align:center;padding:0.5rem 0 0;position:relative;z-index:1">
+  <svg viewBox="0 0 10 20" style="width:8px;height:16px;opacity:0.18">
+    <path d="M5,0 L8,8 Q8,12 5,14 Q2,12 2,8 Z" fill="#B83A22"/>
+    <line x1="5" y1="14" x2="5" y2="20" stroke="#B83A22" stroke-width="0.8"/>
+  </svg>
+</div>
+<!-- ═══ LEAD — the argument ═══ -->
+<a href="era-dervish.html" class="lead filterable" data-tags="colonial counter essay" data-r>
+  <div class="lead-img"><div class="arch-crown"><svg viewBox="0 0 40 16" width="36" height="14"><path d="M2,16 L2,8 A18,10 0 0,1 20,2 A18,10 0 0,1 38,8 L38,16" fill="none" stroke="#C49A3C" stroke-width="0.8" opacity="0.35"/></svg></div><img id="lead-img" src="images/img-1.png" alt="Dervish era historical photograph"></div>
+  <div class="lead-body">
+    <div class="lead-tags"><span class="tag">Military History</span><span class="badge">Counter-Narrative</span></div>
+    <h2 class="lead-title">The "Mad Mullah" Was Somalia's Greatest Scholar-Poet</h2>
+    <div class="lead-quote">"They called him mad. He composed 47 gabay of unmatched literary precision while waging war against three empires."</div>
+    <p class="lead-desc">Winston Churchill named him mad in 1910. The Colonial Office files, declassified in 1975, tell a different story: a doctorate in Islamic jurisprudence, four languages, and the finest classical poetry in Somali literary history — composed while leading a 21-year military resistance that required the first aerial bombardment in African history to end.</p>
+    <span class="lead-go">Read the full counter-narrative <svg viewBox="0 0 20 10" style="width:18px;height:9px;vertical-align:middle;display:inline-block;transition:transform 0.2s"><path d="M0,5 C3,5 6,3.5 10,2 C14,0.5 17,1 19,3 C19.5,3.5 19.5,6.5 19,7 C17,9 14,9.5 10,8 C6,6.5 3,5 0,5Z" fill="currentColor" opacity="0.7"/></svg></span>
+  </div>
+</a>
+
+<!-- ═══ BROWSE GRID — first set ═══ -->
+<div class="browse" id="grid1">
+  <a href="files/xog-futuh-al-habasha.html" class="bcard filterable" data-tags="medieval source" data-cid="futuh" data-connects="adal" data-r>
+    <span class="bcard-tag">Primary Source</span>
+    <div class="bcard-title src-title">Futuh al-Habasha</div>
+    <div class="bcard-desc">The only eyewitness chronicle of the Adal conquest of Ethiopia. Written by a companion of Ahmad Gurey. The second half has never been found.</div>
+    <div class="bcard-foot"><div class="bcard-pills"><span class="pill">Arabic</span><span class="pill">1559</span></div><span class="bcard-arrow"><svg viewBox="0 0 20 10" style="width:18px;height:9px;vertical-align:middle;display:inline-block;transition:transform 0.2s"><path d="M0,5 C3,5 6,3.5 10,2 C14,0.5 17,1 19,3 C19.5,3.5 19.5,6.5 19,7 C17,9 14,9.5 10,8 C6,6.5 3,5 0,5Z" fill="currentColor" opacity="0.7"/></svg></span></div>
+  </a>
+  <a href="files/xog-gaala-leeyahay.html" class="bcard bcard-gabay filterable" data-tags="colonial gabay" data-cid="gaala" data-connects="mullah,british" data-r>
+    <span class="bcard-tag">Gabay</span>
+    <div class="bcard-title">Gaala Leeyahay — "The Infidel-Slayer"</div>
+    <div class="bcard-desc">A war gabay composed after the Battle of Dul Madoba. Every line begins with 'G'. 87 lines composed and memorized without writing.</div>
+    <div class="bcard-foot"><div class="bcard-pills"><span class="pill">Sayyid</span><span class="pill">1913</span></div><span class="bcard-arrow"><svg viewBox="0 0 20 10" style="width:18px;height:9px;vertical-align:middle;display:inline-block;transition:transform 0.2s"><path d="M0,5 C3,5 6,3.5 10,2 C14,0.5 17,1 19,3 C19.5,3.5 19.5,6.5 19,7 C17,9 14,9.5 10,8 C6,6.5 3,5 0,5Z" fill="currentColor" opacity="0.7"/></svg></span></div>
+  </a>
+  <a href="era-benadir.html" class="bcard filterable" data-tags="medieval essay" data-cid="benadir" data-connects="rihla,ajuran" data-r>
+    <span class="bcard-tag">Urban Civilisation</span>
+    <div class="bcard-title">The Benadiri City-States</div>
+    <div class="bcard-desc">Mogadishu, Barawa, and Merca — self-governing Indian Ocean cities. Ibn Battuta visited in 1331 and called Mogadishu one of the great cities of the world.</div>
+    <div class="bcard-foot"><div class="bcard-pills"><span class="pill">900–1300 CE</span></div><span class="bcard-arrow"><svg viewBox="0 0 20 10" style="width:18px;height:9px;vertical-align:middle;display:inline-block;transition:transform 0.2s"><path d="M0,5 C3,5 6,3.5 10,2 C14,0.5 17,1 19,3 C19.5,3.5 19.5,6.5 19,7 C17,9 14,9.5 10,8 C6,6.5 3,5 0,5Z" fill="currentColor" opacity="0.7"/></svg></span></div>
+  </a>
+</div>
+
+<div style="text-align:center;padding:1.8rem 0;position:relative;z-index:1">
+  <svg viewBox="0 0 80 30" style="width:80px;height:30px;opacity:0.2">
+    <line x1="5" y1="25" x2="75" y2="5" stroke="#B83A22" stroke-width="1.2" stroke-linecap="round"/>
+    <line x1="5" y1="5" x2="75" y2="25" stroke="#B83A22" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M73,4 L75,5 L73,6" fill="none" stroke="#B83A22" stroke-width="1"/>
+    <path d="M73,24 L75,25 L73,26" fill="none" stroke="#B83A22" stroke-width="1"/>
+    <circle cx="40" cy="15" r="5" fill="none" stroke="#C49A3C" stroke-width="0.8"/>
+    <circle cx="40" cy="15" r="2" fill="none" stroke="#C49A3C" stroke-width="0.5"/>
+  </svg>
+</div>
+
+<!-- ═══ IMAGE BREAK — the stop ═══ -->
+<div class="img-break filterable" data-tags="medieval essay" data-r="slow">
+  <img id="break-img-1" src="images/img-2.webp" alt="Ottoman map of Africa, 1803">
+  <div class="ib-notch"><svg viewBox="0 0 10 16" width="8" height="13"><path d="M5,0 L8,6 Q8,10 5,12 Q2,10 2,6Z" fill="#B83A22"/><line x1="5" y1="12" x2="5" y2="16" stroke="#B83A22" stroke-width="0.8"/></svg></div>
+  <div class="img-break-overlay">
+    <div class="img-break-text">
+      <div class="ib-kicker">Military Conquest · 1529–1543</div>
+      <div class="ib-title">Imam Ahmad Gurey's<br>Conquest of Ethiopia</div>
+      <div class="ib-sub">THE ONLY EYEWITNESS CHRONICLE · THE SECOND HALF HAS NEVER BEEN FOUND</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BROWSE GRID — second set ═══ -->
+<div class="browse" id="grid2">
+  <a href="files/xog-black-hawk-down.html" class="bcard filterable" data-tags="colonial counter" data-cid="bhd" data-connects="diaspora" data-r>
+    <div><span class="bcard-tag">Colonial History</span><span class="badge">Counter-Narrative</span></div>
+    <div class="bcard-title">Black Hawk Down: The Somali Perspective</div>
+    <div class="bcard-desc">The American film starts with the helicopters. The Somali account starts with the UNOSOM raids, the civilian casualties, and the July 12 massacre that preceded October 3.</div>
+    <div class="bcard-foot"><div class="bcard-pills"><span class="pill">1993</span><span class="pill">Mogadishu</span></div><span class="bcard-arrow"><svg viewBox="0 0 20 10" style="width:18px;height:9px;vertical-align:middle;display:inline-block;transition:transform 0.2s"><path d="M0,5 C3,5 6,3.5 10,2 C14,0.5 17,1 19,3 C19.5,3.5 19.5,6.5 19,7 C17,9 14,9.5 10,8 C6,6.5 3,5 0,5Z" fill="currentColor" opacity="0.7"/></svg></span></div>
+  </a>
+  <a href="era-xeer.html" class="bcard filterable" data-tags="ancient essay" data-cid="xeer" data-connects="xeercn" data-r>
+    <span class="bcard-tag">Legal Civilisation</span>
+    <div class="bcard-title">The Xeer — Law Without a State</div>
+    <div class="bcard-desc">An entirely oral legal system governing 700,000 km² with no police, no prisons, no written code. Diya-paying groups, elder councils, and renegotiability as a constitutional feature.</div>
+    <div class="bcard-foot"><div class="bcard-pills"><span class="pill">Pre-Islamic → Present</span></div><span class="bcard-arrow"><svg viewBox="0 0 20 10" style="width:18px;height:9px;vertical-align:middle;display:inline-block;transition:transform 0.2s"><path d="M0,5 C3,5 6,3.5 10,2 C14,0.5 17,1 19,3 C19.5,3.5 19.5,6.5 19,7 C17,9 14,9.5 10,8 C6,6.5 3,5 0,5Z" fill="currentColor" opacity="0.7"/></svg></span></div>
+  </a>
+  <a href="files/xog-british-intelligence.html" class="bcard filterable" data-tags="colonial source" data-cid="british" data-connects="mullah,gaala" data-r>
+    <span class="bcard-tag">Colonial Record</span>
+    <div class="bcard-title src-title">British Military Intelligence Reports</div>
+    <div class="bcard-desc">Declassified correspondence from the Colonial Office. Internal memos: "The Mullah is anything but mad — he has outmaneuvered our forces at every turn."</div>
+    <div class="bcard-foot"><div class="bcard-pills"><span class="pill">UK Archives</span><span class="pill">1900–1920</span></div><span class="bcard-arrow"><svg viewBox="0 0 20 10" style="width:18px;height:9px;vertical-align:middle;display:inline-block;transition:transform 0.2s"><path d="M0,5 C3,5 6,3.5 10,2 C14,0.5 17,1 19,3 C19.5,3.5 19.5,6.5 19,7 C17,9 14,9.5 10,8 C6,6.5 3,5 0,5Z" fill="currentColor" opacity="0.7"/></svg></span></div>
+  </a>
+</div>
+
+<div style="text-align:center;padding:1.8rem 0;position:relative;z-index:1">
+  <svg viewBox="0 0 80 30" style="width:80px;height:30px;opacity:0.2">
+    <line x1="5" y1="25" x2="75" y2="5" stroke="#B83A22" stroke-width="1.2" stroke-linecap="round"/>
+    <line x1="5" y1="5" x2="75" y2="25" stroke="#B83A22" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M73,4 L75,5 L73,6" fill="none" stroke="#B83A22" stroke-width="1"/>
+    <path d="M73,24 L75,25 L73,26" fill="none" stroke="#B83A22" stroke-width="1"/>
+    <circle cx="40" cy="15" r="5" fill="none" stroke="#C49A3C" stroke-width="0.8"/>
+    <circle cx="40" cy="15" r="2" fill="none" stroke="#C49A3C" stroke-width="0.5"/>
+  </svg>
+</div>
+
+<!-- ═══ GABAY INTERSTITIAL — the breath ═══ -->
+<div class="gabay-break filterable" data-tags="colonial gabay" data-r="slow">
+  <div class="gabay-break-inner">
+    <svg viewBox="0 0 60 12" style="width:50px;height:10px;opacity:0.2;margin-bottom:0.8rem">
+  <line x1="0" y1="6" x2="38" y2="6" stroke="#C49A3C" stroke-width="1.2" stroke-linecap="round"/>
+  <ellipse cx="48" cy="6" rx="10" ry="4.5" fill="none" stroke="#C49A3C" stroke-width="1"/>
+</svg>
+    <div class="gb-kicker">From the Oral Archive</div>
+    <p class="gb-quote">"You fought well, but you fought for chains. We fought for the land our fathers' fathers knew."</p>
+    <p class="gb-attr">— Sayyid Mohamed Abdullah Hassan, <em>Gaala Leeyahay</em>, 1913</p>
+    <p class="gb-structure">ALLITERATIVE CONSTRAINT: EVERY LINE BEGINS WITH 'G' · 87 LINES · COMPOSED ORALLY AFTER THE BATTLE OF DUL MADOBA</p>
+  </div>
+</div>
+
+<!-- ═══ COUNTER-NARRATIVE ROW — the second punch ═══ -->
+<div class="counter-row">
+  <a href="files/xog-punt-not-a-mystery.html" class="cr-card filterable" data-tags="ancient counter" data-cid="punt" data-connects="ajuran" data-r>
+    <div><span class="tag">Ancient History</span><span class="badge">Counter-Narrative</span></div>
+    <h3 class="cr-title">Punt Was Not a Mystery</h3>
+    <p class="cr-desc">Egyptian records named it. Egyptian expeditions sailed there. Egyptian temples depicted its people, houses, and trade goods in detail. The location was never lost — Western archaeology chose not to look at the Somali coast.</p>
+    <span class="cr-go">Read the evidence <svg viewBox="0 0 20 10" style="width:18px;height:9px;vertical-align:middle;display:inline-block;transition:transform 0.2s"><path d="M0,5 C3,5 6,3.5 10,2 C14,0.5 17,1 19,3 C19.5,3.5 19.5,6.5 19,7 C17,9 14,9.5 10,8 C6,6.5 3,5 0,5Z" fill="currentColor" opacity="0.7"/></svg></span>
+  </a>
+  <a href="files/xog-somali-script.html" class="cr-card filterable" data-tags="modern counter" data-cid="scripts" data-connects="deelley,diaspora" data-r>
+    <div><span class="tag">Literature</span><span class="badge">Counter-Narrative</span></div>
+    <h3 class="cr-title">Somali Had Written Script Before 1972</h3>
+    <p class="cr-desc">The standard narrative: no written language until Siad Barre standardized one. The reality: the Osmanya script (1920s) and Borama script (1930s) both predate standardization by decades.</p>
+    <span class="cr-go">Read the evidence <svg viewBox="0 0 20 10" style="width:18px;height:9px;vertical-align:middle;display:inline-block;transition:transform 0.2s"><path d="M0,5 C3,5 6,3.5 10,2 C14,0.5 17,1 19,3 C19.5,3.5 19.5,6.5 19,7 C17,9 14,9.5 10,8 C6,6.5 3,5 0,5Z" fill="currentColor" opacity="0.7"/></svg></span>
+  </a>
+</div>
+
+<div style="text-align:center;padding:1.8rem 0;position:relative;z-index:1">
+  <svg viewBox="0 0 80 30" style="width:80px;height:30px;opacity:0.2">
+    <line x1="5" y1="25" x2="75" y2="5" stroke="#B83A22" stroke-width="1.2" stroke-linecap="round"/>
+    <line x1="5" y1="5" x2="75" y2="25" stroke="#B83A22" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M73,4 L75,5 L73,6" fill="none" stroke="#B83A22" stroke-width="1"/>
+    <path d="M73,24 L75,25 L73,26" fill="none" stroke="#B83A22" stroke-width="1"/>
+    <circle cx="40" cy="15" r="5" fill="none" stroke="#C49A3C" stroke-width="0.8"/>
+    <circle cx="40" cy="15" r="2" fill="none" stroke="#C49A3C" stroke-width="0.5"/>
+  </svg>
+</div>
+
+<!-- ═══ BROWSE GRID — third set ═══ -->
+<div class="browse" id="grid3">
+  <a href="files/xog-rihla-ibn-battuta.html" class="bcard filterable" data-tags="medieval source" data-cid="rihla" data-connects="benadir" data-r>
+    <span class="bcard-tag">Traveller's Account</span>
+    <div class="bcard-title src-title">Rihla — The Travels</div>
+    <div class="bcard-desc">Ibn Battuta visited Mogadishu in 1331 and described a prosperous, self-governing city with trade networks reaching India and China.</div>
+    <div class="bcard-foot"><div class="bcard-pills"><span class="pill">1331</span><span class="pill">Arabic</span></div><span class="bcard-arrow"><svg viewBox="0 0 20 10" style="width:18px;height:9px;vertical-align:middle;display:inline-block;transition:transform 0.2s"><path d="M0,5 C3,5 6,3.5 10,2 C14,0.5 17,1 19,3 C19.5,3.5 19.5,6.5 19,7 C17,9 14,9.5 10,8 C6,6.5 3,5 0,5Z" fill="currentColor" opacity="0.7"/></svg></span></div>
+  </a>
+  <a href="files/xog-deelley.html" class="bcard bcard-gabay filterable" data-tags="modern gabay" data-cid="deelley" data-connects="diaspora,scripts" data-r>
+    <span class="bcard-tag">Gabay</span>
+    <div class="bcard-title">Deelley — "The Burden"</div>
+    <div class="bcard-desc">A gabay on the partition. Every line alliterates on 'D'. Five borders drawn by strangers cannot divide a people who share one language, one faith, one body of law.</div>
+    <div class="bcard-foot"><div class="bcard-pills"><span class="pill">Partition Era</span></div><span class="bcard-arrow"><svg viewBox="0 0 20 10" style="width:18px;height:9px;vertical-align:middle;display:inline-block;transition:transform 0.2s"><path d="M0,5 C3,5 6,3.5 10,2 C14,0.5 17,1 19,3 C19.5,3.5 19.5,6.5 19,7 C17,9 14,9.5 10,8 C6,6.5 3,5 0,5Z" fill="currentColor" opacity="0.7"/></svg></span></div>
+  </a>
+  <a href="era-ajuran.html" class="bcard filterable" data-tags="medieval essay" data-cid="ajuran" data-connects="benadir,punt" data-r>
+    <span class="bcard-tag">Hydraulic Empire</span>
+    <div class="bcard-title">The Ajuran Sultanate</div>
+    <div class="bcard-desc">The only hydraulic empire in sub-Saharan Africa. Stone wells turned the arid interior into farmland — some still in use three centuries later.</div>
+    <div class="bcard-foot"><div class="bcard-pills"><span class="pill">1300–1700 CE</span></div><span class="bcard-arrow"><svg viewBox="0 0 20 10" style="width:18px;height:9px;vertical-align:middle;display:inline-block;transition:transform 0.2s"><path d="M0,5 C3,5 6,3.5 10,2 C14,0.5 17,1 19,3 C19.5,3.5 19.5,6.5 19,7 C17,9 14,9.5 10,8 C6,6.5 3,5 0,5Z" fill="currentColor" opacity="0.7"/></svg></span></div>
+  </a>
+</div>
+
+<div style="text-align:center;padding:1.8rem 0;position:relative;z-index:1">
+  <svg viewBox="0 0 80 30" style="width:80px;height:30px;opacity:0.2">
+    <line x1="5" y1="25" x2="75" y2="5" stroke="#B83A22" stroke-width="1.2" stroke-linecap="round"/>
+    <line x1="5" y1="5" x2="75" y2="25" stroke="#B83A22" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M73,4 L75,5 L73,6" fill="none" stroke="#B83A22" stroke-width="1"/>
+    <path d="M73,24 L75,25 L73,26" fill="none" stroke="#B83A22" stroke-width="1"/>
+    <circle cx="40" cy="15" r="5" fill="none" stroke="#C49A3C" stroke-width="0.8"/>
+    <circle cx="40" cy="15" r="2" fill="none" stroke="#C49A3C" stroke-width="0.5"/>
+  </svg>
+</div>
+
+<!-- ═══ IMAGE BREAK 2 ═══ -->
+<div class="img-break filterable" data-tags="ancient essay" data-r="slow">
+  <img id="break-img-2" src="images/img-3.png" alt="Elder council beneath acacia tree">
+  <div class="ib-notch"><svg viewBox="0 0 10 16" width="8" height="13"><path d="M5,0 L8,6 Q8,10 5,12 Q2,10 2,6Z" fill="#B83A22"/><line x1="5" y1="12" x2="5" y2="16" stroke="#B83A22" stroke-width="0.8"/></svg></div>
+  <div class="img-break-overlay">
+    <div class="img-break-text">
+      <div class="ib-kicker">Legal Civilisation · Pre-Islamic → Present</div>
+      <div class="ib-title">700,000 km² Governed<br>Without a Written Law</div>
+      <div class="ib-sub">THE XEER · DIYA-PAYING GROUPS · ELDER COUNCILS · RENEGOTIABILITY AS A FEATURE</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BROWSE GRID — fourth set ═══ -->
+<div class="browse" id="grid4">
+  <a href="files/xog-somali-poetry.html" class="bcard filterable" data-tags="ancient source" data-cid="poetry" data-connects="gaala,deelley" data-r>
+    <span class="bcard-tag">Oral Literature</span>
+    <div class="bcard-title src-title">Somali Poetry: An Introduction</div>
+    <div class="bcard-desc">Andrzejewski & Lewis, 1964. The first systematic transcription of Somali oral poetry in English. Still cited in every serious study of Somali literature.</div>
+    <div class="bcard-foot"><div class="bcard-pills"><span class="pill">English</span><span class="pill">1964</span></div><span class="bcard-arrow"><svg viewBox="0 0 20 10" style="width:18px;height:9px;vertical-align:middle;display:inline-block;transition:transform 0.2s"><path d="M0,5 C3,5 6,3.5 10,2 C14,0.5 17,1 19,3 C19.5,3.5 19.5,6.5 19,7 C17,9 14,9.5 10,8 C6,6.5 3,5 0,5Z" fill="currentColor" opacity="0.7"/></svg></span></div>
+  </a>
+  <a href="era-diaspora.html" class="bcard filterable" data-tags="modern essay" data-cid="diaspora" data-connects="bhd,deelley,scripts" data-r>
+    <span class="bcard-tag">Diaspora & Identity</span>
+    <div class="bcard-title">The Archive That Travels</div>
+    <div class="bcard-desc">The largest Somali diaspora communities carry oral history, gabay competitions, and clan genealogies across continents. The archive is not in a building. It moves.</div>
+    <div class="bcard-foot"><div class="bcard-pills"><span class="pill">1969 → Present</span></div><span class="bcard-arrow"><svg viewBox="0 0 20 10" style="width:18px;height:9px;vertical-align:middle;display:inline-block;transition:transform 0.2s"><path d="M0,5 C3,5 6,3.5 10,2 C14,0.5 17,1 19,3 C19.5,3.5 19.5,6.5 19,7 C17,9 14,9.5 10,8 C6,6.5 3,5 0,5Z" fill="currentColor" opacity="0.7"/></svg></span></div>
+  </a>
+  <a href="files/xog-xeer-not-customary-law.html" class="bcard filterable" data-tags="ancient counter essay" data-cid="xeercn" data-connects="xeer" data-r>
+    <div><span class="bcard-tag">Legal History</span><span class="badge">Counter-Narrative</span></div>
+    <div class="bcard-title">The Xeer Is Not "Customary Law"</div>
+    <div class="bcard-desc">Western anthropology filed xeer under "customary law" — tribal, informal, primitive. It's a decentralized constitutional system with binding precedent and quantified restitution.</div>
+    <div class="bcard-foot"><div class="bcard-pills"><span class="pill">Pre-Islamic</span><span class="pill">Legal</span></div><span class="bcard-arrow"><svg viewBox="0 0 20 10" style="width:18px;height:9px;vertical-align:middle;display:inline-block;transition:transform 0.2s"><path d="M0,5 C3,5 6,3.5 10,2 C14,0.5 17,1 19,3 C19.5,3.5 19.5,6.5 19,7 C17,9 14,9.5 10,8 C6,6.5 3,5 0,5Z" fill="currentColor" opacity="0.7"/></svg></span></div>
+  </a>
+</div>
+
+<!-- ═══ BROWSE GRID — new pages ═══ -->
+<div class="browse" id="grid5">
+  <a href="era-maritime.html" class="bcard filterable" data-tags="ancient medieval essay" data-cid="maritime" data-connects="benadir,ajuran" data-r>
+    <span class="bcard-tag">Indian Ocean Trade</span>
+    <div class="bcard-title">The Maritime Networks</div>
+    <div class="bcard-desc">From the Periplus ports of the 1st century to Zheng He's arrival in 1417 to the Toob Benadir textile industry exporting 380,000 pieces of cloth a year. The monsoon dictated the calendar. The Somali coast sat at the junction.</div>
+    <div class="bcard-foot"><div class="bcard-pills"><span class="pill">1st c. BCE – 19th c.</span><span class="pill">Footnoted</span></div><span class="bcard-arrow"><svg viewBox="0 0 20 10" style="width:18px;height:9px;vertical-align:middle;display:inline-block;transition:transform 0.2s"><path d="M0,5 C3,5 6,3.5 10,2 C14,0.5 17,1 19,3 C19.5,3.5 19.5,6.5 19,7 C17,9 14,9.5 10,8 C6,6.5 3,5 0,5Z" fill="currentColor" opacity="0.7"/></svg></span></div>
+  </a>
+  <a href="era-sufi.html" class="bcard filterable" data-tags="medieval colonial essay" data-cid="sufi" data-connects="dervish,xeer" data-r>
+    <span class="bcard-tag">Religious Orders</span>
+    <div class="bcard-title">The Sufi Brotherhoods</div>
+    <div class="bcard-desc">The Qadiriyya, Ahmadiyya, and Salihiyya orders built schools, farms, and mediation systems that ran parallel to clan authority. Sheikh Uways was assassinated. The Sayyid wrote a poem celebrating it.</div>
+    <div class="bcard-foot"><div class="bcard-pills"><span class="pill">1503 – Present</span><span class="pill">Footnoted</span></div><span class="bcard-arrow"><svg viewBox="0 0 20 10" style="width:18px;height:9px;vertical-align:middle;display:inline-block;transition:transform 0.2s"><path d="M0,5 C3,5 6,3.5 10,2 C14,0.5 17,1 19,3 C19.5,3.5 19.5,6.5 19,7 C17,9 14,9.5 10,8 C6,6.5 3,5 0,5Z" fill="currentColor" opacity="0.7"/></svg></span></div>
+  </a>
+  <a href="era-script.html" class="bcard filterable" data-tags="modern essay" data-cid="scripts" data-connects="diaspora,deelley" data-r>
+    <span class="bcard-tag">Language Politics</span>
+    <div class="bcard-title">The Script Wars</div>
+    <div class="bcard-desc">Eighteen competing scripts. Each carried a clan, a colonial patron, a religious position. The Latin alphabet won on October 21, 1972. The decision was about machines, Cold War alignment, and anti-clan politics — not linguistics.</div>
+    <div class="bcard-foot"><div class="bcard-pills"><span class="pill">1920s – 1972</span><span class="pill">Footnoted</span></div><span class="bcard-arrow"><svg viewBox="0 0 20 10" style="width:18px;height:9px;vertical-align:middle;display:inline-block;transition:transform 0.2s"><path d="M0,5 C3,5 6,3.5 10,2 C14,0.5 17,1 19,3 C19.5,3.5 19.5,6.5 19,7 C17,9 14,9.5 10,8 C6,6.5 3,5 0,5Z" fill="currentColor" opacity="0.7"/></svg></span></div>
+  </a>
+  <a href="era-genealogies.html" class="bcard filterable" data-tags="ancient essay" data-cid="genealogies" data-connects="xeer" data-r>
+    <span class="bcard-tag">Origins</span>
+    <div class="bcard-title">The Founding Genealogies</div>
+    <div class="bcard-desc">Lineages recited from memory across four and a half millennia. The oldest continuously maintained records on the peninsula, kept without a single sheet of paper.</div>
+    <div class="bcard-foot"><div class="bcard-pills"><span class="pill">c. 2500 BCE</span><span class="pill">Oral</span></div><span class="bcard-arrow"><svg viewBox="0 0 20 10" style="width:18px;height:9px;vertical-align:middle;display:inline-block;transition:transform 0.2s"><path d="M0,5 C3,5 6,3.5 10,2 C14,0.5 17,1 19,3 C19.5,3.5 19.5,6.5 19,7 C17,9 14,9.5 10,8 C6,6.5 3,5 0,5Z" fill="currentColor" opacity="0.7"/></svg></span></div>
+  </a>
+  <a href="era-adal.html" class="bcard filterable" data-tags="medieval essay" data-cid="adal" data-connects="futuh" data-r>
+    <span class="bcard-tag">Military History</span>
+    <div class="bcard-title">The Adal Sultanate & Ahmad Gurey</div>
+    <div class="bcard-desc">Fourteen years that conquered three-quarters of the Ethiopian highlands, reversed only by Portuguese muskets. The campaign the Futuh al-Habasha records battle by battle.</div>
+    <div class="bcard-foot"><div class="bcard-pills"><span class="pill">1415–1577</span></div><span class="bcard-arrow"><svg viewBox="0 0 20 10" style="width:18px;height:9px;vertical-align:middle;display:inline-block;transition:transform 0.2s"><path d="M0,5 C3,5 6,3.5 10,2 C14,0.5 17,1 19,3 C19.5,3.5 19.5,6.5 19,7 C17,9 14,9.5 10,8 C6,6.5 3,5 0,5Z" fill="currentColor" opacity="0.7"/></svg></span></div>
+  </a>
+  <a href="era-dervish.html" class="bcard filterable" data-tags="colonial essay" data-cid="dervish" data-connects="mullah,gaala,british" data-r>
+    <span class="bcard-tag">Resistance</span>
+    <div class="bcard-title">The Dervish State</div>
+    <div class="bcard-desc">Twenty-one years against three empires, run from a moving camp and a stone fort at Taleh. Ended only by the first aerial bombardment in African history.</div>
+    <div class="bcard-foot"><div class="bcard-pills"><span class="pill">1899–1920</span></div><span class="bcard-arrow"><svg viewBox="0 0 20 10" style="width:18px;height:9px;vertical-align:middle;display:inline-block;transition:transform 0.2s"><path d="M0,5 C3,5 6,3.5 10,2 C14,0.5 17,1 19,3 C19.5,3.5 19.5,6.5 19,7 C17,9 14,9.5 10,8 C6,6.5 3,5 0,5Z" fill="currentColor" opacity="0.7"/></svg></span></div>
+  </a>
+  <a href="era-partition.html" class="bcard filterable" data-tags="colonial essay" data-cid="partition" data-connects="dervish" data-r>
+    <span class="bcard-tag">Colonial History</span>
+    <div class="bcard-title">One People, Five Partitions</div>
+    <div class="bcard-desc">Britain, Italy, France, Ethiopia, and Kenya divided one people into five administrations. No Somali signed any of the treaties. The five-pointed star remembers.</div>
+    <div class="bcard-foot"><div class="bcard-pills"><span class="pill">1884–1960</span></div><span class="bcard-arrow"><svg viewBox="0 0 20 10" style="width:18px;height:9px;vertical-align:middle;display:inline-block;transition:transform 0.2s"><path d="M0,5 C3,5 6,3.5 10,2 C14,0.5 17,1 19,3 C19.5,3.5 19.5,6.5 19,7 C17,9 14,9.5 10,8 C6,6.5 3,5 0,5Z" fill="currentColor" opacity="0.7"/></svg></span></div>
+  </a>
+  <a href="era-independence.html" class="bcard filterable" data-tags="modern essay" data-cid="independence" data-connects="partition" data-r>
+    <span class="bcard-tag">The Republic</span>
+    <div class="bcard-title">Independence & Union</div>
+    <div class="bcard-desc">Two territories declared independence five days apart and merged by popular vote, one of the only consensual unifications in African decolonisation.</div>
+    <div class="bcard-foot"><div class="bcard-pills"><span class="pill">1960</span></div><span class="bcard-arrow"><svg viewBox="0 0 20 10" style="width:18px;height:9px;vertical-align:middle;display:inline-block;transition:transform 0.2s"><path d="M0,5 C3,5 6,3.5 10,2 C14,0.5 17,1 19,3 C19.5,3.5 19.5,6.5 19,7 C17,9 14,9.5 10,8 C6,6.5 3,5 0,5Z" fill="currentColor" opacity="0.7"/></svg></span></div>
+  </a>
+  <a href="era-somaliland.html" class="bcard filterable" data-tags="modern essay" data-cid="somaliland" data-connects="independence" data-r>
+    <span class="bcard-tag">Self-Determination</span>
+    <div class="bcard-title">Somaliland</div>
+    <div class="bcard-desc">In 1991 the north withdrew from the union it had joined voluntarily, wrote a constitution, and built three decades of working institutions. No country recognizes it.</div>
+    <div class="bcard-foot"><div class="bcard-pills"><span class="pill">1991 → Present</span></div><span class="bcard-arrow"><svg viewBox="0 0 20 10" style="width:18px;height:9px;vertical-align:middle;display:inline-block;transition:transform 0.2s"><path d="M0,5 C3,5 6,3.5 10,2 C14,0.5 17,1 19,3 C19.5,3.5 19.5,6.5 19,7 C17,9 14,9.5 10,8 C6,6.5 3,5 0,5Z" fill="currentColor" opacity="0.7"/></svg></span></div>
+  </a>
+  <a href="era-2006.html" class="bcard filterable" data-tags="modern essay" data-cid="invasion2006" data-connects="bhd" data-r>
+    <span class="bcard-tag">Modern History</span>
+    <div class="bcard-title">The Courts & the Invasion</div>
+    <div class="bcard-desc">The Islamic Courts gave Mogadishu its first order in fifteen years. The 2006 invasion dismantled it in weeks; the insurgency it triggered outlasted every government since.</div>
+    <div class="bcard-foot"><div class="bcard-pills"><span class="pill">2006–2012</span></div><span class="bcard-arrow"><svg viewBox="0 0 20 10" style="width:18px;height:9px;vertical-align:middle;display:inline-block;transition:transform 0.2s"><path d="M0,5 C3,5 6,3.5 10,2 C14,0.5 17,1 19,3 C19.5,3.5 19.5,6.5 19,7 C17,9 14,9.5 10,8 C6,6.5 3,5 0,5Z" fill="currentColor" opacity="0.7"/></svg></span></div>
+  </a>
+  <a href="files/xog-somali-astronomy.html" class="bcard filterable" data-tags="ancient counter essay" data-cid="xiddigis" data-connects="maritime" data-r>
+    <span class="bcard-tag">Knowledge System</span>
+    <div class="bcard-title">Xiddigis: The Somali Sky</div>
+    <div class="bcard-desc">The moon’s 28 lodgings, the Pleiades timing the lambing, Spica naming half the year. The sky as a working calendar, after Muuse H. I. Galaal.</div>
+    <div class="bcard-foot"><div class="bcard-pills"><span class="pill">Galaal</span><span class="pill">1968</span></div><span class="bcard-arrow"><svg viewBox="0 0 20 10" style="width:18px;height:9px;vertical-align:middle;display:inline-block;transition:transform 0.2s"><path d="M0,5 C3,5 6,3.5 10,2 C14,0.5 17,1 19,3 C19.5,3.5 19.5,6.5 19,7 C17,9 14,9.5 10,8 C6,6.5 3,5 0,5Z" fill="currentColor" opacity="0.7"/></svg></span></div>
+  </a>
+  <a href="xog-fragments.html" class="bcard filterable" data-tags="counter essay" data-cid="fragments" data-r>
+    <span class="bcard-tag">Open Research</span>
+    <div class="bcard-title">Fragments: The Loom</div>
+    <div class="bcard-desc">The working room. One source is a fragment, two twist into a hypothesis, three weave into the record. Bring the margin note; keep your name on it.</div>
+    <div class="bcard-foot"><div class="bcard-pills"><span class="pill">Standing</span></div><span class="bcard-arrow"><svg viewBox="0 0 20 10" style="width:18px;height:9px;vertical-align:middle;display:inline-block;transition:transform 0.2s"><path d="M0,5 C3,5 6,3.5 10,2 C14,0.5 17,1 19,3 C19.5,3.5 19.5,6.5 19,7 C17,9 14,9.5 10,8 C6,6.5 3,5 0,5Z" fill="currentColor" opacity="0.7"/></svg></span></div>
+  </a>
+</div>
+
+<!-- ═══ LOAD MORE ═══ -->
+<div class="load-more"><button class="load-btn">Load More Entries</button></div>
+
+<!-- footer injected by xog-nav.js -->
+
+<script>
+// Filtering
+function setFilter(tag){
+  document.querySelectorAll('.fb').forEach(function(b){b.classList.remove('active')});
+  var btn=document.querySelector('.fb[data-f="'+tag+'"]');
+  if(btn)btn.classList.add('active');
+  // Reshuffle pulse
+  var items=document.querySelectorAll('.filterable');
+  items.forEach(function(c){
+    c.style.transition='transform 0.15s,opacity 0.15s';
+    c.style.transform='scale(0.97)';
+    c.style.opacity='0.7';
+  });
+  setTimeout(function(){
+    var n=0;
+    items.forEach(function(c){
+      var t=c.getAttribute('data-tags')||'';
+      if(tag==='all'||t.indexOf(tag)!==-1){c.style.display='';n++}
+      else{c.style.display='none'}
+      c.style.transform='';
+      c.style.opacity='';
+    });
+    var counter=document.getElementById('resultCount');
+    if(counter)counter.textContent=n+' entries';
+  },180);
+}
+
+// Search
+var searchInput=document.getElementById('searchInput');
+if(searchInput){
+  searchInput.addEventListener('input',function(e){
+    var q=e.target.value.toLowerCase();
+    var n=0;
+    document.querySelectorAll('.filterable').forEach(function(c){
+      if(!q||c.textContent.toLowerCase().indexOf(q)!==-1){c.style.display='';n++}
+      else{c.style.display='none'}
+    });
+    var counter=document.getElementById('resultCount');
+    if(counter)counter.textContent=n+' entries';
+    if(q)document.querySelectorAll('.fb').forEach(function(b){b.classList.remove('active')});
+  });
+}
+
+// Staggered scroll reveals
+var obs=new IntersectionObserver(function(entries){
+  var visible=entries.filter(function(e){return e.isIntersecting});
+  visible.forEach(function(e,i){
+    setTimeout(function(){e.target.classList.add('v')},i*80);
+    obs.unobserve(e.target);
+  });
+},{threshold:0.05});
+document.querySelectorAll('[data-r]').forEach(function(el){obs.observe(el)});
+
+// Cursor glow (safe)
+var glowEl=document.createElement('div');
+glowEl.style.cssText='position:fixed;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,rgba(184,58,34,0.04) 0%,transparent 70%);pointer-events:none;z-index:0;transform:translate(-50%,-50%);display:none';
+document.body.appendChild(glowEl);
+document.addEventListener('mousemove',function(e){
+  glowEl.style.left=e.clientX+'px';
+  glowEl.style.top=e.clientY+'px';
+  glowEl.style.display='block';
+});
+document.addEventListener('mouseleave',function(){glowEl.style.display='none'});
+
+// Silk Road — hover a card, related cards glow, others fade
+document.querySelectorAll('.filterable[data-cid]').forEach(function(card){
+  card.addEventListener('mouseenter',function(){
+    var connects=(card.getAttribute('data-connects')||'').split(',').filter(Boolean);
+    if(!connects.length)return;
+    document.querySelectorAll('.filterable[data-cid]').forEach(function(c){
+      if(c===card)return;
+      var cid=c.getAttribute('data-cid');
+      if(connects.indexOf(cid)!==-1){
+        c.classList.add('silk-glow');
+        c.classList.remove('silk-fade');
+      }else{
+        c.classList.add('silk-fade');
+        c.classList.remove('silk-glow');
+      }
+    });
+  });
+  card.addEventListener('mouseleave',function(){
+    document.querySelectorAll('.filterable[data-cid]').forEach(function(c){
+      c.classList.remove('silk-glow','silk-fade');
+    });
+  });
+});
+
+</script>
+<script src="xog-nav.js"></script>
+<style>
+.bcard{position:relative}
+.bcard-map{position:absolute;top:0.9rem;right:0.9rem;width:50px;height:50px;opacity:0.55;pointer-events:none}
+.bcard-map .bm-out{fill:rgba(184,58,34,0.05);stroke:var(--muted,#3D3024);stroke-width:1.4;opacity:0.6}
+.bcard-map .bm-zone{fill:rgba(184,58,34,0.3);stroke:var(--ochre,#B83A22);stroke-width:1.6}
+.bcard-map .bm-full{fill:rgba(184,58,34,0.18);stroke:var(--ochre,#B83A22);stroke-width:1}
+</style>
+<script>
+(function () {
+  var OUTLINE = 'M 33.4,13.2 L 34.6,13.0 L 36.1,16.5 L 42.0,19.4 L 46.6,17.9 L 51.9,17.9 L 59.8,15.5 L 67.1,14.6 L 75.9,12.1 L 81.2,11.1 L 80.0,14.8 L 81.0,19.1 L 80.8,19.9 L 78.3,24.8 L 77.2,28.0 L 74.4,32.9 L 70.0,39.7 L 58.6,58.4 L 49.2,67.8 L 27.2,87.0 L 19.9,91.8 L 14.1,90.4 L 13.1,87.3 L 11.8,84.6 L 8.8,82.4 L 6.4,82.0 L 6.9,78.1 L 9.6,73.0 L 8.1,69.9 L 8.7,64.2 L 8.5,60.7 L 12.4,53.9 L 17.1,49.4 L 20.0,42.0 L 24.4,42.7 L 27.0,38.2 L 25.4,33.3 L 27.8,30.8 L 30.4,31.8 L 30.9,29.0 L 26.5,27.5 L 19.0,26.3 L 18.0,25.4 L 20.4,18.0 L 24.4,13.2 L 25.5,11.3 L 28.2,7.4 L 30.6,7.2 L 32.7,6.3 L 34.3,9.9 L 31.6,11.5 L 30.0,12.8 L 33.0,13.0 L 33.4,13.2 Z';
+  var Z = {
+    genealogies: { full: 1 }, maritime: { full: 1 }, xeer: { full: 1 }, sufi: { full: 1 },
+    scripts: { full: 1 }, partition: { full: 1 }, independence: { full: 1 }, diaspora: { full: 1 },
+    benadir: { cx: 42, cy: 72, rx: 10, ry: 4.5, rot: -35 },
+    ajuran: { cx: 40, cy: 60, rx: 21, ry: 17, rot: -20 },
+    adal: { cx: 30, cy: 20, rx: 11, ry: 8, rot: -30 },
+    dervish: { cx: 62, cy: 33, rx: 12, ry: 9, rot: 15 },
+    somaliland: { cx: 42, cy: 20, rx: 14, ry: 8, rot: 10 },
+    invasion2006: { cx: 38, cy: 75, rx: 12, ry: 10, rot: -30 },
+    punt: { cx: 55, cy: 16, rx: 22, ry: 7, rot: 4 }
+  };
+  document.querySelectorAll('.bcard[data-cid]').forEach(function (c) {
+    var z = Z[c.getAttribute('data-cid')];
+    if (!z) return;
+    var zone = z.full
+      ? '<path class="bm-full" d="' + OUTLINE + '"/>'
+      : '<ellipse class="bm-zone" cx="' + z.cx + '" cy="' + z.cy + '" rx="' + z.rx + '" ry="' + z.ry +
+        '" transform="rotate(' + z.rot + ' ' + z.cx + ' ' + z.cy + ')"/>';
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 100 100');
+    svg.setAttribute('class', 'bcard-map');
+    svg.setAttribute('aria-hidden', 'true');
+    svg.innerHTML = '<path class="bm-out" d="' + OUTLINE + '"/>' + zone;
+    c.appendChild(svg);
+  });
+})();
+</script>
+</body></html>

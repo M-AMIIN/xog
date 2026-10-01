@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xog — The 2006 Invasion · 2006–2012</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=DM+Serif+Display&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300;1,8..60,400&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="xog-nav.css">
+<link rel="stylesheet" href="xog-styles.css">
+<link rel="stylesheet" href="xog-cite.css">
+<style>
+/* ── ERA-2006 ELEVATED STYLES ─────────────────────────────── */
+:root {
+  --ochre: #B83A22;
+  --ochre-dim: rgba(184, 58, 34, 0.55);
+  --ochre-glow: rgba(184, 58, 34, 0.10);
+  --ochre-deep: #7A2616;
+  --gold: #C49A3C;
+  --gold-dim: rgba(184, 58, 34, 0.55);
+  --gold-glow: rgba(184, 58, 34, 0.10);
+  --rust: #8A5800;
+  --rust-dim: rgba(138, 88, 0, 0.60);
+  --sand: #C8A882;
+  --text-bright: #140C04;
+  --text: #2A1E10;
+  --muted: #5A4430;
+  --faint: #8A7460;
+  --deep: #F9F6F1;
+  --surface: #F3EDE3;
+  --card: #EDE5D8;
+  --border: rgba(20, 12, 4, 0.09);
+  --border-mid: rgba(20, 12, 4, 0.16);
+  --sea: #1C3272;
+  --col-aside: 300px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  overflow-x: hidden;
+  background: var(--deep);
+  color: var(--text);
+  padding-top: 58px;
+}
+
+/* ── SCROLL REVEAL ── */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(1.8rem);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-reveal].visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── HERO ── */
+.era-hero {
+  position: relative;
+  border-bottom: 1px solid var(--border);
+  padding: 4rem 2rem 3.5rem;
+  overflow: hidden;
+  background: linear-gradient(170deg, #F9F6F1 0%, #F3EDE3 60%, #EDE5D8 100%);
+}
+.era-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 70% 50%, rgba(184,58,34,.06), transparent),
+    radial-gradient(ellipse 40% 60% at 20% 80%, rgba(138,88,0,.04), transparent);
+  pointer-events: none;
+}
+/* grain texture */
+.era-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.era-hero-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.era-crumb {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.era-crumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.era-crumb a:hover { color: var(--ochre); }
+.era-crumb span { opacity: .4; }
+
+.era-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: .7rem;
+}
+.era-headline {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.8rem, 6vw, 5.2rem);
+  font-weight: 300;
+  line-height: 1.05;
+  color: var(--text-bright);
+  margin-bottom: .5rem;
+  max-width: 800px;
+}
+.era-headline em {
+  font-style: italic;
+  color: var(--ochre);
+}
+.era-dates {
+  font-family: 'DM Mono', monospace;
+  font-size: .62rem;
+  color: var(--muted);
+  letter-spacing: .1em;
+  margin-bottom: 2rem;
+}
+.era-lede {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.18rem;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.75;
+  max-width: 680px;
+  border-left: 2px solid var(--ochre);
+  padding-left: 1.4rem;
+}
+
+/* ── WORLD CONTEXT BAR ── */
+.world-bar {
+  background: rgba(184,58,34,.03);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: .9rem 2rem;
+}
+.world-bar-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.wb-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.wb-items { display: flex; gap: 1.5rem; flex-wrap: wrap; flex: 1; }
+.wb-item {
+  font-family: 'Source Serif 4', serif;
+  font-size: .6rem;
+  color: var(--muted);
+  letter-spacing: .05em;
+}
+.wb-item strong {
+  color: var(--text-bright);
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: .56rem;
+  letter-spacing: .08em;
+  margin-bottom: .15rem;
+}
+
+/* ── IMAGE PANEL ── */
+.image-panel {
+  max-width: 1100px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+}
+.image-panel figure {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+.image-panel img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: sepia(0.15) contrast(1.05);
+  transition: filter 0.4s ease;
+}
+.image-panel figure:hover img {
+  filter: sepia(0) contrast(1);
+}
+.image-panel figcaption {
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .06em;
+  color: var(--muted);
+  padding: .8rem 1.2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.image-panel figcaption .img-source {
+  font-size: .5rem;
+  color: var(--faint);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+/* ── CONTENT GRID ── */
+.era-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  display: grid;
+  grid-template-columns: 1fr var(--col-aside);
+  gap: 4rem;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .era-content { grid-template-columns: 1fr; gap: 3rem; }
+  .era-aside { order: -1; }
+}
+
+/* ── PROSE ── */
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin-bottom: .8rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid var(--border);
+}
+.era-main h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.9rem;
+  font-weight: 400;
+  color: var(--text-bright);
+  line-height: 1.2;
+  margin: 3rem 0 1rem;
+}
+.era-main h2:first-of-type { margin-top: 0; }
+.era-main p {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.02rem;
+  line-height: 1.85;
+  color: var(--muted);
+  margin-bottom: 1.4rem;
+}
+.era-main p strong {
+  color: var(--text-bright);
+  font-weight: 400;
+}
+
+/* ── PULL QUOTE ── */
+.pull {
+  border-left: 3px solid var(--ochre);
+  padding: 1.2rem 1.5rem;
+  margin: 2.5rem 0;
+  background: var(--ochre-glow);
+}
+.pull p {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.32rem;
+  font-style: italic;
+  color: var(--text-bright);
+  line-height: 1.55;
+  margin: 0 0 .5rem;
+}
+.pull cite {
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem;
+  color: var(--muted);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-style: normal;
+}
+
+/* ── INLINE IMAGE IN PROSE ── */
+.prose-image {
+  margin: 2.5rem 0;
+  border: 1px solid var(--border);
+  background: var(--card);
+  overflow: hidden;
+}
+.prose-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: sepia(0.2) contrast(1.05);
+}
+.prose-image figcaption {
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem;
+  color: var(--muted);
+  padding: .7rem 1rem;
+  letter-spacing: .04em;
+  border-top: 1px solid var(--border);
+}
+
+/* ── ASIDE ── */
+.era-aside {
+  position: sticky;
+  top: 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+@media (max-width: 900px) {
+  .era-aside { position: static; }
+}
+.aside-card {
+  border: 1px solid var(--border);
+  padding: 1.3rem;
+  background: rgba(184,58,34,.02);
+  position: relative;
+}
+.aside-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--ochre), transparent);
+}
+.aside-card h3 {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin-bottom: 1rem;
+}
+.figure {
+  display: flex; flex-direction: column; gap: .5rem;
+  padding-bottom: 1rem; margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.figure:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.fig-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.05rem; font-weight: 400;
+  color: var(--text-bright); line-height: 1.2;
+}
+.fig-role {
+  font-family: 'DM Mono', monospace;
+  font-size: .56rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ochre);
+}
+.fig-desc {
+  font-family: 'Source Serif 4', serif;
+  font-size: .7rem; line-height: 1.65; color: var(--muted);
+}
+.fact-row {
+  display: flex; justify-content: space-between;
+  align-items: baseline; padding: .5rem 0;
+  border-bottom: 1px solid rgba(200,176,144,.06); gap: 1rem;
+}
+.fact-row:last-child { border-bottom: none; }
+.fact-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted); flex-shrink: 0;
+}
+.fact-val {
+  font-family: 'DM Serif Display', serif;
+  font-size: .95rem; color: var(--text-bright); text-align: right;
+}
+.source-item {
+  font-family: 'Source Serif 4', serif;
+  font-size: .64rem; line-height: 1.6;
+  color: var(--muted); padding: .5rem 0;
+  border-bottom: 1px solid rgba(200,176,144,.06);
+}
+.source-item:last-child { border-bottom: none; }
+.source-item strong {
+  color: var(--text-bright); display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem; letter-spacing: .06em; margin-bottom: .2rem;
+}
+
+/* ── ARABESQUE DIVIDER ── */
+.arabesque {
+  display: block;
+  margin: 3rem auto;
+  height: 24px;
+  width: 200px;
+  opacity: 0.25;
+}
+
+/* ── ERA NAVIGATION ── */
+.era-nav {
+  border-top: 1px solid var(--border);
+  padding: 2.5rem 2rem;
+}
+.era-nav-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 2rem;
+}
+.era-nav-btn {
+  display: flex; flex-direction: column; gap: .3rem;
+  text-decoration: none; max-width: 280px; flex: 1;
+}
+.era-nav-btn:last-child { align-items: flex-end; }
+.nav-dir {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--muted);
+}
+.nav-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.05rem; color: var(--text-bright);
+  line-height: 1.2; transition: color .2s;
+}
+.era-nav-btn:hover .nav-title { color: var(--ochre); }
+.nav-dates {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem; color: var(--faint); letter-spacing: .06em;
+}
+.nav-center {
+  text-align: center; text-decoration: none;
+  color: var(--muted); font-family: 'DM Mono', monospace;
+  font-size: .54rem; letter-spacing: .14em;
+  text-transform: uppercase; transition: color .2s;
+}
+.nav-center:hover { color: var(--ochre); }
+
+/* ── MAP LINK CARD ── */
+.map-card {
+  display: block;
+  border: 1px solid var(--border);
+  padding: 1rem 1.2rem;
+  text-decoration: none;
+  transition: all .2s;
+  background: rgba(184,58,34,.03);
+}
+.map-card:hover { border-color: rgba(184,58,34,.4); }
+.map-card .mc-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--ochre); margin-bottom: .4rem;
+}
+.map-card .mc-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: .98rem; color: var(--text-bright); line-height: 1.3;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .era-hero { padding: 3rem 1.2rem 2.5rem; }
+  .era-content { padding: 3rem 1.2rem; }
+  .era-nav { padding: 2rem 1.2rem; }
+  .era-nav-inner { flex-direction: column; }
+}
+
+/* ── BACKGROUND ARTIFACT ANIMATION ── */
+@keyframes artifactFloat {
+  0% { transform: rotate(-20deg) translateY(0); }
+  50% { transform: rotate(-17deg) translateY(-12px); }
+  100% { transform: rotate(-20deg) translateY(0); }
+}
+</style>
+<link rel="stylesheet" href="xog-fable.css?v=3">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23111929'/%3E%3Cpath d='M32 8 L36.5 27.5 L56 32 L36.5 36.5 L32 56 L27.5 36.5 L8 32 L27.5 27.5 Z' fill='%23C49A3C'/%3E%3Ccircle cx='32' cy='32' r='3.4' fill='%23FDFAF5'/%3E%3C/svg%3E">
+</head>
+<body>
+<img src="images/spear.svg" alt="" aria-hidden="true" style="position:fixed;right:-5%;top:15%;width:25vw;max-width:300px;opacity:0.06;pointer-events:none;transform:rotate(-20deg);z-index:0;animation:artifactFloat 18s ease-in-out infinite">
+
+<!-- HERO -->
+<div class="era-hero" data-reveal>
+  <div class="era-hero-inner">
+    <div class="era-crumb">
+      <a href="somali-archive.html">Archive</a>
+      <span>/</span>
+      <span>The 2006 Invasion</span>
+    </div>
+    <div class="era-kicker">2006 – 2012 CE · Somalia & Ethiopia</div>
+    <h1 class="era-headline">The <em>Ethiopian Invasion</em><br>& the Birth of al-Shabaab</h1>
+    <div class="era-dates">December 24, 2006 — The Islamic Courts Defeated</div>
+    <p class="era-lede">For six months in 2006, the Islamic Courts Union controlled Mogadishu and much of central Somalia. They defeated the warlords and brought the first sustained peace in fifteen years. Then Ethiopia invaded, backed by the United States. The invasion destroyed the Courts, radicalized a generation, and created the exact threat it claimed to prevent.</p>
+  </div>
+</div>
+
+<!-- WORLD CONTEXT BAR -->
+<div class="world-bar" data-reveal>
+  <div class="world-bar-inner">
+    <div class="wb-label">The world in 2006</div>
+    <div class="wb-items">
+      <div class="wb-item"><strong>Iraq War</strong>Fourth year of American occupation following 2003 invasion; insurgency entrenched</div>
+      <div class="wb-item"><strong>War on Terror</strong>Post-9/11 counterterrorism operations expanded across Muslim-majority regions</div>
+      <div class="wb-item"><strong>Afghanistan</strong>Taliban resurgence beginning in Taliban strongholds</div>
+      <div class="wb-item"><strong>Ethiopia</strong>Meles Zenawi's regime allied with United States; strategic partner in East Africa</div>
+      <div class="wb-item"><strong>Somalia</strong>Islamic Courts defeat warlords; Ethiopian military mobilizes in response</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="era-content">
+
+  <main class="era-main" role="main">
+
+    <div class="section-label" data-reveal>The Courts & the Peace · 2004–2006</div>
+    <h2 data-reveal>Fifteen Years of War Ended by Judges</h2>
+
+    <p data-reveal>After the collapse of 1991, Somalia's capital descended into warlordism. Mogadishu was controlled by competing clan militias — the USC, the SPM, and various splinter groups, each with armed wings and territorial ambitions. They fought over neighborhoods. They fought over resources. The capital became a graveyard of security checkpoints where you could be shot depending on which clan controlled which corner. For fifteen years, from 1991 to 2006, there was no government, no police, no judiciary. There was no authority that could enforce any rule other than the threat of violence.</p>
+
+    <p data-reveal>In this vacuum, Somali judges — trained in Islamic law, familiar to their communities — began to organize. They established <em>sharia courts</em> that resolved disputes the traditional way: through Islamic jurisprudence. A merchant with a grievance could bring his case to a court. A clan with a property dispute could seek judgment.<span class="c">4<span>Bronwyn Bruton, <em>Somalia: A New Approach</em> (Council on Foreign Relations, 2010), pp. 18–27. <span class="tip-note">Bruton traces the origins of the Islamic Courts Union from local dispute-resolution mechanisms to a nascent political force.</span></span></span> The courts had no government backing and no standing army initially. They had legitimacy born from the fact that they actually resolved disputes instead of perpetuating them.</p>
+
+    <p data-reveal>Over time, as the courts gained legitimacy, some of them organized militias to enforce their decisions. By the early 2000s, a coalition of these courts — eventually called the <strong>Islamic Courts Union (ICU)</strong> — had begun to challenge the warlords. They defeated militias in neighborhood by neighborhood skirmishes. By June 2006, the ICU had defeated enough warlord factions to control Mogadishu and much of central Somalia.</p>
+
+    <p data-reveal>What happened next was unprecedented in post-1991 Somalia: peace. The ICU imposed order. They disarmed militias. They opened the port that the warlords had closed. Merchants could travel. Women could move through the city. The courts administered justice. There was no Western democracy, no elections, no secular governance. But there was security, and after fifteen years of chaos, security was what Somalis wanted most.</p>
+
+    <div class="pull" data-reveal>
+      <p>"The Islamic Courts brought peace to Mogadishu for the first time in fifteen years. They did it through Islamic law and the implicit threat of force. It was not liberal democracy. It was order."</p>
+      <cite>International Crisis Group, Somalia: The Tough Part is Ahead (2006)</cite>
+    </div>
+
+    <p data-reveal>The international community was not pleased. The ICU was Islamic. Some of its leadership had connections to al-Qaeda operatives. A few of the courts were run by radical clerics. But most of the courts were conservative, focused on applying Islamic law to everyday disputes. The issue was not that the courts were inherently extreme — it was that they were Islamic, and in 2006, any Islamic authority in a strategically important region triggered American counterterrorism protocols.</p>
+
+    <div class="section-label" data-reveal>The Invasion · December 2006</div>
+    <h2 data-reveal>Ethiopia & the United States</h2>
+
+    <p data-reveal>Ethiopia's government, led by Prime Minister Meles Zenawi, was deeply concerned by the rise of an Islamic authority in Somalia. Ethiopia is predominantly Christian, and it has a history of conflict with Islamic states. The Ogaden region of Ethiopia has large ethnic Somali and Muslim populations, and Addis Ababa feared that an Islamic Somalia could inspire separatism on Ethiopia's side of the border.<span class="c">5<span>Stig Jarle Hansen, <em>Al-Shabaab in Somalia</em> (Oxford University Press, 2013), pp. 46–68. <span class="tip-note">Hansen details Ethiopia's strategic calculations and the geopolitical concerns driving the intervention.</span></span></span></p>
+
+    <p data-reveal>The United States, under the Bush administration, shared the concern but for different reasons. In the post-9/11 environment, the U.S. was focused on removing any Islamist government that might harbor terrorists. The ICU, even though most of its courts were moderate, included some individuals with ideological ties to al-Qaeda. That was enough. The U.S. decided that the ICU had to go.</p>
+
+    <p data-reveal>What happened next was a classic proxy war dynamic. The United States provided military aid, intelligence support, and diplomatic cover to Ethiopia. Ethiopia mobilized its military. On December 24, 2006 — Christmas Eve in the Western calendar — Ethiopian forces invaded Somalia. They attacked from the northwest, moving toward Mogadishu. The ICU militia fought back but was outgunned by the Ethiopian army.</p>
+
+    <p data-reveal>By January 2007, the ICU had been defeated. The Ethiopians rolled into Mogadishu unopposed. The courts' militias had either fled, disbanded, or melted into the population. The Somali warlords, who had been displaced by the ICU, were now back in positions of power, armed by Ethiopia and dependent on Ethiopian military presence for their authority.</p>
+
+    <p data-reveal><strong>The security the ICU had brought lasted exactly six months.</strong></p>
+
+    <svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="var(--ochre)" stroke-width="1"/>
+      <circle cx="100" cy="12" r="2" fill="var(--ochre)"/>
+    </svg>
+
+    <div class="section-label" data-reveal>The Insurgency · 2007 Onward</div>
+    <h2 data-reveal>Creating the Threat You Fight</h2>
+
+    <p data-reveal>The Ethiopian occupation triggered an insurgency. Young Somalis who had been part of the ICU courts but had not been al-Qaeda operatives before the invasion suddenly had a reason to fight against a foreign military occupation. Some formed the <strong>Somali Resistance Movement (SRM)</strong>. Some reorganized as militias loyal to the remaining ICU leadership in exile. And some, the most ideologically committed, joined or formed a hardline splinter group called al-Shabaab.</p>
+
+    <p data-reveal>Al-Shabaab emerged from the Youth Wing (Shabab) of the ICU as a hardline splinter committed to jihad against foreign occupation and secular governance.<span class="c">1<span>Stig Jarle Hansen, <em>Al-Shabaab in Somalia</em> (Oxford University Press, 2013), pp. 34-45.</span></span> Its founding figures included Aden Hashi Ayro, a former military officer trained in Afghanistan, and Omar Shafik Hammami, an American-born jihadist recruiter. Al-Shabaab launched suicide bombings and roadside ambushes against Ethiopian forces and their Somali allies.</p>
+
+    <p data-reveal>The American role was not public, but it was extensive. The U.S. Central Intelligence Agency operated bases in the region. American personnel coordinated with Ethiopian forces. The U.S. conducted drone strikes against suspected al-Qaeda operatives in Somalia — strikes that sometimes hit civilians. The stated goal was counterterrorism. The effect was to provide recruits with a powerful narrative: a foreign occupation backed by a foreign power against Islam itself.</p>
+
+    <p data-reveal>The African Union, under international pressure, sent a peacekeeping mission called AMISOM (African Union Mission in Somalia) in 2007. AMISOM troops, primarily from Uganda and Burundi, were supposed to stabilize the country. Instead, they arrived to find a country in open conflict. They became part of the security infrastructure that opposed the insurgency. This meant they also became targets.</p>
+
+    <p data-reveal>By 2008, al-Shabaab was conducting sophisticated attacks: assassinating government officials, bombing AMISOM barracks, and carrying out suicide bombings across Mogadishu and the countryside.<span class="c">2<span>Cedric Barnes and Harun Hassan, "The Rise and Fall of Mogadishu's Islamic Courts," <em>Journal of Eastern African Studies</em> 1, no. 2 (2007), pp. 151-160.</span></span> Aden Hashi Ayro was killed in a U.S. drone strike in 2008, but al-Shabaab reorganized under new leadership. By 2009, the group controlled large parts of southern and central Somalia, commanding an insurgency that drew recruits from both Somalia and diaspora communities worldwide.</p>
+
+    <p data-reveal>The 2006 invasion was intended to prevent an Islamist takeover of Somalia. Instead, it created the conditions for al-Shabaab to emerge as a far more radical and violent organization than the Islamic Courts had ever been.<span class="c">3<span>Ken Menkhaus, "The Crisis in Somalia: Tragedy in Five Acts," <em>African Affairs</em> 106, no. 204 (2007), pp. 357-390.</span></span></p>
+
+    <svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="var(--ochre)" stroke-width="1"/>
+      <circle cx="100" cy="12" r="2" fill="var(--ochre)"/>
+    </svg>
+
+    <div class="section-label" data-reveal>The Outcome · 2012 & Beyond</div>
+    <h2 data-reveal>A Decade of Occupation</h2>
+
+    <p data-reveal>The Ethiopian military remained in Somalia for five years. They slowly lost control of rural areas. They faced a growing insurgency. The Somali government, now led by weak administrations dependent on foreign military support, had no popular legitimacy. AMISOM troops remained and remain to this day, still fighting al-Shabaab, still unable to fully defeat them.</p>
+
+    <p data-reveal>By 2012, the Ethiopians withdrew. AMISOM stayed. Al-Shabaab controlled less territory but continued to conduct attacks. A federal government was established in Mogadishu, supported by foreign military power, but it lacked authority in much of the country. Al-Shabaab conducted suicide bombings at government buildings, at AMISOM barracks, at civilian targets. They conducted attacks on hotels. They dug in as an insurgent force, financed by extortion and by relationships with international jihadist networks.</p>
+
+    <p data-reveal>By 2016, with al-Shabaab still active and still strong, Somalia held elections for a new parliament. But the war had not ended. The invasion had not prevented Islamism — it had radicalized it.<span class="c">6<span>Ken Menkhaus, <em>Somalia: State Collapse and the Threat of Terrorism</em> (IISS Adelphi Paper 364, 2004), pp. 53–71. <span class="tip-note">Menkhaus analyzes how counterterrorism operations and civilian casualties created grievances that al-Shabaab exploited for recruitment.</span></span></span> The U.S. drone strikes, meant to kill terrorists, had killed civilians and radicalized those who lost family members. The foreign occupation had done exactly what foreign occupations usually do: it had created the enemy it was meant to defeat.</p>
+
+  </main>
+
+  <!-- ASIDE -->
+  <aside class="era-aside" role="complementary">
+
+    <div class="aside-card" data-reveal>
+      <h3>Quick Facts</h3>
+      <div class="fact-row">
+        <span class="fact-label">ICU control</span>
+        <span class="fact-val">June–Dec 2006</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Ethiopian invasion</span>
+        <span class="fact-val">Dec 24, 2006</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">AMISOM deployed</span>
+        <span class="fact-val">2007</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Ayro killed</span>
+        <span class="fact-val">May 2008</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Eth. withdrawal</span>
+        <span class="fact-val">2012</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Peace duration</span>
+        <span class="fact-val">6 months</span>
+      </div>
+    </div>
+
+    <div class="aside-card" data-reveal>
+      <h3>Key Figures</h3>
+      <div class="figure">
+        <div class="fig-name">Sheikh Sharif Sheikh Ahmed</div>
+        <div class="fig-role">ICU Leader & President</div>
+        <div class="fig-desc">Moderate Islamist scholar who led the Islamic Courts Union. Fled to Kenya after the invasion. Later returned to Somalia and served as president 2009–2012, attempting to bridge the divide between the state and Islamic forces.</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">Meles Zenawi</div>
+        <div class="fig-role">Ethiopian PM</div>
+        <div class="fig-desc">Authoritarian leader of Ethiopia. Concerned about Islamic authority in Somalia, he mobilized the invasion with full American backing and maintained Ethiopian forces in Somalia for five years.</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">Aden Hashi Ayro</div>
+        <div class="fig-role">al-Shabaab Co-founder</div>
+        <div class="fig-desc">Former military officer who trained with jihadist networks in Afghanistan. Emerged as a leader of the Youth Wing of ICU, then co-founded al-Shabaab. Killed in a U.S. drone strike in May 2008.</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">Omar Shafik Hammami</div>
+        <div class="fig-role">al-Shabaab Ideologue</div>
+        <div class="fig-desc">American-born Islamist who joined al-Shabaab as a recruiter and propagandist. Represented the internationalization of the insurgency. Killed in 2015 by al-Shabaab rivals.</div>
+      </div>
+    </div>
+
+    <div class="aside-card" data-reveal>
+      <h3>Primary Sources</h3>
+      <div class="source-item">
+        <strong>Somalia: A Terrible War</strong>
+        International Crisis Group reports (2006-2012). Real-time analysis of the invasion, insurgency, and AMISOM mission.
+      </div>
+      <div class="source-item">
+        <strong>A Terrorist Group That Lost Its Way</strong>
+        Andrew Higgins, New York Times (2016). Profile of al-Shabaab's evolution from resistance movement to criminal enterprise.
+      </div>
+      <div class="source-item">
+        <strong>The Strategic Costs of Counter-Terrorism in the Horn of Africa</strong>
+        Various, U.S. Institute of Peace. Analysis of how counterterrorism operations may have radicalized Somali populations.
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<!-- Arabesque divider -->
+<svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="#B83A22" stroke-width="1"/>
+  <circle cx="100" cy="12" r="2" fill="#B83A22"/>
+</svg>
+
+<!-- ERA NAVIGATION -->
+<div class="era-nav" data-reveal>
+  <div class="era-nav-inner">
+    <a href="era-somaliland.html" class="era-nav-btn">
+      <span class="nav-dir">← Previous era</span>
+      <span class="nav-title">Somaliland</span>
+      <span class="nav-dates">1991 – present</span>
+    </a>
+    <a href="somali-archive.html" class="nav-center">All Eras</a>
+    <a href="era-diaspora.html" class="era-nav-btn">
+      <span class="nav-dir">Next era →</span>
+      <span class="nav-title">The Diaspora</span>
+      <span class="nav-dates">1991 – present</span>
+    </a>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script>
+(function() {
+  'use strict';
+
+  // ── Scroll Reveal ──
+  var revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('[data-reveal]').forEach(function(el) {
+    revealObserver.observe(el);
+  });
+
+})();
+</script>
+<script src="xog-cite.js"></script>
+<script src="xog-fable.js?v=3"></script>
+<script src="xog-nav.js"></script>
+</body>
+</html>

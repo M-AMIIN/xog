@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xog — The Script Wars · 1920s–1972</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=DM+Serif+Display&family=Noto+Sans+Osmanya&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300;1,8..60,400&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="xog-nav.css">
+<link rel="stylesheet" href="xog-styles.css">
+<link rel="stylesheet" href="xog-cite.css">
+<style>
+/* ── ERA-SCRIPT ELEVATED STYLES ─────────────────────────────── */
+:root {
+  --ochre: #B83A22;
+  --ochre-dim: rgba(184,58,34, 0.55);
+  --ochre-glow: rgba(184,58,34, 0.10);
+  --ochre-deep: #7A2616;
+  --gold: #C49A3C;
+  --gold-dim: rgba(184,58,34, 0.55);
+  --gold-glow: rgba(184,58,34, 0.10);
+  --rust: #8A5800;
+  --rust-dim: rgba(138, 88, 0, 0.60);
+  --sand: #C8A882;
+  --text-bright: #140C04;
+  --text: #2A1E10;
+  --muted: #5A4430;
+  --faint: #8A7460;
+  --deep: #F9F6F1;
+  --surface: #F3EDE3;
+  --card: #EDE5D8;
+  --border: rgba(20, 12, 4, 0.09);
+  --border-mid: rgba(20, 12, 4, 0.16);
+  --sea: #1C3272;
+  --col-aside: 300px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  overflow-x: hidden;
+  background: var(--deep);
+  color: var(--text);
+  padding-top: 58px;
+}
+
+/* ── SCROLL REVEAL ── */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(1.8rem);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-reveal].visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── HERO ── */
+.era-hero {
+  position: relative;
+  border-bottom: 1px solid var(--border);
+  padding: 4rem 2rem 3.5rem;
+  overflow: hidden;
+  background: linear-gradient(170deg, #F9F6F1 0%, #F3EDE3 60%, #EDE5D8 100%);
+}
+.era-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 70% 50%, rgba(184,58,34,.06), transparent),
+    radial-gradient(ellipse 40% 60% at 20% 80%, rgba(138,88,0,.04), transparent);
+  pointer-events: none;
+}
+/* grain texture */
+.era-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.era-hero-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.era-crumb {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.era-crumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.era-crumb a:hover { color: var(--ochre); }
+.era-crumb span { opacity: .4; }
+
+.era-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: .7rem;
+}
+.era-headline {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.8rem, 6vw, 5.2rem);
+  font-weight: 300;
+  line-height: 1.05;
+  color: var(--text-bright);
+  margin-bottom: .5rem;
+  max-width: 800px;
+}
+.era-headline em {
+  font-style: italic;
+  color: var(--ochre);
+}
+.era-dates {
+  font-family: 'DM Mono', monospace;
+  font-size: .62rem;
+  color: var(--muted);
+  letter-spacing: .1em;
+  margin-bottom: 2rem;
+}
+.era-lede {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.18rem;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.75;
+  max-width: 680px;
+  border-left: 2px solid var(--ochre);
+  padding-left: 1.4rem;
+}
+
+/* ── WORLD CONTEXT BAR ── */
+.world-bar {
+  background: rgba(184,58,34,.03);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: .9rem 2rem;
+}
+.world-bar-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.wb-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.wb-items { display: flex; gap: 1.5rem; flex-wrap: wrap; flex: 1; }
+.wb-item {
+  font-family: 'Source Serif 4', serif;
+  font-size: .6rem;
+  color: var(--muted);
+  letter-spacing: .05em;
+}
+.wb-item strong {
+  color: var(--text-bright);
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: .56rem;
+  letter-spacing: .08em;
+  margin-bottom: .15rem;
+}
+
+/* ── IMAGE PANEL ── */
+.image-panel {
+  max-width: 1100px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+}
+.image-panel figure {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+.image-panel img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: sepia(0.15) contrast(1.05);
+  transition: filter 0.4s ease;
+}
+.image-panel figure:hover img {
+  filter: sepia(0) contrast(1);
+}
+.image-panel figcaption {
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .06em;
+  color: var(--muted);
+  padding: .8rem 1.2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.image-panel figcaption .img-source {
+  font-size: .5rem;
+  color: var(--faint);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+/* ── CONTENT GRID ── */
+.era-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  display: grid;
+  grid-template-columns: 1fr var(--col-aside);
+  gap: 4rem;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .era-content { grid-template-columns: 1fr; gap: 3rem; }
+  .era-aside { order: -1; }
+}
+
+/* ── PROSE ── */
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin-bottom: .8rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid var(--border);
+}
+.era-main h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.9rem;
+  font-weight: 400;
+  color: var(--text-bright);
+  line-height: 1.2;
+  margin: 3rem 0 1rem;
+}
+.era-main h2:first-of-type { margin-top: 0; }
+.era-main p {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.02rem;
+  line-height: 1.85;
+  color: var(--muted);
+  margin-bottom: 1.4rem;
+}
+.era-main p strong {
+  color: var(--text-bright);
+  font-weight: 400;
+}
+
+/* ── PULL QUOTE ── */
+.pull {
+  border-left: 3px solid var(--ochre);
+  padding: 1.2rem 1.5rem;
+  margin: 2.5rem 0;
+  background: var(--ochre-glow);
+}
+.pull p {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.32rem;
+  font-style: italic;
+  color: var(--text-bright);
+  line-height: 1.55;
+  margin: 0 0 .5rem;
+}
+.pull cite {
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem;
+  color: var(--muted);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-style: normal;
+}
+
+/* ── ASIDE ── */
+.era-aside {
+  position: sticky;
+  top: 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+@media (max-width: 900px) {
+  .era-aside { position: static; }
+}
+.aside-card {
+  border: 1px solid var(--border);
+  padding: 1.3rem;
+  background: rgba(184,58,34,.02);
+  position: relative;
+}
+.aside-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--ochre), transparent);
+}
+.aside-card h3 {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin-bottom: 1rem;
+}
+.figure {
+  display: flex; flex-direction: column; gap: .5rem;
+  padding-bottom: 1rem; margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.figure:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.fig-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.05rem; font-weight: 400;
+  color: var(--text-bright); line-height: 1.2;
+}
+.fig-role {
+  font-family: 'DM Mono', monospace;
+  font-size: .56rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ochre);
+}
+.fig-desc {
+  font-family: 'Source Serif 4', serif;
+  font-size: .7rem; line-height: 1.65; color: var(--muted);
+}
+.fact-row {
+  display: flex; justify-content: space-between;
+  align-items: baseline; padding: .5rem 0;
+  border-bottom: 1px solid rgba(184,58,34,.06); gap: 1rem;
+}
+.fact-row:last-child { border-bottom: none; }
+.fact-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted); flex-shrink: 0;
+}
+.fact-val {
+  font-family: 'DM Serif Display', serif;
+  font-size: .95rem; color: var(--text-bright); text-align: right;
+}
+.timeline-item {
+  display: flex; gap: .8rem;
+  padding: .8rem 0; border-bottom: 1px solid var(--border);
+}
+.timeline-item:last-child { border-bottom: none; }
+.tl-year {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem; letter-spacing: .08em;
+  color: var(--ochre); flex-shrink: 0; min-width: 50px;
+}
+.tl-event {
+  font-family: 'Source Serif 4', serif;
+  font-size: .75rem; line-height: 1.5; color: var(--muted);
+}
+
+/* ── ERA NAVIGATION ── */
+.era-nav {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem;
+  border-top: 1px solid var(--border);
+}
+.era-nav-inner {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+@media (max-width: 640px) {
+  .era-nav-inner { grid-template-columns: 1fr; gap: 1rem; }
+  .nav-center { order: -1; }
+}
+.era-nav-btn, .nav-center {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  padding: 1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border);
+  background: transparent;
+}
+.era-nav-btn:hover, .nav-center:hover {
+  border-color: var(--ochre);
+  background: var(--ochre-glow);
+}
+.nav-dir {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.nav-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.2rem;
+  color: var(--text-bright);
+  font-weight: 400;
+}
+.nav-dates {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem;
+  color: var(--ochre);
+  letter-spacing: .08em;
+}
+.nav-center {
+  text-align: center;
+  border: none;
+  justify-content: center;
+}
+.nav-center:hover { background: transparent; }
+.nav-center span {
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: underline;
+}
+
+/* ── ARABESQUE DIVIDER ── */
+.arabesque {
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+  width: 100%;
+  height: 24px;
+  opacity: 0.4;
+}
+
+/* ── GHOSTED SVG ARTIFACT ── */
+@keyframes artifactFloat {
+  0%, 100% { transform: rotate(-15deg) translateY(0); }
+  50%      { transform: rotate(-15deg) translateY(-18px); }
+}
+
+/* ── the Osmanya keyboard ── */
+.osm-bench { background: var(--card, #EDE5D8); border-top: 2px solid var(--ochre); border-bottom: 1px solid var(--rule, rgba(184,58,34,0.12)); padding: 3.5rem 2rem; position: relative; z-index: 1; }
+.ob-inner { max-width: 880px; margin: 0 auto; }
+.ob-kicker { font-family: 'DM Mono', monospace; font-size: .58rem; letter-spacing: .22em; text-transform: uppercase; color: var(--ochre); margin-bottom: .8rem; }
+.ob-title { font-family: 'DM Serif Display', serif; font-size: clamp(1.9rem, 3.5vw, 2.8rem); font-weight: 300; color: var(--text-bright, #140C04); margin-bottom: .8rem; }
+.ob-title em { font-style: italic; color: var(--ochre); }
+.ob-lede { font-size: 1rem; color: var(--muted, #5A4430); max-width: 620px; margin-bottom: 1.6rem; }
+.ob-in { width: 100%; font-family: 'Source Serif 4', serif; font-size: 1.25rem; padding: .9rem 1.1rem; border: 1px solid var(--ochre); background: #FDFAF5; color: var(--text-bright, #140C04); outline: none; }
+.ob-in:focus { box-shadow: 0 0 0 3px rgba(184,58,34,0.12); }
+.ob-out { font-family: 'Noto Sans Osmanya', serif; font-size: clamp(1.7rem, 4vw, 2.7rem); color: var(--ochre); line-height: 1.4; min-height: 1.4em; padding: .3rem .2rem .3rem; word-wrap: break-word; }
+.ob-note { font-family: 'DM Mono', monospace; font-size: .5rem; letter-spacing: .1em; color: var(--faint, #8A7460); }
+.ob-row { padding: 1rem 0 .8rem; border-bottom: 1px dashed rgba(184,58,34,0.15); }
+.ob-row:last-of-type { margin-bottom: 1.6rem; }
+.ob-tag { font-family: 'DM Mono', monospace; font-size: .55rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ochre); margin-bottom: .2rem; }
+.ob-ar { font-family: Georgia, 'Times New Roman', serif; }
+.ob-lat { font-family: 'DM Serif Display', serif; color: var(--text-bright, #140C04); }
+.ob-approx, .ob-out .ap { color: var(--gold, #C49A3C); }
+.ob-gone { color: var(--faint, #8A7460); letter-spacing: .3em; }
+.ob-dead .ob-tag { color: var(--faint, #8A7460); }
+.ob-chart { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: .4rem; border-top: 1px solid var(--rule, rgba(184,58,34,0.12)); padding-top: 1.4rem; }
+.ok-cell { text-align: center; padding: .5rem .2rem .4rem; background: rgba(253,250,245,0.6); border: 1px solid rgba(184,58,34,0.08); }
+.ok-glyph { display: block; font-family: 'Noto Sans Osmanya', serif; font-size: 1.3rem; color: var(--text-bright, #140C04); }
+.ok-lat { display: block; font-family: 'DM Mono', monospace; font-size: .55rem; color: var(--ochre); margin-top: .15rem; }
+</style>
+<link rel="stylesheet" href="xog-fable.css?v=3">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23111929'/%3E%3Cpath d='M32 8 L36.5 27.5 L56 32 L36.5 36.5 L32 56 L27.5 36.5 L8 32 L27.5 27.5 Z' fill='%23C49A3C'/%3E%3Ccircle cx='32' cy='32' r='3.4' fill='%23FDFAF5'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<!-- GHOSTED BACKGROUND ARTIFACT -->
+<img src="images/fandhaal-spoon.svg" alt="" aria-hidden="true" style="position:fixed;right:-6%;top:22%;width:24vw;max-width:290px;opacity:0.05;pointer-events:none;transform:rotate(-15deg);z-index:0;animation:artifactFloat 18s ease-in-out infinite">
+
+<!-- HERO ──────────────────────────────────────────────────────── -->
+<div class="era-hero">
+  <div class="era-hero-inner">
+    <div class="era-crumb">
+      <a href="somali-archive.html">Xog Archive</a>
+      <span>/</span>
+      <span>The Script Wars</span>
+    </div>
+    <h1 class="era-headline">The Script Wars</h1>
+    <p class="era-kicker">1920s – 1972 · Osmanya, Arabic, Latin & the Politics of Alphabet</p>
+    <p class="era-lede">Somali had no written standard. Which alphabet to adopt became the defining political contest of nationalism. Each script carried a clan affiliation, a colonial patron, a religious vision, and a claim to what Somalia should become.</p>
+  </div>
+</div>
+
+<!-- THE OSMANYA KEYBOARD ─ write the script the page is about -->
+<section class="osm-bench" aria-label="Write your name in Osmanya">
+  <div class="ob-inner">
+    <div class="ob-kicker">The Alphabet, Working &middot; Far Soomaali &middot; 1920</div>
+    <h2 class="ob-title">Write Your Name in <em>Every Combatant</em></h2>
+    <p class="ob-lede">The wars fielded five scripts. Type below and watch the same word answer in each of them, including the friction that decided the outcome.</p>
+    <input type="text" id="obIn" class="ob-in" placeholder="Type a name or a Somali word..." autocomplete="off" spellcheck="false" maxlength="60">
+    <div class="ob-row">
+      <div class="ob-tag">Osmanya &middot; the invention, 1920</div>
+      <div class="ob-out" id="obOut" lang="so" aria-live="polite">𐒄𐒙𐒌</div>
+      <div class="ob-note">LONG II AND UU WRITTEN WITH YA AND WAW, AS THE ALPHABET DOES &middot; P, V, Z APPROXIMATED AS B, F, S</div>
+    </div>
+    <div class="ob-row">
+      <div class="ob-tag">Wadaad Arabic &middot; the establishment's script</div>
+      <div class="ob-out ob-ar" id="obAr" dir="rtl" lang="ar" aria-live="polite">خَوج</div>
+      <div class="ob-note">ONE CONVENTION OF SEVERAL; WADAAD WRITING WAS NEVER STANDARDIZED &middot; ARABIC HAS THREE VOWEL MARKS FOR SOMALI'S FIVE VOWELS: <span class="ob-approx">E AND O</span> SHOW IN GOLD WHERE THE FIT BREAKS</div>
+    </div>
+    <div class="ob-row">
+      <div class="ob-tag">Latin &middot; "Laatiin waa la' diin," its enemies rhymed: Latin is godless. It won anyway, 1972</div>
+      <div class="ob-out ob-lat" id="obLat" aria-live="polite">xog</div>
+      <div class="ob-note">EVERY SOUND, ONE LETTER, ANY TYPEWRITER &middot; THE ARGUMENT THAT ENDED THE WAR</div>
+    </div>
+    <div class="ob-row ob-dead">
+      <div class="ob-tag">Borama, 1933 &middot; Kaddare, 1952</div>
+      <div class="ob-out ob-gone">&#9633;&#9633;&#9633;&#9633;</div>
+      <div class="ob-note">TWO COMBATANTS HAVE NO UNICODE ENCODING TO THIS DAY. THEY CANNOT BE TYPED ON ANY DEVICE ON EARTH &middot; STANDARDIZATION DECIDES WHO GETS TO EXIST DIGITALLY</div>
+    </div>
+    <div class="ob-chart"><div class="ok-cell"><span class="ok-glyph">𐒀</span><span class="ok-lat">'</span></div><div class="ok-cell"><span class="ok-glyph">𐒁</span><span class="ok-lat">b</span></div><div class="ok-cell"><span class="ok-glyph">𐒂</span><span class="ok-lat">t</span></div><div class="ok-cell"><span class="ok-glyph">𐒃</span><span class="ok-lat">j</span></div><div class="ok-cell"><span class="ok-glyph">𐒄</span><span class="ok-lat">x</span></div><div class="ok-cell"><span class="ok-glyph">𐒅</span><span class="ok-lat">kh</span></div><div class="ok-cell"><span class="ok-glyph">𐒆</span><span class="ok-lat">d</span></div><div class="ok-cell"><span class="ok-glyph">𐒇</span><span class="ok-lat">r</span></div><div class="ok-cell"><span class="ok-glyph">𐒈</span><span class="ok-lat">s</span></div><div class="ok-cell"><span class="ok-glyph">𐒉</span><span class="ok-lat">sh</span></div><div class="ok-cell"><span class="ok-glyph">𐒊</span><span class="ok-lat">dh</span></div><div class="ok-cell"><span class="ok-glyph">𐒋</span><span class="ok-lat">c</span></div><div class="ok-cell"><span class="ok-glyph">𐒌</span><span class="ok-lat">g</span></div><div class="ok-cell"><span class="ok-glyph">𐒍</span><span class="ok-lat">f</span></div><div class="ok-cell"><span class="ok-glyph">𐒎</span><span class="ok-lat">q</span></div><div class="ok-cell"><span class="ok-glyph">𐒏</span><span class="ok-lat">k</span></div><div class="ok-cell"><span class="ok-glyph">𐒐</span><span class="ok-lat">l</span></div><div class="ok-cell"><span class="ok-glyph">𐒑</span><span class="ok-lat">m</span></div><div class="ok-cell"><span class="ok-glyph">𐒒</span><span class="ok-lat">n</span></div><div class="ok-cell"><span class="ok-glyph">𐒓</span><span class="ok-lat">w</span></div><div class="ok-cell"><span class="ok-glyph">𐒔</span><span class="ok-lat">h</span></div><div class="ok-cell"><span class="ok-glyph">𐒕</span><span class="ok-lat">y</span></div><div class="ok-cell"><span class="ok-glyph">𐒖</span><span class="ok-lat">a</span></div><div class="ok-cell"><span class="ok-glyph">𐒗</span><span class="ok-lat">e</span></div><div class="ok-cell"><span class="ok-glyph">𐒘</span><span class="ok-lat">i</span></div><div class="ok-cell"><span class="ok-glyph">𐒙</span><span class="ok-lat">o</span></div><div class="ok-cell"><span class="ok-glyph">𐒚</span><span class="ok-lat">u</span></div><div class="ok-cell"><span class="ok-glyph">𐒛</span><span class="ok-lat">aa</span></div><div class="ok-cell"><span class="ok-glyph">𐒜</span><span class="ok-lat">ee</span></div><div class="ok-cell"><span class="ok-glyph">𐒝</span><span class="ok-lat">oo</span></div></div>
+  </div>
+</section>
+
+<!-- WORLD CONTEXT ──────────────────────────────────────────────── -->
+<div class="world-bar">
+  <div class="world-bar-inner">
+    <span class="wb-label">Somalia in 1972</span>
+    <div class="wb-items">
+      <div class="wb-item">
+        <strong>Government</strong>
+        Military regime, 3 years old
+      </div>
+      <div class="wb-item">
+        <strong>Cold War</strong>
+        US vs USSR, Vietnam escalating
+      </div>
+      <div class="wb-item">
+        <strong>Africa</strong>
+        Decolonization wave, OAU assembly
+      </div>
+      <div class="wb-item">
+        <strong>Region</strong>
+        Ethiopia, Kenya, Yemen reshaping borders
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT ──────────────────────────────────────────────── -->
+<div class="era-content">
+  <main class="era-main" role="main">
+
+    <div class="section-label" data-reveal>The Historical Context</div>
+    <h2 data-reveal>The Problem</h2>
+
+    <p data-reveal>Somali was the language of 98% of the population. It had no standard written form. <span class="c">1<span>Laitin, David D. <em>Politics, Language, and Thought: The Somali Experience</em> (University of Chicago Press, 1977), pp. 1–18.</span></span> Colonial administrators in Italian, British, and French territories wrote in Italian, English, and French. Court proceedings, government documents, contracts, treaties — all conducted in the colonizer's script. The legal system depended on written records Somali speakers could not read.</p>
+
+    <p data-reveal>The oral tradition was the complete cultural infrastructure. Every legal claim lived in the gabay, the memorized recitation, the witness who spoke before a council. A Somali marriage contract had no written enforcement. A land boundary had no written deed. A trade agreement was memory and witness.</p>
+
+    <p data-reveal>But a modern state required written law, printed textbooks, civil records, and bureaucracy. The British had begun printing in Somali using Latin letters. The Italians had experimented with Arabic script adapted to Somali sounds. Independent Somalia would not inherit a colonial language authority — it had to choose.</p>
+
+    <div class="section-label" data-reveal>The First Proposal · 1920s</div>
+    <h2 data-reveal>Osman Yusuf Kenadid and the Osmanya Script</h2>
+
+    <p data-reveal>Osman Yusuf Kenadid was the son of Sultan Yusuf Ali Kenadid of the Hobyo Sultanate on the northern coast. He belonged to the Majeerteen clan, the dominant power in that region. In the 1920s, he did something unprecedented: he invented an alphabet specifically for Somali. <span class="c">2<span>Laitin, <em>Politics, Language, and Thought</em>, pp. 82–95.</span></span></p>
+
+    <p data-reveal>The Osmanya script was phonetically sophisticated. It bore no resemblance to Arabic or Latin. It used curved and angular lines in a novel arrangement, 22 characters covering every Somali phoneme with clean separation. <span class="c">3<span>Tosco, Mauro. "The Case of Cushitic Languages," in <em>The Oxford Handbook of the History of Linguistics</em>, ed. Keith Allan (Oxford University Press, 2013), pp. 271–290.</span></span> He introduced it into local schools. The script gained acceptance for correspondence, bookkeeping, and commercial record-keeping in the Hobyo region.</p>
+
+    <p data-reveal>Then the Italian colonial authorities imprisoned him in Mogadishu. They recognized what the script represented: nationalist sentiment, cultural autonomy, a claim to Somali identity that did not require colonial mediation. All script development halted for 25 years. <span class="c">4<span>Laitin, <em>Politics, Language, and Thought</em>, pp. 85–90.</span></span> Osmanya survived in diaspora use and manuscript copying, but lost institutional momentum.</p>
+
+    <div class="section-label" data-reveal>Competing Scripts · 1930s–1950s</div>
+    <h2 data-reveal>The Borama, Kaddare, and Arabic Claims</h2>
+
+    <p data-reveal>In 1933, Sheikh Abdurahman Sheikh Nuur of the Gadabuursi clan invented the Borama script. <span class="c">5<span>Laitin, <em>Politics, Language, and Thought</em>, pp. 95–112.</span></span> It was used mainly around Borama in the northwest, and gained a small body of qasida poetry written in it. The script was functional but regionally limited.</p>
+
+    <p data-reveal>In 1952, Hussein Sheikh Ahmed Kaddare of the Abgaal Hawiye clan invented the Kaddare script. Technical commissions found it "very accurate" for representing Somali phonemes. <span class="c">6<span>Andrzejewski, B.W. "The Development of a National Orthography in Somalia and the Modernization of the Somali Language," <em>Horn of Africa</em> 1, no. 3 (1978), pp. 39–45.</span></span> Yet it never gained wider use beyond manuscript study.</p>
+
+    <p data-reveal>Arabic script — Wadaad's Writing — had been used for Islamic education for centuries. Religious conservatives advocated for it as the official script. But Arabic script cannot represent all Somali phonemes without diacritical marks. The practical limitation was significant: the pharyngeal consonants in Somali, the ejectives, the interdental sounds — Arabic could only approximate them. <span class="c">7<span>Laitin, <em>Politics, Language, and Thought</em>, pp. 95–112.</span></span></p>
+
+    <p data-reveal>Each script carried a clan identifier. Osmanya meant Majeerteen. Borama meant Gadabuursi. Kaddare meant Hawiye. Arabic meant religious authority, the Wadaads, the Muslim scholars. This was the political problem. In a nation where clan identity determined land rights, trade access, political alliance, and military loyalty, the question "which alphabet?" was inseparable from the question "which clan gets to name the nation?"</p>
+
+    <div class="pull" data-reveal>
+      <p>"The choice of script was not a linguistic matter at all. It was a decision about power."</p>
+      <cite>— Summary of Laitin, <em>Politics, Language, and Thought</em>, pp. 125–142</cite>
+    </div>
+
+    <div class="section-label" data-reveal>The Decision · October 1972</div>
+    <h2 data-reveal>Latin Wins — Why</h2>
+
+    <p data-reveal>On October 21, 1972, Siad Barre's military government issued a decree. The Somali language would become the sole official language of the state, written in Latin characters using the orthography designed by Shire Jama Ahmed. <span class="c">8<span>Shire Jama Ahmed, cited in Laitin, <em>Politics, Language, and Thought</em>, pp. 115–125.</span></span> The government submitted 18 competing scripts to a Language Committee. Latin was chosen.</p>
+
+    <p data-reveal>Shire Jama's argument was pragmatic. Printing presses worldwide were set to Latin. Typewriters already in the country used Latin keyboards. Latin provided "simplicity, ability to cope with all sounds in the language, and compatibility with existing infrastructure." <span class="c">9<span>Shire Jama Ahmed, cited in Laitin, <em>Politics, Language, and Thought</em>, pp. 115–125.</span></span> The practical case was unassailable.</p>
+
+    <p data-reveal>But the political case went deeper. Five reasons converged on Latin:</p>
+
+    <p data-reveal><strong>Machine compatibility.</strong> The existing infrastructure — typewriters, printing presses, telegraph equipment — was set to Latin. Changing to Osmanya or Borama would have required replacing every machine.</p>
+
+    <p data-reveal><strong>Clan neutrality.</strong> Osmanya was Majeerteen. Arabic was religious-conservative. Latin was nobody's and therefore everybody's. It carried no historical claim by any Somali clan. <span class="c">10<span>Laitin, <em>Politics, Language, and Thought</em>, pp. 125–142.</span></span></p>
+
+    <p data-reveal><strong>Cold War alignment.</strong> Siad Barre's regime was Soviet-backed. The USSR had conducted massive literacy campaigns in Cuba, Tanzania, and South Yemen using Latin characters. The Soviets understood Latin infrastructure. Barre framed Latin adoption as part of a modernization program aligned with socialist literacy campaigns in the developing world. <span class="c">11<span>Kapteijns, Lidwien. "Making Memories: The Construction of Somali National Culture through Radio Mogadishu in the 1950s–1960s," <em>Journal of African Cultural Studies</em> 14, no. 1 (2001), pp. 83–94.</span></span></p>
+
+    <p data-reveal><strong>Speed.</strong> Latin was the fastest path to mass literacy. Textbooks could be printed immediately. Teachers trained in weeks. The campaigns could begin within months.</p>
+
+    <p data-reveal><strong>Anti-clan politics.</strong> Barre's regime was actively burning effigies of tribalism — qabyaalad — in all 13 quarters of Mogadishu. Choosing any indigenous script would have been choosing a clan. Choosing Osmanya meant favoring Majeerteen. Choosing Borama meant favoring Gadabuursi. Choosing Kaddare meant favoring Hawiye. Latin meant neutrality. <span class="c">12<span>Laitin, <em>Politics, Language, and Thought</em>, pp. 125–142.</span></span></p>
+
+    <!-- Arabesque divider -->
+    <svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="margin:2.5rem auto;display:block;width:140px;">
+      <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="#B83A22" stroke-width="1"/>
+      <circle cx="100" cy="12" r="2" fill="#B83A22"/>
+    </svg>
+
+    <div class="section-label" data-reveal>The Somalization Campaign</div>
+    <h2 data-reveal>Writing the Nation in Three Months</h2>
+
+    <p data-reveal>Within three months of October 1972, the entire state apparatus switched to Somali in Latin script. All government communications, all bureaucratic forms, all official records were "Somalized." <span class="c">13<span>Samatar, Ahmed Ismail. <em>Socialist Somalia: Rhetoric and Reality</em> (Zed Books, 1988), pp. 95–108.</span></span> Civil servants who could not write Somali Latin were sent to literacy classes. Documentation systems were rebuilt. The practical transition was faster than anyone had predicted.</p>
+
+    <p data-reveal>Then came the rural campaigns. Students and civil servants were deployed to nomadic communities, pastoralist areas, farming regions. They taught reading and writing using poetry. The gabay — the oral verse form that had carried Somali culture for centuries — became the vehicle for written literacy. <span class="c">14<span>Samatar, <em>Socialist Somalia: Rhetoric and Reality</em>, pp. 95–108.</span></span></p>
+
+    <p data-reveal>Radio Mogadishu broadcast newly composed gabay in Somali Latin script. Young people memorized verses, then learned to write them down. The oral tradition became the bridge to written culture. Literacy rates climbed from under 5% to over 24% in a decade. <span class="c">15<span>Kapteijns, Lidwien. "Discourse on Moral Womanhood in Somali Popular Songs, 1960–1990," <em>Journal of African History</em> 50, no. 1 (2009), pp. 101–122.</span></span></p>
+
+    <div class="pull" data-reveal>
+      <p>"The campaigns used poetry as the delivery mechanism. The form that had kept the language alive in oral tradition now carried it into written culture."</p>
+      <cite>— From literacy campaign records, 1972–1982</cite>
+    </div>
+
+    <div class="section-label" data-reveal>The Aftermath · 1972–Present</div>
+    <h2 data-reveal>What Was Lost and What Survived</h2>
+
+    <p data-reveal>The Osmanya script survived in diaspora communities. As Somali refugees fled the regime's collapse in the 1980s and 1990s, they carried Osmanya manuscripts with them. In the 2000s, Osmanya was encoded in Unicode — the digital character set that allows any script to be typed and displayed. <span class="c">16<span>Tosco, <em>The Case of Cushitic Languages</em>, pp. 280–285.</span></span> It appears on websites, in diaspora publications, in cultural preservation projects.</p>
+
+    <p data-reveal>But the living use died. Children who learned to read in the 1970s learned Latin. Children born after 1975 had no exposure to Osmanya as a functional writing system. The Borama and Kaddare scripts exist now only in academic papers and archived manuscripts. No one writes new literature in them.</p>
+
+    <p data-reveal>The gabay survived the transition completely. Somali poetry continued to be composed and performed, now increasingly in written form as well as oral. The verse forms that had carried legal claims, love stories, political arguments, and historical narratives in the pre-literate era continued to carry them after 1972. The alphabetic change did not break the poetic chain.</p>
+
+    <p data-reveal>The question of whether a non-Latin script would have changed Somalia's relationship to its own literature remains unresolved. Would Osmanya have carried different cultural weight? Would the visual form of the alphabet have mattered? Would a Majeerteen script have provoked a different clan response? These are not answerable questions. History did not run that experiment. <span class="c">17<span>Tosco, <em>The Case of Cushitic Languages</em>, pp. 280–285.</span></span> What is clear is that the script debates did not survive the decision. Within a generation, Latin was assumed as inevitable. The competing claims of Osmanya, Borama, Kaddare, and Arabic faded into historical footnotes.</p>
+
+  </main>
+
+  <!-- ASIDE CARDS ──────────────────────────────────────────────── -->
+  <aside class="era-aside">
+
+    <!-- Quick Facts -->
+    <div class="aside-card" data-reveal>
+      <h3>Quick Facts</h3>
+      <div class="fact-row">
+        <span class="fact-label">Scripts Proposed</span>
+        <span class="fact-val">18</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Decision Date</span>
+        <span class="fact-val">Oct 21, 1972</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Literacy Before</span>
+        <span class="fact-val">&lt; 5%</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Literacy After</span>
+        <span class="fact-val">24% (1982)</span>
+      </div>
+    </div>
+
+    <!-- Key Figures -->
+    <div class="aside-card" data-reveal>
+      <h3>Key Figures</h3>
+      <div class="figure">
+        <span class="fig-name">Osman Yusuf Kenadid</span>
+        <span class="fig-role">Creator of Osmanya</span>
+        <span class="fig-desc">Majeerteen clan, inventor of phonetic alphabet in 1920s, imprisoned by Italians for nationalist symbolism.</span>
+      </div>
+      <div class="figure">
+        <span class="fig-name">Sheikh Abdurahman Sheikh Nuur</span>
+        <span class="fig-role">Creator of Borama Script</span>
+        <span class="fig-desc">Gadabuursi clan, developed alphabet circa 1933, used mainly in northwest Somalia.</span>
+      </div>
+      <div class="figure">
+        <span class="fig-name">Hussein Sheikh Ahmed Kaddare</span>
+        <span class="fig-role">Creator of Kaddare Script</span>
+        <span class="fig-desc">Abgaal Hawiye clan, designed alphabet in 1952, recognized as technically accurate.</span>
+      </div>
+      <div class="figure">
+        <span class="fig-name">Shire Jama Ahmed</span>
+        <span class="fig-role">Designer of Latin Orthography</span>
+        <span class="fig-desc">Developed pragmatic Latin-based system; proved fastest path to mass literacy.</span>
+      </div>
+      <div class="figure">
+        <span class="fig-name">Muhammad Siad Barre</span>
+        <span class="fig-role">Head of State</span>
+        <span class="fig-desc">Military government chose Latin October 1972; aligned with anti-clan nationalism.</span>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="aside-card" data-reveal>
+      <h3>Timeline</h3>
+      <div class="timeline-item">
+        <span class="tl-year">1920s</span>
+        <span class="tl-event">Osmanya script invented; gains regional use</span>
+      </div>
+      <div class="timeline-item">
+        <span class="tl-year">1925</span>
+        <span class="tl-event">Italian authorities imprison Kenadid; script development halts</span>
+      </div>
+      <div class="timeline-item">
+        <span class="tl-year">1933</span>
+        <span class="tl-event">Borama script created by Sheikh Abdurahman</span>
+      </div>
+      <div class="timeline-item">
+        <span class="tl-year">1952</span>
+        <span class="tl-event">Kaddare script invented; recognized as phonetically accurate</span>
+      </div>
+      <div class="timeline-item">
+        <span class="tl-year">1969</span>
+        <span class="tl-event">Siad Barre takes power; begins language standardization effort</span>
+      </div>
+      <div class="timeline-item">
+        <span class="tl-year">1972</span>
+        <span class="tl-event">Latin orthography officially adopted; Somalization campaigns begin</span>
+      </div>
+      <div class="timeline-item">
+        <span class="tl-year">1973–1982</span>
+        <span class="tl-event">Rural literacy campaigns; rates rise from &lt;5% to 24%</span>
+      </div>
+      <div class="timeline-item">
+        <span class="tl-year">2003</span>
+        <span class="tl-event">Osmanya encoded in Unicode; diaspora use accelerates</span>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<!-- ARABESQUE DIVIDER -->
+<svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="#B83A22" stroke-width="1"/>
+  <circle cx="100" cy="12" r="2" fill="#B83A22"/>
+</svg>
+
+<!-- ERA NAVIGATION -->
+<div class="era-nav" data-reveal>
+  <div class="era-nav-inner">
+    <a href="era-independence.html" class="era-nav-btn">
+      <span class="nav-dir">← Previous era</span>
+      <span class="nav-title">Independence</span>
+      <span class="nav-dates">1960 – 1969 CE</span>
+    </a>
+    <a href="somali-archive.html" class="nav-center">
+      <span>All Eras</span>
+    </a>
+    <a href="era-somaliland.html" class="era-nav-btn">
+      <span class="nav-dir">Next era →</span>
+      <span class="nav-title">Somaliland</span>
+      <span class="nav-dates">1988 – Present</span>
+    </a>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script>
+// Citation system
+document.querySelectorAll('.c').forEach(el => {
+  el.addEventListener('click', showCitation);
+  el.addEventListener('mouseenter', showCitation);
+  el.addEventListener('mouseleave', hideCitation);
+});
+
+function showCitation(e) {
+  const marker = e.currentTarget;
+  const source = marker.querySelector('span');
+  if (!source) return;
+
+  const tip = document.createElement('div');
+  tip.className = 'cite-tip show';
+  tip.innerHTML = source.textContent;
+  document.body.appendChild(tip);
+
+  const rect = marker.getBoundingClientRect();
+  tip.style.left = (rect.left) + 'px';
+  tip.style.top = (rect.top - tip.offsetHeight - 8) + 'px';
+
+  marker.dataset.tip = '1';
+}
+
+function hideCitation(e) {
+  if (e.type === 'mouseleave') {
+    document.querySelectorAll('.cite-tip').forEach(t => t.remove());
+    delete e.currentTarget.dataset.tip;
+  }
+}
+
+// Scroll reveal
+const revealElements = document.querySelectorAll('[data-reveal]');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+revealElements.forEach(el => observer.observe(el));
+</script>
+
+<!-- Navigation script -->
+<script src="xog-fable.js?v=3"></script>
+<script src="xog-nav.js" defer></script>
+<script src="xog-cite.js" defer></script>
+
+<script>
+/* Latin to Osmanya. Greedy longest-match; the alphabet's own conventions:
+   long ii and uu are written with ya and waw. */
+(function () {
+  var M = {
+    "sh": "\ud801\udc89", "dh": "\ud801\udc8a", "kh": "\ud801\udc85",
+    "aa": "\ud801\udc9b", "ee": "\ud801\udc9c", "oo": "\ud801\udc9d",
+    "ii": "\ud801\udc95", "uu": "\ud801\udc93",
+    "'": "\ud801\udc80", "b": "\ud801\udc81", "t": "\ud801\udc82", "j": "\ud801\udc83",
+    "x": "\ud801\udc84", "d": "\ud801\udc86", "r": "\ud801\udc87", "s": "\ud801\udc88",
+    "c": "\ud801\udc8b", "g": "\ud801\udc8c", "f": "\ud801\udc8d", "q": "\ud801\udc8e",
+    "k": "\ud801\udc8f", "l": "\ud801\udc90", "m": "\ud801\udc91", "n": "\ud801\udc92",
+    "w": "\ud801\udc93", "h": "\ud801\udc94", "y": "\ud801\udc95",
+    "a": "\ud801\udc96", "e": "\ud801\udc97", "i": "\ud801\udc98", "o": "\ud801\udc99", "u": "\ud801\udc9a",
+    "p": "\ud801\udc81", "v": "\ud801\udc8d", "z": "\ud801\udc88"
+  };
+  for (var d = 0; d <= 9; d++) M[String(d)] = String.fromCodePoint(0x104A0 + d);
+  function osmanya(text) {
+    var t = text.toLowerCase(), out = '', i = 0;
+    while (i < t.length) {
+      var two = t.substr(i, 2);
+      if (M[two]) { out += M[two]; i += 2; continue; }
+      var one = t.charAt(i);
+      out += (M[one] !== undefined) ? M[one] : one;
+      i += 1;
+    }
+    return out;
+  }
+  /* Wadaad Arabic, one convention of several. Consonants map; short vowels
+     become harakat; long vowels take a mater. e and o have no Arabic mark:
+     they borrow i's and u's and are flagged as approximations. */
+  var AC = { "'": "\u0621", b: "\u0628", t: "\u062a", j: "\u062c", x: "\u062d",
+    kh: "\u062e", d: "\u062f", r: "\u0631", s: "\u0633", sh: "\u0634",
+    dh: "\u0637", c: "\u0639", g: "\u06af", f: "\u0641", q: "\u0642",
+    k: "\u0643", l: "\u0644", m: "\u0645", n: "\u0646", w: "\u0648",
+    h: "\u0647", y: "\u064a", p: "\u0628", v: "\u0641", z: "\u0632" };
+  var HARAKA = { a: "\u064e", i: "\u0650", u: "\u064f", e: "\u0650", o: "\u064f" };
+  var MATER = { aa: "\u064e\u0627", ii: "\u0650\u064a", uu: "\u064f\u0648", ee: "\u0650\u064a", oo: "\u064f\u0648" };
+  var APPROX = { e: 1, o: 1, ee: 1, oo: 1 };
+  function wadaad(text) {
+    var t = text.toLowerCase(), out = '', i = 0, started = false;
+    while (i < t.length) {
+      var two = t.substr(i, 2), one = t.charAt(i);
+      if (MATER[two]) {
+        var seg = (started ? '' : '\u0627') + MATER[two];
+        out += APPROX[two] ? '<span class="ap">' + seg + '</span>' : seg;
+        started = true; i += 2; continue;
+      }
+      if (AC[two]) { out += AC[two]; started = true; i += 2; continue; }
+      if (HARAKA[one]) {
+        var seg2 = (started ? '' : '\u0627') + HARAKA[one];
+        out += APPROX[one] ? '<span class="ap">' + seg2 + '</span>' : seg2;
+        started = true; i += 1; continue;
+      }
+      if (AC[one]) { out += AC[one]; started = true; i += 1; continue; }
+      out += one === ' ' ? ' ' : one;
+      if (one === ' ') started = false;
+      i += 1;
+    }
+    return out;
+  }
+  var inp = document.getElementById('obIn');
+  var out = document.getElementById('obOut');
+  var outAr = document.getElementById('obAr');
+  var outLat = document.getElementById('obLat');
+  if (!inp || !out) return;
+  inp.addEventListener('input', function () {
+    var v = inp.value.trim();
+    out.textContent = v ? osmanya(inp.value) : '\ud801\udc84\ud801\udc99\ud801\udc8c';
+    if (outAr) outAr.innerHTML = v ? wadaad(inp.value) : wadaad('xog');
+    if (outLat) outLat.textContent = v ? inp.value : 'xog';
+  });
+})();
+</script>
+</body>
+</html>

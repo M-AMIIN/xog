@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xog — The Partition · 1884–1960</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=DM+Serif+Display&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300;1,8..60,400&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="xog-nav.css">
+<link rel="stylesheet" href="xog-styles.css">
+<link rel="stylesheet" href="xog-cite.css">
+<style>
+/* ── ERA-PARTITION ELEVATED STYLES ─────────────────────────────── */
+:root {
+  --ochre: #B83A22;
+  --ochre-dim: rgba(184, 58, 34, 0.55);
+  --ochre-glow: rgba(184, 58, 34, 0.10);
+  --ochre-deep: #7A2616;
+  --gold: #C49A3C;
+  --gold-dim: rgba(184, 58, 34, 0.55);
+  --gold-glow: rgba(184, 58, 34, 0.10);
+  --rust: #8A5800;
+  --rust-dim: rgba(138, 88, 0, 0.60);
+  --sand: #C8A882;
+  --text-bright: #140C04;
+  --text: #2A1E10;
+  --muted: #5A4430;
+  --faint: #8A7460;
+  --deep: #F9F6F1;
+  --surface: #F3EDE3;
+  --card: #EDE5D8;
+  --border: rgba(20, 12, 4, 0.09);
+  --border-mid: rgba(20, 12, 4, 0.16);
+  --sea: #1C3272;
+  --col-aside: 300px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  overflow-x: hidden;
+  background: var(--deep);
+  color: var(--text);
+  padding-top: 58px;
+}
+
+/* ── SCROLL REVEAL ── */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(1.8rem);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-reveal].visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── HERO ── */
+.era-hero {
+  position: relative;
+  border-bottom: 1px solid var(--border);
+  padding: 4rem 2rem 3.5rem;
+  overflow: hidden;
+  background: linear-gradient(170deg, #F9F6F1 0%, #F3EDE3 60%, #EDE5D8 100%);
+}
+.era-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 70% 50%, rgba(184,58,34,.06), transparent),
+    radial-gradient(ellipse 40% 60% at 20% 80%, rgba(138,88,0,.04), transparent);
+  pointer-events: none;
+}
+/* grain texture */
+.era-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.era-hero-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.era-crumb {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.era-crumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.era-crumb a:hover { color: var(--ochre); }
+.era-crumb span { opacity: .4; }
+
+.era-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: .7rem;
+}
+.era-headline {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.8rem, 6vw, 5.2rem);
+  font-weight: 300;
+  line-height: 1.05;
+  color: var(--text-bright);
+  margin-bottom: .5rem;
+  max-width: 800px;
+}
+.era-headline em {
+  font-style: italic;
+  color: var(--ochre);
+}
+.era-dates {
+  font-family: 'DM Mono', monospace;
+  font-size: .62rem;
+  color: var(--muted);
+  letter-spacing: .1em;
+  margin-bottom: 2rem;
+}
+.era-lede {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.18rem;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.75;
+  max-width: 680px;
+  border-left: 2px solid var(--ochre);
+  padding-left: 1.4rem;
+}
+
+/* ── WORLD CONTEXT BAR ── */
+.world-bar {
+  background: rgba(184,58,34,.03);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: .9rem 2rem;
+}
+.world-bar-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.wb-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.wb-items { display: flex; gap: 1.5rem; flex-wrap: wrap; flex: 1; }
+.wb-item {
+  font-family: 'Source Serif 4', serif;
+  font-size: .6rem;
+  color: var(--muted);
+  letter-spacing: .05em;
+}
+.wb-item strong {
+  color: var(--text-bright);
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: .56rem;
+  letter-spacing: .08em;
+  margin-bottom: .15rem;
+}
+
+/* ── IMAGE PANEL ── */
+.image-panel {
+  max-width: 1100px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+}
+.image-panel figure {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+.image-panel img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: sepia(0.15) contrast(1.05);
+  transition: filter 0.4s ease;
+}
+.image-panel figure:hover img {
+  filter: sepia(0) contrast(1);
+}
+.image-panel figcaption {
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .06em;
+  color: var(--muted);
+  padding: .8rem 1.2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.image-panel figcaption .img-source {
+  font-size: .5rem;
+  color: var(--faint);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+/* ── CONTENT GRID ── */
+.era-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  display: grid;
+  grid-template-columns: 1fr var(--col-aside);
+  gap: 4rem;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .era-content { grid-template-columns: 1fr; gap: 3rem; }
+  .era-aside { order: -1; }
+}
+
+/* ── PROSE ── */
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin-bottom: .8rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid var(--border);
+}
+.era-main h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.9rem;
+  font-weight: 400;
+  color: var(--text-bright);
+  line-height: 1.2;
+  margin: 3rem 0 1rem;
+}
+.era-main h2:first-of-type { margin-top: 0; }
+.era-main p {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.02rem;
+  line-height: 1.85;
+  color: var(--muted);
+  margin-bottom: 1.4rem;
+}
+.era-main p strong {
+  color: var(--text-bright);
+  font-weight: 400;
+}
+
+/* ── PULL QUOTE ── */
+.pull {
+  border-left: 3px solid var(--ochre);
+  padding: 1.2rem 1.5rem;
+  margin: 2.5rem 0;
+  background: var(--ochre-glow);
+}
+.pull p {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.32rem;
+  font-style: italic;
+  color: var(--text-bright);
+  line-height: 1.55;
+  margin: 0 0 .5rem;
+}
+.pull cite {
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem;
+  color: var(--muted);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-style: normal;
+}
+
+/* ── INLINE IMAGE IN PROSE ── */
+.prose-image {
+  margin: 2.5rem 0;
+  border: 1px solid var(--border);
+  background: var(--card);
+  overflow: hidden;
+}
+.prose-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: sepia(0.2) contrast(1.05);
+}
+.prose-image figcaption {
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem;
+  color: var(--muted);
+  padding: .7rem 1rem;
+  letter-spacing: .04em;
+  border-top: 1px solid var(--border);
+}
+
+/* ── ASIDE ── */
+.era-aside {
+  position: sticky;
+  top: 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+@media (max-width: 900px) {
+  .era-aside { position: static; }
+}
+.aside-card {
+  border: 1px solid var(--border);
+  padding: 1.3rem;
+  background: rgba(184,58,34,.02);
+  position: relative;
+}
+.aside-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--ochre), transparent);
+}
+.aside-card h3 {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin-bottom: 1rem;
+}
+.figure {
+  display: flex; flex-direction: column; gap: .5rem;
+  padding-bottom: 1rem; margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.figure:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.fig-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.05rem; font-weight: 400;
+  color: var(--text-bright); line-height: 1.2;
+}
+.fig-role {
+  font-family: 'DM Mono', monospace;
+  font-size: .56rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ochre);
+}
+.fig-desc {
+  font-family: 'Source Serif 4', serif;
+  font-size: .7rem; line-height: 1.65; color: var(--muted);
+}
+.fact-row {
+  display: flex; justify-content: space-between;
+  align-items: baseline; padding: .5rem 0;
+  border-bottom: 1px solid rgba(200,176,144,.06); gap: 1rem;
+}
+.fact-row:last-child { border-bottom: none; }
+.fact-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted); flex-shrink: 0;
+}
+.fact-val {
+  font-family: 'DM Serif Display', serif;
+  font-size: .95rem; color: var(--text-bright); text-align: right;
+}
+.source-item {
+  font-family: 'Source Serif 4', serif;
+  font-size: .64rem; line-height: 1.6;
+  color: var(--muted); padding: .5rem 0;
+  border-bottom: 1px solid rgba(200,176,144,.06);
+}
+.source-item:last-child { border-bottom: none; }
+.source-item strong {
+  color: var(--text-bright); display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem; letter-spacing: .06em; margin-bottom: .2rem;
+}
+
+/* ── ARABESQUE DIVIDER ── */
+.arabesque {
+  display: block;
+  margin: 3rem auto;
+  height: 24px;
+  width: 200px;
+  opacity: 0.25;
+}
+
+/* ── ERA NAVIGATION ── */
+.era-nav {
+  border-top: 1px solid var(--border);
+  padding: 2.5rem 2rem;
+}
+.era-nav-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 2rem;
+}
+.era-nav-btn {
+  display: flex; flex-direction: column; gap: .3rem;
+  text-decoration: none; max-width: 280px; flex: 1;
+}
+.era-nav-btn:last-child { align-items: flex-end; }
+.nav-dir {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--muted);
+}
+.nav-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.05rem; color: var(--text-bright);
+  line-height: 1.2; transition: color .2s;
+}
+.era-nav-btn:hover .nav-title { color: var(--ochre); }
+.nav-dates {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem; color: var(--faint); letter-spacing: .06em;
+}
+.nav-center {
+  text-align: center; text-decoration: none;
+  color: var(--muted); font-family: 'DM Mono', monospace;
+  font-size: .54rem; letter-spacing: .14em;
+  text-transform: uppercase; transition: color .2s;
+}
+.nav-center:hover { color: var(--ochre); }
+
+/* ── MAP LINK CARD ── */
+.map-card {
+  display: block;
+  border: 1px solid var(--border);
+  padding: 1rem 1.2rem;
+  text-decoration: none;
+  transition: all .2s;
+  background: rgba(184,58,34,.03);
+}
+.map-card:hover { border-color: rgba(184,58,34,.4); }
+.map-card .mc-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--ochre); margin-bottom: .4rem;
+}
+.map-card .mc-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: .98rem; color: var(--text-bright); line-height: 1.3;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .era-hero { padding: 3rem 1.2rem 2.5rem; }
+  .era-content { padding: 3rem 1.2rem; }
+  .era-nav { padding: 2rem 1.2rem; }
+  .era-nav-inner { flex-direction: column; }
+}
+
+@keyframes artifactFloat {
+  0% { transform: rotate(-15deg) translateY(0); }
+  50% { transform: rotate(-12deg) translateY(-12px); }
+  100% { transform: rotate(-15deg) translateY(0); }
+}
+</style>
+<link rel="stylesheet" href="xog-fable.css?v=3">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23111929'/%3E%3Cpath d='M32 8 L36.5 27.5 L56 32 L36.5 36.5 L32 56 L27.5 36.5 L8 32 L27.5 27.5 Z' fill='%23C49A3C'/%3E%3Ccircle cx='32' cy='32' r='3.4' fill='%23FDFAF5'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<img src="images/spear.svg" alt="" aria-hidden="true" style="position:fixed;right:-8%;top:20%;width:26vw;max-width:310px;opacity:0.06;pointer-events:none;transform:rotate(-10deg);z-index:0;animation:artifactFloat 18s ease-in-out infinite">
+
+<!-- HERO -->
+<div class="era-hero" data-reveal>
+  <div class="era-hero-inner">
+    <div class="era-crumb">
+      <a href="somali-archive.html">Archive</a>
+      <span>/</span>
+      <span>The Partition</span>
+    </div>
+    <div class="era-kicker">1884 – 1960 CE · The Scramble for the Horn</div>
+    <h1 class="era-headline">The <em>Partition</em><br>of Somali Territories</h1>
+    <div class="era-dates">1884 – 1960 · Five Colonial Powers, One People</div>
+    <p class="era-lede">In the decades of the Scramble for Africa, five European and neighboring powers partitioned Somali territory without consulting any Somali leader. The Ogaden was given to Ethiopia. British and Italian Somaliland were created as separate colonies. France took the port of Djibouti. Kenya took the Northern Frontier District. The borders drawn at conference tables in Berlin and London would shape Somali politics for a century and catalyze every major conflict of the post-independence era.</p>
+  </div>
+</div>
+
+<!-- WORLD CONTEXT BAR -->
+<div class="world-bar" data-reveal>
+  <div class="world-bar-inner">
+    <div class="wb-label">The world in 1884</div>
+    <div class="wb-items">
+      <div class="wb-item"><strong>Europe</strong>Berlin Conference divides Africa</div>
+      <div class="wb-item"><strong>Britain</strong>Rising imperial power in Africa</div>
+      <div class="wb-item"><strong>France</strong>Consolidating colonial holdings</div>
+      <div class="wb-item"><strong>Italy</strong>New power seeking colonial territories</div>
+      <div class="wb-item"><strong>Ethiopia</strong>Modernizing under Menelik II</div>
+    </div>
+  </div>
+</div>
+
+<div class="image-panel" data-reveal>
+  <figure>
+    <img src="images/somalia-nationalism.jpg"
+         alt="Map of Greater Somalia (Soomaaliweyn) showing the five Somali-inhabited territories partitioned among colonial powers: British Somaliland, Italian Somaliland, French Somaliland (Djibouti), the Ogaden (Ethiopia), and the NFD (Kenya)."
+         loading="lazy">
+    <figcaption>
+      Soomaaliweyn — the five Somali territories divided by colonial borders
+      <span class="img-source">Wikimedia Commons</span>
+    </figcaption>
+  </figure>
+</div>
+
+<svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;max-width:200px;margin:2rem auto;opacity:0.3">
+  <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="var(--ochre)" stroke-width="1"/>
+  <circle cx="100" cy="12" r="2" fill="var(--ochre)"/>
+</svg>
+
+<!-- MAIN CONTENT -->
+<div class="era-content">
+
+  <main class="era-main" role="main">
+
+    <div class="section-label" data-reveal>The Division</div>
+    <h2 data-reveal data-cut="1,2">Five Powers, One Territory</h2>
+
+    <p data-reveal>Between 1880 and 1900, Somali territory was divided among five different colonial administrations.<span class="c">1<span>I.M. Lewis, <em>A Modern History of the Somali</em>, 4th ed. (Ohio University Press, 2002), pp. 62-85.</span></span></p>
+
+    <p data-reveal><strong>British Somaliland</strong> controlled the coast from Zeila to Kismayo. <strong>Italian Somalia</strong> controlled the central and southern regions, including Mogadishu and the Shabelle-Jubba river valleys. <strong>French Somaliland</strong> was limited to the strategic port city of Djibouti and its immediate hinterland. <strong>Ethiopia</strong>, which had never been colonized, had the Ogaden region granted to it through treaties with Britain and Italy that Somali clans never signed. <strong>Kenya</strong> controlled the Northern Frontier District, grazing lands used by Somali pastoral clans.</p>
+
+    <p data-reveal>The borders were arbitrary, following no ethnic boundaries, no geographical logic, no political precedent.<span class="c">2<span>Robert L. Hess, <em>Italian Colonialism in Somalia</em> (University of Chicago Press, 1966), pp. 45-78.</span></span> A Somali clan whose pastoral territory crossed from British to Italian administration would find itself split between two different colonial tax systems. The port of Mogadishu, which had been a unified commercial center under the Ajuran Sultanate and later Adal, became a capital of an Italian colony with a hinterland controlled through different administrative systems.</p>
+
+    <p data-reveal>This partition was not the result of Somali request or negotiation. <strong>No Somali representatives attended the Berlin Conference of 1884 that established the rules for the partition.</strong><span class="c">3<span>Cedric Barnes, "U dhashay — Ku dhashay: Genealogical and Territorial Discourse in Somali History," <em>Social Identities</em> 12, no. 4 (2006), pp. 487-498.</span></span> Britain and Italy divided their spheres of influence in Somalia between themselves. Ethiopia under Emperor Menelik II used treaty negotiations with Britain and Italy to extend Ethiopian control into the Ogaden. France took Djibouti because of its strategic position on the Red Sea. The Somali clans that inhabited these territories did not consent to these arrangements.</p>
+
+    <div class="section-label" data-reveal>Colonial Administration</div>
+    <h2 data-reveal data-cut="3">Different Systems, Same Exploitation</h2>
+
+    <p data-reveal>The five colonial powers administered their territories according to different philosophies and with different intensities. British Somaliland used indirect rule, governing through existing clan structures and leaving pastoral society relatively undisturbed. Italian Somalia attempted more direct administration and settler colonialism, especially in the southern agricultural regions. The Italians established plantations, imported settlers, and attempted to build infrastructure more aggressively than the British.</p>
+
+    <p data-reveal>French Djibouti was essentially a port city with a French garrison and French commercial interests. It was not a territory so much as a colonial foothold.</p>
+
+    <p data-reveal>Ethiopia administered the Ogaden as tributary territory, extracting taxes and tribute from Somali pastoralists while allowing traditional clan governance to continue. Emperor Menelik II, who had decisively defeated Italy at the Battle of Adwa in 1896, was careful to establish Ethiopian sovereignty without attempting the level of direct administration the Italians pursued in Italian Somaliland.</p>
+
+    <p data-reveal>What united all five colonial administrations was the extraction of resources and the subordination of Somali interests to external power. Pastoral lands were taxed. Trade was monopolized. Local governance structures were undermined. The pastoral system that had sustained Somali societies for centuries was disrupted by colonial policies designed to extract revenue.<span class="c">5<span>Said S. Samatar, <em>Oral Poetry and Somali Nationalism: The Case of Sayyid Maḥammad ʻAbdille Ḥasan</em> (Cambridge University Press, 1982), pp. 143–167. <span class="tip-note">Samatar examines how colonial taxation and administrative control disrupted pastoral economies and generated Somali resistance movements.</span></span></span> British and Italian administrations competed for the same pastoral tax base. Ethiopian rule in the Ogaden created tension and resistance.</p>
+
+    <div class="section-label" data-reveal>The Ogaden Betrayal</div>
+    <h2 data-reveal data-cut="4">How Ethiopia Acquired Somali Territory</h2>
+
+    <p data-reveal>The clearest example of Somali dispossession without Somali consent was the Ogaden. The Ogaden is inhabited by Somali pastoralists — the Ogaden clan and related groups. But in 1897, the Anglo-Ethiopian Treaty granted the Ogaden to Ethiopia.<span class="c">4<span>I.M. Lewis, <em>A Modern History of the Somali</em>, 4th ed. (Ohio University Press, 2002), pp. 83-88.</span></span> This was not the result of Ethiopian conquest. It was a treaty signed between Britain and Ethiopia, in which Britain, which had no direct authority over the Ogaden, agreed to recognize Ethiopian sovereignty over it.</p>
+
+    <p data-reveal>The Somali Ogaden clans were not parties to this negotiation. They did not cede their territory. They did not agree to Ethiopian rule. The treaty was a transaction between two outside powers in which Somali land was treated as a commodity to be traded. It established a precedent that would shape Somali politics for a century: that external powers could dispose of Somali territory without consulting the Somali people who inhabited it.</p>
+
+    <p data-reveal>Ethiopian administration of the Ogaden created lasting resentment. The Somali clans resisted Ethiopian tax collection. The Ethiopian government, particularly under Haile Selassie in the 20th century, responded with military pressure. The Ogaden, which should have been part of a unified Somali state, instead became a flashpoint of tension between Somalia and Ethiopia — a dispute that would not be resolved until the 1977–78 Ogaden War, nearly a century after the initial partition.</p>
+
+    <p data-reveal>The same dynamic applied to Kenya's Northern Frontier District. The NFD was inhabited by Somali pastoral clans, but after independence, Kenya refused to allow it to join Somalia. The result was a border dispute that lasted decades.</p>
+
+    <div class="section-label" data-reveal>The Road to Independence</div>
+    <h2 data-reveal data-cut="5,star">1960 and the Unification Dream</h2>
+
+    <p data-reveal>After World War II, the wave of decolonization swept Africa. In 1960, British Somaliland and Italian Somaliland achieved independence on the same date — July 1 — and immediately merged into the Somali Republic. The dream of a unified Somali nation seemed suddenly possible.</p>
+
+    <p data-reveal>But the partition's legacy remained. French Somaliland (now Djibouti) remained a French colony and did not join. The Ogaden remained Ethiopian territory. The Northern Frontier District remained part of Kenya. The Somali people found themselves divided among five different states, with only two unified at independence. This incompleteness would define Somali politics for decades.</p>
+
+    <p data-reveal>The first government of independent Somalia was built on the premise that Somali territory should be unified — that the partition was illegitimate and should be reversed. This aspiration, known as Greater Somalia, drove Somali foreign policy until the late 20th century.<span class="c">6<span>E.R. Turton, "Somali Resistance to Colonial Rule and the Development of Somali Political Activity in Kenya, 1884–1948," <em>Journal of African History</em> 13, no. 3 (1972), pp. 477–497. <span class="tip-note">Turton documents Somali resistance to partition and the nationalist movements that emerged across colonial boundaries.</span></span></span> It motivated wars with Ethiopia and Kenya. It shaped the Pan-Somali nationalism that united the 1960 independence movement. And it made the partition not merely a historical event but an ongoing political crisis.</p>
+
+  </main>
+
+  <!-- ASIDE -->
+  <aside class="era-aside">
+
+    <div class="aside-card" data-reveal>
+      <h3>Quick Facts</h3>
+      <div class="fact-row">
+        <span class="fact-label">Period</span>
+        <span class="fact-val">1884 – 1960</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Colonial powers</span>
+        <span class="fact-val">5 (Britain, Italy, France, Ethiopia, Kenya)</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">British Somaliland</span>
+        <span class="fact-val">Northern coast</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Italian Somaliland</span>
+        <span class="fact-val">Central & southern regions</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">French Somaliland</span>
+        <span class="fact-val">Djibouti port city</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Ogaden to Ethiopia</span>
+        <span class="fact-val">1897 treaty (no Somali consent)</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Independence</span>
+        <span class="fact-val">July 1, 1960</span>
+      </div>
+    </div>
+
+    <div class="aside-card" data-reveal>
+      <h3>Key Figures</h3>
+      <div class="figure">
+        <div class="fig-name">Emperor Menelik II</div>
+        <div class="fig-role">Ethiopian Ruler</div>
+        <div class="fig-desc">Defeated Italy at Adwa in 1896, establishing Ethiopia's independence. Negotiated treaties with Britain and Italy that granted him control of the Ogaden. Expanded Ethiopian territory while European powers were distracted.</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">Lord Salisbury</div>
+        <div class="fig-role">British Prime Minister</div>
+        <div class="fig-desc">Oversaw British imperial expansion in East Africa. Negotiated the treaties that partitioned Somali territory between British and Italian spheres. Never consulted Somali leaders.</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">Haile Selassie</div>
+        <div class="fig-role">Later Ethiopian Emperor</div>
+        <div class="fig-desc">Consolidated Ethiopian rule in the Ogaden during the 20th century. His administration enforced Ethiopian sovereignty in Somali territories, creating lasting resentment among Ogaden clans.</div>
+      </div>
+    </div>
+
+    <div class="aside-card" data-reveal>
+      <h3>Primary Sources</h3>
+      <div class="source-item">
+        <strong>The Scramble for Africa</strong>
+        Thomas Pakenham (1991). Comprehensive history of the European partition of Africa, including the partition of Somalia and the Berlin Conference.
+      </div>
+      <div class="source-item">
+        <strong>The Treaties Partitioning Somali Territory</strong>
+        British Foreign Office archives. The 1884 agreements between Britain and Italy, and the 1897 Anglo-Ethiopian Treaty granting the Ogaden to Ethiopia.
+      </div>
+      <div class="source-item">
+        <strong>Colonial Somalia</strong>
+        Lee V. Cassanelli (1982). Examines the British and Italian colonial systems and their differential impact on Somali society.
+      </div>
+      <div class="source-item">
+        <strong>The Ogaden Dispute and Somali-Ethiopian Relations</strong>
+        Haggai Erlich (1983). Traces the history of the Ogaden from partition through the 20th-century conflicts.
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;max-width:200px;margin:2rem auto;opacity:0.3">
+  <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="var(--ochre)" stroke-width="1"/>
+  <circle cx="100" cy="12" r="2" fill="var(--ochre)"/>
+</svg>
+
+<!-- ERA NAVIGATION -->
+<div class="era-nav" data-reveal>
+  <div class="era-nav-inner">
+    <a href="era-dervish.html" class="era-nav-btn">
+      <span class="nav-dir">← Previous era</span>
+      <span class="nav-title">The Dervish State</span>
+      <span class="nav-dates">1899 – 1920 CE</span>
+    </a>
+    <a href="somali-archive.html" class="nav-center">All Eras</a>
+    <a href="era-independence.html" class="era-nav-btn">
+      <span class="nav-dir">Next era →</span>
+      <span class="nav-title">Independence</span>
+      <span class="nav-dates">1960 – 1991 CE</span>
+    </a>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script>
+(function() {
+  'use strict';
+
+  // ── Scroll Reveal ──
+  var revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('[data-reveal]').forEach(function(el) {
+    revealObserver.observe(el);
+  });
+
+})();
+</script>
+<script src="xog-cite.js"></script>
+<script src="xog-fable.js?v=3"></script>
+<script src="xog-nav.js"></script>
+<style>
+/* ── the cutting board: one footprint, five borders, then the star ── */
+.cutboard{position:fixed;right:2rem;top:50%;transform:translateY(-50%);width:150px;z-index:55;pointer-events:none;background:rgba(253,250,245,0.85);border:1px solid rgba(184,58,34,0.25);padding:.6rem .6rem .4rem}
+.cutboard svg{width:100%;height:auto;display:block}
+.cb-out{fill:rgba(184,58,34,0.07);stroke:#3D3024;stroke-width:1.2;opacity:.8}
+.cb-cut{stroke:#B83A22;stroke-width:1.6;stroke-dasharray:4 3;fill:none;stroke-dashoffset:140;opacity:0;transition:stroke-dashoffset 1.2s ease,opacity .4s}
+.cb-cut.drawn{stroke-dashoffset:0;opacity:1}
+.cb-star{fill:none;stroke:#C49A3C;stroke-width:1.4;opacity:0;transition:opacity 1s}
+.cb-star.lit{opacity:1}
+.cb-label{font-family:'DM Mono',monospace;font-size:.44rem;letter-spacing:.1em;text-transform:uppercase;color:#3D3024;text-align:center;padding-top:.4rem;min-height:2em;transition:color .3s}
+.cb-label.hot{color:#B83A22}
+@media(max-width:1150px){.cutboard{display:none}}
+</style>
+<script>
+/* Five borders cut one footprint as the reader passes each chapter.
+   The borders are schematic; the treaties and dates are not. */
+(function () {
+  if (window.matchMedia && window.matchMedia('(max-width: 1150px)').matches) return;
+  var OUTLINE = 'M 33.4,13.2 L 34.6,13.0 L 36.1,16.5 L 42.0,19.4 L 46.6,17.9 L 51.9,17.9 L 59.8,15.5 L 67.1,14.6 L 75.9,12.1 L 81.2,11.1 L 80.0,14.8 L 81.0,19.1 L 80.8,19.9 L 78.3,24.8 L 77.2,28.0 L 74.4,32.9 L 70.0,39.7 L 58.6,58.4 L 49.2,67.8 L 27.2,87.0 L 19.9,91.8 L 14.1,90.4 L 13.1,87.3 L 11.8,84.6 L 8.8,82.4 L 6.4,82.0 L 6.9,78.1 L 9.6,73.0 L 8.1,69.9 L 8.7,64.2 L 8.5,60.7 L 12.4,53.9 L 17.1,49.4 L 20.0,42.0 L 24.4,42.7 L 27.0,38.2 L 25.4,33.3 L 27.8,30.8 L 30.4,31.8 L 30.9,29.0 L 26.5,27.5 L 19.0,26.3 L 18.0,25.4 L 20.4,18.0 L 24.4,13.2 L 25.5,11.3 L 28.2,7.4 L 30.6,7.2 L 32.7,6.3 L 34.3,9.9 L 31.6,11.5 L 30.0,12.8 L 33.0,13.0 L 33.4,13.2 Z';
+  var CUTS = {
+    1: { d: 'M 6,18 L 36,26', label: 'BRITISH SOMALILAND \u00b7 TREATIES 1884\u201386' },
+    2: { d: 'M 36,26 L 30,6', label: 'C\u00d4TE FRAN\u00c7AISE \u00b7 1888' },
+    3: { d: 'M 46,30 L 82,22', label: 'ITALIAN SOMALIA \u00b7 1889' },
+    4: { d: 'M 14,34 L 56,56', label: 'THE OGADEN TO ETHIOPIA \u00b7 1897\u20131948' },
+    5: { d: 'M 12,62 L 34,86', label: 'THE NFD TO KENYA \u00b7 1925\u20131963' }
+  };
+  var board = document.createElement('div');
+  board.className = 'cutboard';
+  board.setAttribute('aria-hidden', 'true');
+  var paths = '';
+  for (var k in CUTS) paths += '<path class="cb-cut" id="cbCut' + k + '" d="' + CUTS[k].d + '"/>';
+  board.innerHTML = '<svg viewBox="0 0 100 100"><path class="cb-out" d="' + OUTLINE + '"/>' + paths +
+    '<path class="cb-star" id="cbStar" d="M50,30 L54.7,43.5 L69,44 L57.6,52.7 L61.8,66.5 L50,58.4 L38.2,66.5 L42.4,52.7 L31,44 L45.3,43.5 Z"/></svg>' +
+    '<div class="cb-label" id="cbLabel">ONE FOOTPRINT \u00b7 1884</div>';
+  document.body.appendChild(board);
+  var label = document.getElementById('cbLabel');
+  var marks = Array.prototype.slice.call(document.querySelectorAll('[data-cut]'));
+  function onScroll() {
+    var lastLabel = null;
+    marks.forEach(function (m) {
+      var passed = m.getBoundingClientRect().top < window.innerHeight * 0.6;
+      m.getAttribute('data-cut').split(',').forEach(function (c) {
+        if (c === 'star') {
+          var st = document.getElementById('cbStar');
+          if (passed) { st.classList.add('lit'); lastLabel = 'TWO JOINED \u00b7 THREE OUTSIDE \u00b7 1960'; }
+          else st.classList.remove('lit');
+        } else {
+          var el = document.getElementById('cbCut' + c);
+          if (passed) { el.classList.add('drawn'); lastLabel = CUTS[c].label; }
+          else el.classList.remove('drawn');
+        }
+      });
+    });
+    if (lastLabel) { label.textContent = lastLabel; label.classList.add('hot'); }
+    else { label.textContent = 'ONE FOOTPRINT \u00b7 1884'; label.classList.remove('hot'); }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+</body>
+</html>

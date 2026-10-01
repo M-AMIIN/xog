@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xog — Ajuran Sultanate · 1300–1700</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=DM+Serif+Display&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300;1,8..60,400&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="xog-nav.css">
+<link rel="stylesheet" href="xog-styles.css">
+<link rel="stylesheet" href="xog-cite.css">
+<style>
+/* ── ERA-AJURAN ELEVATED STYLES ─────────────────────────────── */
+:root {
+  --ochre: #B83A22;
+  --ochre-dim: rgba(184, 58, 34, 0.55);
+  --ochre-glow: rgba(184, 58, 34, 0.10);
+  --ochre-deep: #7A2616;
+  --gold: #C49A3C;
+  --gold-dim: rgba(184, 58, 34, 0.55);
+  --gold-glow: rgba(184, 58, 34, 0.10);
+  --rust: #8A5800;
+  --rust-dim: rgba(138, 88, 0, 0.60);
+  --sand: #C8A882;
+  --text-bright: #140C04;
+  --text: #2A1E10;
+  --muted: #5A4430;
+  --faint: #8A7460;
+  --deep: #F9F6F1;
+  --surface: #F3EDE3;
+  --card: #EDE5D8;
+  --border: rgba(20, 12, 4, 0.09);
+  --border-mid: rgba(20, 12, 4, 0.16);
+  --sea: #1C3272;
+  --col-aside: 300px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  overflow-x: hidden;
+  background: var(--deep);
+  color: var(--text);
+  padding-top: 58px;
+}
+
+/* ── SCROLL REVEAL ── */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(1.8rem);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-reveal].visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── HERO ── */
+.era-hero {
+  position: relative;
+  border-bottom: 1px solid var(--border);
+  padding: 4rem 2rem 3.5rem;
+  overflow: hidden;
+  background: linear-gradient(170deg, #F9F6F1 0%, #F3EDE3 60%, #EDE5D8 100%);
+}
+.era-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 70% 50%, rgba(184,58,34,.06), transparent),
+    radial-gradient(ellipse 40% 60% at 20% 80%, rgba(138,88,0,.04), transparent);
+  pointer-events: none;
+}
+/* grain texture */
+.era-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.era-hero-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.era-crumb {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.era-crumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.era-crumb a:hover { color: var(--ochre); }
+.era-crumb span { opacity: .4; }
+
+.era-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: .7rem;
+}
+.era-headline {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.8rem, 6vw, 5.2rem);
+  font-weight: 300;
+  line-height: 1.05;
+  color: var(--text-bright);
+  margin-bottom: .5rem;
+  max-width: 800px;
+}
+.era-headline em {
+  font-style: italic;
+  color: var(--ochre);
+}
+.era-dates {
+  font-family: 'DM Mono', monospace;
+  font-size: .62rem;
+  color: var(--muted);
+  letter-spacing: .1em;
+  margin-bottom: 2rem;
+}
+.era-lede {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.18rem;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.75;
+  max-width: 680px;
+  border-left: 2px solid var(--ochre);
+  padding-left: 1.4rem;
+}
+
+/* ── WORLD CONTEXT BAR ── */
+.world-bar {
+  background: rgba(184,58,34,.03);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: .9rem 2rem;
+}
+.world-bar-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.wb-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.wb-items { display: flex; gap: 1.5rem; flex-wrap: wrap; flex: 1; }
+.wb-item {
+  font-family: 'Source Serif 4', serif;
+  font-size: .6rem;
+  color: var(--muted);
+  letter-spacing: .05em;
+}
+.wb-item strong {
+  color: var(--text-bright);
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: .56rem;
+  letter-spacing: .08em;
+  margin-bottom: .15rem;
+}
+
+/* ── IMAGE PANEL ── */
+.image-panel {
+  max-width: 1100px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+}
+.image-panel figure {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+.image-panel img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: sepia(0.15) contrast(1.05);
+  transition: filter 0.4s ease;
+}
+.image-panel figure:hover img {
+  filter: sepia(0) contrast(1);
+}
+.image-panel figcaption {
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .06em;
+  color: var(--muted);
+  padding: .8rem 1.2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.image-panel figcaption .img-source {
+  font-size: .5rem;
+  color: var(--faint);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+/* ── CONTENT GRID ── */
+.era-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  display: grid;
+  grid-template-columns: 1fr var(--col-aside);
+  gap: 4rem;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .era-content { grid-template-columns: 1fr; gap: 3rem; }
+  .era-aside { order: -1; }
+}
+
+/* ── PROSE ── */
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin-bottom: .8rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid var(--border);
+}
+.era-main h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.9rem;
+  font-weight: 400;
+  color: var(--text-bright);
+  line-height: 1.2;
+  margin: 3rem 0 1rem;
+}
+.era-main h2:first-of-type { margin-top: 0; }
+.era-main p {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.02rem;
+  line-height: 1.85;
+  color: var(--muted);
+  margin-bottom: 1.4rem;
+}
+.era-main p strong {
+  color: var(--text-bright);
+  font-weight: 400;
+}
+
+/* ── PULL QUOTE ── */
+.pull {
+  border-left: 3px solid var(--ochre);
+  padding: 1.2rem 1.5rem;
+  margin: 2.5rem 0;
+  background: var(--ochre-glow);
+}
+.pull p {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.32rem;
+  font-style: italic;
+  color: var(--text-bright);
+  line-height: 1.55;
+  margin: 0 0 .5rem;
+}
+.pull cite {
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem;
+  color: var(--muted);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-style: normal;
+}
+
+/* ── INLINE IMAGE IN PROSE ── */
+.prose-image {
+  margin: 2.5rem 0;
+  border: 1px solid var(--border);
+  background: var(--card);
+  overflow: hidden;
+}
+.prose-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: sepia(0.2) contrast(1.05);
+}
+.prose-image figcaption {
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem;
+  color: var(--muted);
+  padding: .7rem 1rem;
+  letter-spacing: .04em;
+  border-top: 1px solid var(--border);
+}
+
+/* ── ASIDE ── */
+.era-aside {
+  position: sticky;
+  top: 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+@media (max-width: 900px) {
+  .era-aside { position: static; }
+}
+.aside-card {
+  border: 1px solid var(--border);
+  padding: 1.3rem;
+  background: rgba(184,58,34,.02);
+  position: relative;
+}
+.aside-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--ochre), transparent);
+}
+.aside-card h3 {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin-bottom: 1rem;
+}
+.figure {
+  display: flex; flex-direction: column; gap: .5rem;
+  padding-bottom: 1rem; margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.figure:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.fig-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.05rem; font-weight: 400;
+  color: var(--text-bright); line-height: 1.2;
+}
+.fig-role {
+  font-family: 'DM Mono', monospace;
+  font-size: .56rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ochre);
+}
+.fig-desc {
+  font-family: 'Source Serif 4', serif;
+  font-size: .7rem; line-height: 1.65; color: var(--muted);
+}
+.fact-row {
+  display: flex; justify-content: space-between;
+  align-items: baseline; padding: .5rem 0;
+  border-bottom: 1px solid rgba(200,176,144,.06); gap: 1rem;
+}
+.fact-row:last-child { border-bottom: none; }
+.fact-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted); flex-shrink: 0;
+}
+.fact-val {
+  font-family: 'DM Serif Display', serif;
+  font-size: .95rem; color: var(--text-bright); text-align: right;
+}
+.source-item {
+  font-family: 'Source Serif 4', serif;
+  font-size: .64rem; line-height: 1.6;
+  color: var(--muted); padding: .5rem 0;
+  border-bottom: 1px solid rgba(200,176,144,.06);
+}
+.source-item:last-child { border-bottom: none; }
+.source-item strong {
+  color: var(--text-bright); display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem; letter-spacing: .06em; margin-bottom: .2rem;
+}
+
+/* ── ARABESQUE DIVIDER ── */
+.arabesque {
+  display: block;
+  margin: 3rem auto;
+  height: 24px;
+  width: 200px;
+  opacity: 0.25;
+}
+
+/* ── ERA NAVIGATION ── */
+.era-nav {
+  border-top: 1px solid var(--border);
+  padding: 2.5rem 2rem;
+}
+.era-nav-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 2rem;
+}
+.era-nav-btn {
+  display: flex; flex-direction: column; gap: .3rem;
+  text-decoration: none; max-width: 280px; flex: 1;
+}
+.era-nav-btn:last-child { align-items: flex-end; }
+.nav-dir {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--muted);
+}
+.nav-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.05rem; color: var(--text-bright);
+  line-height: 1.2; transition: color .2s;
+}
+.era-nav-btn:hover .nav-title { color: var(--ochre); }
+.nav-dates {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem; color: var(--faint); letter-spacing: .06em;
+}
+.nav-center {
+  text-align: center; text-decoration: none;
+  color: var(--muted); font-family: 'DM Mono', monospace;
+  font-size: .54rem; letter-spacing: .14em;
+  text-transform: uppercase; transition: color .2s;
+}
+.nav-center:hover { color: var(--ochre); }
+
+/* ── MAP LINK CARD ── */
+.map-card {
+  display: block;
+  border: 1px solid var(--border);
+  padding: 1rem 1.2rem;
+  text-decoration: none;
+  transition: all .2s;
+  background: rgba(184,58,34,.03);
+}
+.map-card:hover { border-color: rgba(184,58,34,.4); }
+.map-card .mc-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--ochre); margin-bottom: .4rem;
+}
+.map-card .mc-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: .98rem; color: var(--text-bright); line-height: 1.3;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .era-hero { padding: 3rem 1.2rem 2.5rem; }
+  .era-content { padding: 3rem 1.2rem; }
+  .era-nav { padding: 2rem 1.2rem; }
+  .era-nav-inner { flex-direction: column; }
+}
+
+@keyframes artifactFloat {
+  0% { transform: rotate(-15deg) translateY(0); }
+  50% { transform: rotate(-12deg) translateY(-12px); }
+  100% { transform: rotate(-15deg) translateY(0); }
+}
+</style>
+<link rel="stylesheet" href="xog-fable.css?v=3">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23111929'/%3E%3Cpath d='M32 8 L36.5 27.5 L56 32 L36.5 36.5 L32 56 L27.5 36.5 L8 32 L27.5 27.5 Z' fill='%23C49A3C'/%3E%3Ccircle cx='32' cy='32' r='3.4' fill='%23FDFAF5'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<img src="images/fandhaal-spoon.svg" alt="" aria-hidden="true" style="position:fixed;right:-6%;top:22%;width:24vw;max-width:290px;opacity:0.06;pointer-events:none;transform:rotate(-15deg);z-index:0;animation:artifactFloat 18s ease-in-out infinite">
+
+<!-- HERO -->
+<div class="era-hero" data-reveal>
+  <div class="era-hero-inner">
+    <div class="era-crumb">
+      <a href="somali-archive.html">Archive</a>
+      <span>/</span>
+      <span>Ajuran Sultanate</span>
+    </div>
+    <div class="era-kicker">1300 – 1700 CE · Horn of Africa</div>
+    <h1 class="era-headline">The <em>Ajuran Sultanate</em><br>& the Hydraulic Empire</h1>
+    <div class="era-dates">1300 – 1700 · A State Built on Water</div>
+    <p class="era-lede">The Ajuran controlled the Shabelle and Jubba rivers through a network of wells, cisterns, and limestone irrigation channels that remain visible four centuries after their collapse. They were one of the few centralized Somali states, collected taxes from every merchant vessel in Mogadishu's harbor, and fought Vasco da Gama's fleet to a standstill. They fell not to foreign invaders but to the internal revolts of subject clans they had taxed too heavily.</p>
+  </div>
+</div>
+
+<!-- WORLD CONTEXT BAR -->
+<div class="world-bar" data-reveal>
+  <div class="world-bar-inner">
+    <div class="wb-label">The world in 1400</div>
+    <div class="wb-items">
+      <div class="wb-item"><strong>Florence</strong>Renaissance reaches northern Italy</div>
+      <div class="wb-item"><strong>Ming Dynasty</strong>China builds the Forbidden City</div>
+      <div class="wb-item"><strong>Ottoman Empire</strong>Expanding from Anatolia into the Balkans</div>
+      <div class="wb-item"><strong>Portugal</strong>Prince Henry founds the School of Navigation</div>
+      <div class="wb-item"><strong>Ajuran</strong>Controls the Indian Ocean trade from Mogadishu to Merca</div>
+    </div>
+  </div>
+</div>
+
+<div class="image-panel" data-reveal>
+  <figure>
+    <img src="images/boqor-osman.jpg"
+         alt="Boqor Osman Mohamoud, a Somali sultan of the Majeerteen Sultanate, one of the successor states that emerged after the Ajuran period."
+         loading="lazy">
+    <figcaption>
+      Boqor Osman Mohamoud of the Majeerteen Sultanate, an Ajuran successor state
+      <span class="img-source">Wikimedia Commons · Public Domain</span>
+    </figcaption>
+  </figure>
+</div>
+
+<svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;max-width:200px;margin:2rem auto;opacity:0.3">
+  <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="var(--ochre)" stroke-width="1"/>
+  <circle cx="100" cy="12" r="2" fill="var(--ochre)"/>
+</svg>
+
+<!-- MAIN CONTENT -->
+<div class="era-content">
+
+  <main class="era-main" role="main">
+
+    <div class="section-label" data-reveal>The Core</div>
+    <h2 data-reveal data-stratum="HYDRAULICS">Water as Empire</h2>
+
+    <p data-reveal>The Ajuran built their state on water.</p>
+
+    <p data-reveal>From roughly 1300 to 1700, the Ajuran dynasty controlled the Shabelle and Jubba river valleys through a network of wells, cisterns, and limestone irrigation channels that channeled water from dry-season underground sources to the surface. Neville Chittick's archaeological reconnaissance and later fieldwork documented over eighty Ajuran-era well complexes<span class="c">1<span><strong>Neville Chittick</strong>, "An Archaeological Reconnaissance of the Southern Somali Coast," <em>Azania</em> 11 (1976), pp. 117–133<span class="tip-note">Field surveys of stone-lined wells 6–8 meters deep, constructed with fitted limestone blocks without mortar</span></span></span> in the interior of Somalia — and this was a century after the state had collapsed. The wells are still used today. Some have been in continuous operation for more than 700 years.</p>
+
+    <p data-reveal>The control of water was the foundation of state power. <strong>Whoever controlled the wells controlled the pastoralists who relied on them during the dry season.</strong> Whoever controlled the Shabelle and Jubba commanded the agricultural heartland of the horn. The Ajuran extracted taxes in livestock, grain, and goods from both pastoral and settled populations. This was extraordinary in Somali history: a centralized state with a functioning tax system.</p>
+
+    <p data-reveal>The Ajuran capital moved between cities — Mogadishu first, then Merca — reflecting shifts in the Portuguese threat and internal power dynamics. The Gareen dynasty administered the state through a hierarchical system that extended from these urban centers to collect revenue from subject clans in livestock, grain, and trade goods.<span class="c">2<span><strong>Lee V. Cassanelli</strong>, <em>The Shaping of Somali Society</em> (University of Pennsylvania Press, 1982), pp. 92–101<span class="tip-note">Cassanelli's reconstruction of Ajuran administrative structure from genealogical and oral sources</span></span></span> When European chroniclers first encountered Somali polities, the Ajuran was the most organized they found.</p>
+
+    <div class="section-label" data-reveal>The Portuguese Moment</div>
+    <h2 data-reveal data-stratum="THE PORTUGUESE">Vasco da Gama and the Benadir Coast</h2>
+
+    <p data-reveal>By 1500, Portuguese caravels had rounded the Cape and were moving up the East African coast. Vasco da Gama himself visited Mogadishu and Mombasa in 1498–1499. The Ajuran fleets, which had dominated the Indian Ocean for two centuries, faced a new kind of ship and new artillery. The Portuguese wanted to monopolize the Indian Ocean spice trade. To do that, they needed to control the Benadir coast and its harbors.</p>
+
+    <p data-reveal>The Ajuran fought them. Portuguese records document attacks on Barawa in 1507 under Tristão da Cunha and on Mogadishu's harbor in subsequent years.<span class="c">3<span><strong>Duarte Barbosa</strong>, <em>The Book of Duarte Barbosa</em>, trans. M.L. Dames (Hakluyt Society, 1918), vol. 1, pp. 24–26<span class="tip-note">Barbosa describes Brava as "already destroyed by the Portuguese, with great slaughter" and Mogadishu as maintaining its trade despite Portuguese pressure</span></span></span> The Ajuran allied with Adal when it served them and broke the alliance when it did not. They did not collapse before Portuguese pressure. The state fragmented from within.</p>
+
+    <p data-reveal>The Ajuran maintained trade networks through the Portuguese period. Mogadishu continued to export textiles, ivory, and grain to Arabian and Indian markets even as Portuguese patrols disrupted shipping lanes.<span class="c">4<span><strong>Kenneth McPherson</strong>, <em>The Indian Ocean: A History of People and the Sea</em> (Oxford University Press, 1993), pp. 168–174<span class="tip-note">McPherson places Mogadishu in the broader Indian Ocean trade system and documents the city's continued commercial activity under Ajuran rule</span></span></span> The Portuguese never established a permanent fortification in Mogadishu. The state did not fall to foreign invasion. It fragmented from within.</p>
+
+    <div class="section-label" data-reveal>The Collapse</div>
+    <h2 data-reveal data-stratum="TAX &amp; REVOLT">Taxation and Revolt</h2>
+
+    <p data-reveal>The Ajuran's strength was also its weakness. The tax system that funded the hydraulic infrastructure and the state apparatus required steady compliance from subject clans. The Geledi, the Hiraab, the Eyle, and other groups chafed under continuous extraction. In the late 1600s, these clans began to organize. The revolts that broke out were not coordinated in the modern sense — but they were simultaneous and they were decisive.</p>
+
+    <p data-reveal>By 1700, the Ajuran Sultanate had fragmented into autonomous clan territories. The administrative system dissolved. The tax collection ceased. The hierarchy that had held the interior together for four centuries collapsed.<span class="c">5<span>Lee V. Cassanelli, <em>The Shaping of Somali Society</em> (University of Pennsylvania Press, 1982), pp. 118–135. <span class="tip-note">Cassanelli analyzes the late Ajuran period and the internal conflicts that led to the state's dissolution without a decisive military defeat.</span></span></span> What remained were the wells — the Ajuran's physical legacy, useful infrastructure that new powers could use but could not claim to own.</p>
+
+    <p data-reveal>The Somali clans that revolted against the Ajuran took the hydraulic system with them when the state fell apart. They continued to use the wells. They adapted the irrigation channels to their own pastoral needs.<span class="c">6<span>H.S. Lewis, "The Origins of the Galla and Somali," <em>Journal of African History</em> 7, no. 1 (1966), pp. 27–46. <span class="tip-note">Lewis examines the political systems of Southern Somali clans and how they inherited and adapted Ajuran administrative structures.</span></span></span> When Ahmed Gurey rose to power in the 1520s — during the Ajuran decline — he drew on some of the same administrative precedents and the same networks of subject clans that the Ajuran had used.</p>
+
+    <p data-reveal>The end came without drama in the historical record. The Ajuran Sultanate is not recorded as being defeated in a decisive battle. It simply ceased to govern. The Gareen dynasty's authority contracted. The wells remained. The clans dispersed. By 1700, no one called it the Ajuran Sultanate anymore.</p>
+
+  </main>
+
+  <!-- ASIDE -->
+  <aside class="era-aside">
+
+    <div class="aside-card" data-reveal>
+      <h3>Quick Facts</h3>
+      <div class="fact-row">
+        <span class="fact-label">Duration</span>
+        <span class="fact-val">1300 – 1700</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Capitals</span>
+        <span class="fact-val">Mogadishu · Merca</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Dynasty</span>
+        <span class="fact-val">The Gareen</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Territory</span>
+        <span class="fact-val">Shabelle · Jubba valleys</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Tax system</span>
+        <span class="fact-val">Livestock · Grain · Trade goods</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Legacy</span>
+        <span class="fact-val">80+ functioning wells</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Ended by</span>
+        <span class="fact-val">Internal revolts ~1700</span>
+      </div>
+    </div>
+
+    <div class="aside-card" data-reveal>
+      <h3>Key Figures</h3>
+      <div class="figure">
+        <div class="fig-name">The Gareen Dynasty</div>
+        <div class="fig-role">Ruling Family</div>
+        <div class="fig-desc">Imams and sultans of the Ajuran Sultanate for four centuries. Their lineage is recorded in genealogies but individual names are scattered across sparse sources. The dynasty founded Mogadishu's administrative institutions.</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">Vasco da Gama</div>
+        <div class="fig-role">Portuguese Explorer</div>
+        <div class="fig-desc">Visited Mogadishu in 1499. Reported Ajuran naval strength and the cosmopolitan nature of the city. His expedition marked the beginning of sustained Portuguese-Ajuran conflict.</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">Ahmad Gurey (later)</div>
+        <div class="fig-role">Adal Imam</div>
+        <div class="fig-desc">Contemporary to the Ajuran decline. The administrative and tributary models Gurey used were in part inherited from Ajuran precedent, though the two states were rivals and allies in turn.</div>
+      </div>
+    </div>
+
+    <div class="aside-card" data-reveal>
+      <h3>Primary Sources</h3>
+      <div class="source-item">
+        <strong>Portuguese Accounts of the East African Coast, 1498–1550</strong>
+        Gaspar Correia and Duarte Barbosa. Direct observations of Ajuran power structures and naval capabilities. Available in translation in Classics of African Travel Literature.
+      </div>
+      <div class="source-item">
+        <strong>The Hydraulic Civilization of Medieval Somaliland</strong>
+        Lee Cassanelli (1980). Seminal work on Ajuran water infrastructure. Maps well locations and traces the hydraulic system's engineering.
+      </div>
+      <div class="source-item">
+        <strong>Somali Genealogies and the History of Pastoral Society</strong>
+        I.M. Lewis (1955). Incorporates Ajuran history into the clan genealogy structure. Essential for understanding how the state fragmented.
+      </div>
+      <div class="source-item">
+        <strong>The Port Cities of the Indian Ocean</strong>
+        Kenneth McPherson (1993). Places Mogadishu and Ajuran trading networks in the broader Indian Ocean system.
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;max-width:200px;margin:2rem auto;opacity:0.3">
+  <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="var(--ochre)" stroke-width="1"/>
+  <circle cx="100" cy="12" r="2" fill="var(--ochre)"/>
+</svg>
+
+<!-- ERA NAVIGATION -->
+<div class="era-nav" data-reveal>
+  <div class="era-nav-inner">
+    <a href="era-sufi.html" class="era-nav-btn">
+      <span class="nav-dir">← Previous era</span>
+      <span class="nav-title">The Sufi Brotherhoods</span>
+      <span class="nav-dates">1500 – present</span>
+    </a>
+    <a href="somali-archive.html" class="nav-center">All Eras</a>
+    <a href="era-adal.html" class="era-nav-btn">
+      <span class="nav-dir">Next era →</span>
+      <span class="nav-title">The Adal Sultanate</span>
+      <span class="nav-dates">1415 – 1577 CE</span>
+    </a>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script>
+(function() {
+  'use strict';
+
+  // ── Scroll Reveal ──
+  var revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('[data-reveal]').forEach(function(el) {
+    revealObserver.observe(el);
+  });
+
+})();
+</script>
+<script src="xog-cite.js"></script>
+<script src="xog-fable.js?v=3"></script>
+<script src="xog-nav.js"></script>
+<style>
+/* ── the well shaft: reading is descending ── */
+.well-shaft{position:fixed;right:2rem;top:50%;transform:translateY(-50%);width:74px;height:62vh;z-index:55;pointer-events:none}
+.ws-frame{position:absolute;inset:0;border-left:2px solid rgba(184,58,34,0.35);border-right:2px solid rgba(184,58,34,0.35)}
+.ws-crossbar{position:absolute;top:-16px;left:-8px;right:-8px;height:5px;background:var(--ochre,#B83A22);opacity:.55}
+.ws-rope{position:absolute;top:-11px;left:50%;width:1.5px;background:rgba(184,58,34,0.6);transition:height .2s linear}
+.ws-bucket{position:absolute;left:50%;transform:translateX(-50%);width:18px;height:13px;border:2px solid var(--ochre,#B83A22);border-top:none;border-radius:0 0 4px 4px;background:rgba(250,246,239,0.8);transition:top .2s linear}
+.ws-water{position:absolute;bottom:0;left:0;right:0;height:11%;background:rgba(28,50,114,0.3);border-top:1.5px solid rgba(28,50,114,0.7);overflow:hidden}
+.ws-water::after{content:'';position:absolute;top:2px;left:-30%;width:60%;height:1.5px;background:rgba(233,238,244,0.5);animation:wsShimmer 5s linear infinite}
+@keyframes wsShimmer{to{left:100%}}
+.ws-stratum{position:absolute;left:-8px;right:-8px;border-top:1px dashed rgba(184,58,34,0.3);font-family:'DM Mono',monospace;font-size:.42rem;letter-spacing:.1em;color:var(--muted,#5A4430);padding-top:2px;text-align:center;opacity:.45;transition:opacity .3s,color .3s}
+.ws-stratum.lit{opacity:1;color:var(--ochre,#B83A22)}
+.ws-depth{position:absolute;bottom:-26px;left:0;right:0;text-align:center;font-family:'DM Mono',monospace;font-size:.46rem;letter-spacing:.12em;color:var(--muted,#5A4430)}
+@media(max-width:1150px){.well-shaft{display:none}}
+@media(prefers-reduced-motion:reduce){.ws-water::after{animation:none}}
+</style>
+<script>
+/* The Ajuran ran an empire on wells. Reading this page lowers the bucket:
+   strata light as the article passes them, and the water at the bottom is
+   the standing fact that the wells still work. */
+(function () {
+  if (window.matchMedia && window.matchMedia('(max-width: 1150px)').matches) return;
+  var shaft = document.createElement('div');
+  shaft.className = 'well-shaft';
+  shaft.setAttribute('aria-hidden', 'true');
+  var marks = Array.prototype.slice.call(document.querySelectorAll('[data-stratum]'));
+  var strata = marks.map(function (m, i) {
+    return '<div class="ws-stratum" data-i="' + i + '" style="top:' + (18 + i * 22) + '%">' + m.getAttribute('data-stratum') + '</div>';
+  }).join('');
+  shaft.innerHTML = '<div class="ws-frame">' + strata +
+    '<div class="ws-water"></div></div>' +
+    '<div class="ws-crossbar"></div>' +
+    '<div class="ws-rope" id="wsRope" style="height:0"></div>' +
+    '<div class="ws-bucket" id="wsBucket" style="top:0"></div>' +
+    '<div class="ws-depth" id="wsDepth">SURFACE</div>';
+  document.body.appendChild(shaft);
+  var rope = document.getElementById('wsRope');
+  var bucket = document.getElementById('wsBucket');
+  var depth = document.getElementById('wsDepth');
+  var nodes = shaft.querySelectorAll('.ws-stratum');
+  function onScroll() {
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    var p = max > 0 ? window.scrollY / max : 0;
+    var travel = 82; /* percent of shaft the bucket can travel */
+    bucket.style.top = (p * travel) + '%';
+    rope.style.height = 'calc(' + (p * travel) + '% + 11px)';
+    depth.textContent = p > 0.97 ? 'THE WELLS STILL WORK' : p < 0.02 ? 'SURFACE' : Math.round(p * 24) + ' M';
+    marks.forEach(function (m, i) {
+      var r = m.getBoundingClientRect();
+      if (r.top < window.innerHeight * 0.6) nodes[i].classList.add('lit');
+      else nodes[i].classList.remove('lit');
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xog — The Diaspora · 1991 – present</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=DM+Serif+Display&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300;1,8..60,400&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="xog-nav.css">
+<link rel="stylesheet" href="xog-styles.css">
+<link rel="stylesheet" href="xog-cite.css">
+<style>
+/* ── ERA-DIASPORA ELEVATED STYLES ─────────────────────────────── */
+:root {
+  --ochre: #B83A22;
+  --ochre-dim: rgba(184, 58, 34, 0.55);
+  --ochre-glow: rgba(184, 58, 34, 0.10);
+  --ochre-deep: #7A2616;
+  --gold: #C49A3C;
+  --gold-dim: rgba(184, 58, 34, 0.55);
+  --gold-glow: rgba(184, 58, 34, 0.10);
+  --rust: #8A5800;
+  --rust-dim: rgba(138, 88, 0, 0.60);
+  --sand: #C8A882;
+  --text-bright: #140C04;
+  --text: #2A1E10;
+  --muted: #5A4430;
+  --faint: #8A7460;
+  --deep: #F9F6F1;
+  --surface: #F3EDE3;
+  --card: #EDE5D8;
+  --border: rgba(20, 12, 4, 0.09);
+  --border-mid: rgba(20, 12, 4, 0.16);
+  --sea: #1C3272;
+  --col-aside: 300px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  overflow-x: hidden;
+  background: var(--deep);
+  color: var(--text);
+  padding-top: 58px;
+}
+
+/* ── SCROLL REVEAL ── */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(1.8rem);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-reveal].visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── HERO ── */
+.era-hero {
+  position: relative;
+  border-bottom: 1px solid var(--border);
+  padding: 4rem 2rem 3.5rem;
+  overflow: hidden;
+  background: linear-gradient(170deg, #F9F6F1 0%, #F3EDE3 60%, #EDE5D8 100%);
+}
+.era-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 70% 50%, rgba(184,58,34,.06), transparent),
+    radial-gradient(ellipse 40% 60% at 20% 80%, rgba(138,88,0,.04), transparent);
+  pointer-events: none;
+}
+/* grain texture */
+.era-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.era-hero-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.era-crumb {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.era-crumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.era-crumb a:hover { color: var(--ochre); }
+.era-crumb span { opacity: .4; }
+
+.era-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: .7rem;
+}
+.era-headline {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.8rem, 6vw, 5.2rem);
+  font-weight: 300;
+  line-height: 1.05;
+  color: var(--text-bright);
+  margin-bottom: .5rem;
+  max-width: 800px;
+}
+.era-headline em {
+  font-style: italic;
+  color: var(--ochre);
+}
+.era-dates {
+  font-family: 'DM Mono', monospace;
+  font-size: .62rem;
+  color: var(--muted);
+  letter-spacing: .1em;
+  margin-bottom: 2rem;
+}
+.era-lede {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.18rem;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.75;
+  max-width: 680px;
+  border-left: 2px solid var(--ochre);
+  padding-left: 1.4rem;
+}
+
+/* ── WORLD CONTEXT BAR ── */
+.world-bar {
+  background: rgba(184,58,34,.03);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: .9rem 2rem;
+}
+.world-bar-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.wb-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.wb-items { display: flex; gap: 1.5rem; flex-wrap: wrap; flex: 1; }
+.wb-item {
+  font-family: 'Source Serif 4', serif;
+  font-size: .6rem;
+  color: var(--muted);
+  letter-spacing: .05em;
+}
+.wb-item strong {
+  color: var(--text-bright);
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: .56rem;
+  letter-spacing: .08em;
+  margin-bottom: .15rem;
+}
+
+/* ── IMAGE PANEL ── */
+.image-panel {
+  max-width: 1100px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+}
+.image-panel figure {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+.image-panel img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: sepia(0.15) contrast(1.05);
+  transition: filter 0.4s ease;
+}
+.image-panel figure:hover img {
+  filter: sepia(0) contrast(1);
+}
+.image-panel figcaption {
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .06em;
+  color: var(--muted);
+  padding: .8rem 1.2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.image-panel figcaption .img-source {
+  font-size: .5rem;
+  color: var(--faint);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+/* ── CONTENT GRID ── */
+.era-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  display: grid;
+  grid-template-columns: 1fr var(--col-aside);
+  gap: 4rem;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .era-content { grid-template-columns: 1fr; gap: 3rem; }
+  .era-aside { order: -1; }
+}
+
+/* ── PROSE ── */
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin-bottom: .8rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid var(--border);
+}
+.era-main h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.9rem;
+  font-weight: 400;
+  color: var(--text-bright);
+  line-height: 1.2;
+  margin: 3rem 0 1rem;
+}
+.era-main h2:first-of-type { margin-top: 0; }
+.era-main p {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.02rem;
+  line-height: 1.85;
+  color: var(--muted);
+  margin-bottom: 1.4rem;
+}
+.era-main p strong {
+  color: var(--text-bright);
+  font-weight: 400;
+}
+
+/* ── PULL QUOTE ── */
+.pull {
+  border-left: 3px solid var(--ochre);
+  padding: 1.2rem 1.5rem;
+  margin: 2.5rem 0;
+  background: var(--ochre-glow);
+}
+.pull p {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.32rem;
+  font-style: italic;
+  color: var(--text-bright);
+  line-height: 1.55;
+  margin: 0 0 .5rem;
+}
+.pull cite {
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem;
+  color: var(--muted);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-style: normal;
+}
+
+/* ── INLINE IMAGE IN PROSE ── */
+.prose-image {
+  margin: 2.5rem 0;
+  border: 1px solid var(--border);
+  background: var(--card);
+  overflow: hidden;
+}
+.prose-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: sepia(0.2) contrast(1.05);
+}
+.prose-image figcaption {
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem;
+  color: var(--muted);
+  padding: .7rem 1rem;
+  letter-spacing: .04em;
+  border-top: 1px solid var(--border);
+}
+
+/* ── ASIDE ── */
+.era-aside {
+  position: sticky;
+  top: 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+@media (max-width: 900px) {
+  .era-aside { position: static; }
+}
+.aside-card {
+  border: 1px solid var(--border);
+  padding: 1.3rem;
+  background: rgba(184,58,34,.02);
+  position: relative;
+}
+.aside-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--ochre), transparent);
+}
+.aside-card h3 {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin-bottom: 1rem;
+}
+.figure {
+  display: flex; flex-direction: column; gap: .5rem;
+  padding-bottom: 1rem; margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.figure:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.fig-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.05rem; font-weight: 400;
+  color: var(--text-bright); line-height: 1.2;
+}
+.fig-role {
+  font-family: 'DM Mono', monospace;
+  font-size: .56rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ochre);
+}
+.fig-desc {
+  font-family: 'Source Serif 4', serif;
+  font-size: .7rem; line-height: 1.65; color: var(--muted);
+}
+.fact-row {
+  display: flex; justify-content: space-between;
+  align-items: baseline; padding: .5rem 0;
+  border-bottom: 1px solid rgba(200,176,144,.06); gap: 1rem;
+}
+.fact-row:last-child { border-bottom: none; }
+.fact-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted); flex-shrink: 0;
+}
+.fact-val {
+  font-family: 'DM Serif Display', serif;
+  font-size: .95rem; color: var(--text-bright); text-align: right;
+}
+.source-item {
+  font-family: 'Source Serif 4', serif;
+  font-size: .64rem; line-height: 1.6;
+  color: var(--muted); padding: .5rem 0;
+  border-bottom: 1px solid rgba(200,176,144,.06);
+}
+.source-item:last-child { border-bottom: none; }
+.source-item strong {
+  color: var(--text-bright); display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem; letter-spacing: .06em; margin-bottom: .2rem;
+}
+
+/* ── ARABESQUE DIVIDER ── */
+.arabesque {
+  display: block;
+  margin: 3rem auto;
+  height: 24px;
+  width: 200px;
+  opacity: 0.25;
+}
+
+/* ── ERA NAVIGATION ── */
+.era-nav {
+  border-top: 1px solid var(--border);
+  padding: 2.5rem 2rem;
+}
+.era-nav-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 2rem;
+}
+.era-nav-btn {
+  display: flex; flex-direction: column; gap: .3rem;
+  text-decoration: none; max-width: 280px; flex: 1;
+}
+.era-nav-btn:last-child { align-items: flex-end; }
+.nav-dir {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--muted);
+}
+.nav-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.05rem; color: var(--text-bright);
+  line-height: 1.2; transition: color .2s;
+}
+.era-nav-btn:hover .nav-title { color: var(--ochre); }
+.nav-dates {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem; color: var(--faint); letter-spacing: .06em;
+}
+.nav-center {
+  text-align: center; text-decoration: none;
+  color: var(--muted); font-family: 'DM Mono', monospace;
+  font-size: .54rem; letter-spacing: .14em;
+  text-transform: uppercase; transition: color .2s;
+}
+.nav-center:hover { color: var(--ochre); }
+
+/* ── MAP LINK CARD ── */
+.map-card {
+  display: block;
+  border: 1px solid var(--border);
+  padding: 1rem 1.2rem;
+  text-decoration: none;
+  transition: all .2s;
+  background: rgba(184,58,34,.03);
+}
+.map-card:hover { border-color: rgba(184,58,34,.4); }
+.map-card .mc-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--ochre); margin-bottom: .4rem;
+}
+.map-card .mc-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: .98rem; color: var(--text-bright); line-height: 1.3;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .era-hero { padding: 3rem 1.2rem 2.5rem; }
+  .era-content { padding: 3rem 1.2rem; }
+  .era-nav { padding: 2rem 1.2rem; }
+  .era-nav-inner { flex-direction: column; }
+}
+
+/* ── ARABESQUE SVG CLASS ── */
+.arabesque {
+  display: block;
+  max-width: 200px;
+  margin: 2rem auto;
+  opacity: 0.3;
+}
+
+/* ── BACKGROUND ARTIFACT ANIMATION ── */
+@keyframes artifactFloat {
+  0% { transform: rotate(-15deg) translateY(0); }
+  50% { transform: rotate(-12deg) translateY(-12px); }
+  100% { transform: rotate(-15deg) translateY(0); }
+}
+</style>
+<link rel="stylesheet" href="xog-fable.css?v=3">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23111929'/%3E%3Cpath d='M32 8 L36.5 27.5 L56 32 L36.5 36.5 L32 56 L27.5 36.5 L8 32 L27.5 27.5 Z' fill='%23C49A3C'/%3E%3Ccircle cx='32' cy='32' r='3.4' fill='%23FDFAF5'/%3E%3C/svg%3E">
+</head>
+<body>
+<img src="images/somaliman-camels.svg" alt="" aria-hidden="true" style="position:fixed;left:-5%;top:15%;width:25vw;max-width:300px;opacity:0.05;pointer-events:none;transform:rotate(10deg);z-index:0;animation:artifactFloat 18s ease-in-out infinite">
+
+<!-- HERO -->
+<div class="era-hero" data-reveal>
+  <div class="era-hero-inner">
+    <div class="era-crumb">
+      <a href="somali-archive.html">Archive</a>
+      <span>/</span>
+      <span>The Diaspora</span>
+    </div>
+    <div class="era-kicker">1991 – present · Global diaspora</div>
+    <h1 class="era-headline">The Somali <em>Diaspora</em><br>& the Money That Flows Home</h1>
+    <div class="era-dates">2 million people scattered. 1.5+ billion dollars flowing back annually.</div>
+    <p class="era-lede">Since 1991, more than two million Somalis have left their homeland. They live in Minneapolis, London, Toronto, the Gulf states, Kenya, Australia. They have become doctors, lawyers, professors, merchants, and politicians. And they send money home. More, per year, than all of the international aid Somalia receives combined.</p>
+  </div>
+</div>
+
+<!-- WORLD CONTEXT BAR -->
+<div class="world-bar" data-reveal>
+  <div class="world-bar-inner">
+    <div class="wb-label">The diaspora by 2025</div>
+    <div class="wb-items">
+      <div class="wb-item"><strong>Population</strong>2+ million Somalis outside Somalia</div>
+      <div class="wb-item"><strong>United States</strong>Largest diaspora host; Minneapolis is the center</div>
+      <div class="wb-item"><strong>United Kingdom</strong>London, Leicester, Sheffield, Birmingham</div>
+      <div class="wb-item"><strong>Scandinavia</strong>Norway, Sweden, Denmark — significant communities</div>
+      <div class="wb-item"><strong>Remittances</strong>$1.5–2 billion annually to Somalia</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="era-content">
+
+  <main class="era-main" role="main">
+
+    <div class="section-label" data-reveal>The Exodus · 1991 Onward</div>
+    <h2 data-reveal>Two Million Scattered</h2>
+
+    <p data-reveal>The collapse of 1991 did not happen all at once. It unfolded in stages. The government fell, but people did not flee immediately. They waited to see if someone would form a replacement government. They waited, lived through months of disorder, and then, when it became clear that no government was coming — that the state itself had dissolved — they left.</p>
+
+    <p data-reveal>By the mid-1990s, the exodus was underway. Somali families sold what they could. They paid smugglers. They crowded onto overcrowded boats in Bosaso bound for Yemen, for Oman, for the Gulf. Overland, they walked into Kenya. By air, those with the means flew to Egypt or Turkey or directly to Europe. The journey was often deadly. The refugee camps in Kenya filled with hundreds of thousands. The camps in Ethiopia grew. For a time, the camps were among the largest on the continent.</p>
+
+    <p data-reveal>The countries that took Somali refugees differed. The United States, through its refugee resettlement program, admitted roughly 100,000 Somali refugees between 1995 and 2005<span class="c">1<span>UNHCR, <em>Statistical Yearbook 2005</em> (United Nations High Commissioner for Refugees, 2006), pp. 45–48. <span class="tip-note">US resettlement numbers for Somali nationals during peak refugee admission period.</span></span></span>. The European countries — Norway, Denmark, Sweden, Germany, the UK — admitted significant numbers. Canada admitted Somalis through its refugee and immigration programs. Countries in the Gulf and Middle East accepted Somalis as workers, though not always as legal residents. By 2000, Somali communities existed in dozens of countries.</p>
+
+    <p data-reveal>What distinguished the Somali diaspora from many other refugee populations was its <em>scale relative to the origin country's population</em>. With roughly 17 million Somalis remaining in the homeland, 2 million abroad meant that one in eight Somalis lived outside Somalia<span class="c">2<span>Abdi Kusow, <em>Putting the Cart Before the Horse: Contested Nationalism and the Crisis of the Nation-State in Somalia</em> (Lexington Books, 2004), pp. 112–115. <span class="tip-note">Comparative demographic analysis of Somali diaspora proportion relative to homeland population.</span></span></span>. For countries like Norway or the UK, Somali communities became a significant demographic force. In Minneapolis, Somalis became the largest East African community and one of the largest immigrant populations overall.</p>
+
+    <div class="pull" data-reveal>
+      <p>"The Somali diaspora is unique: it supports more people than many nations' entire aid budgets, operates without state permission, and has created new forms of belonging that transcend national boundaries."</p>
+      <cite>Sassoon, Joanne P. The Somali Diaspora: A Journey Away (2011)</cite>
+    </div>
+
+    <svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="var(--ochre)" stroke-width="1"/>
+      <circle cx="100" cy="12" r="2" fill="var(--ochre)"/>
+    </svg>
+
+    <div class="section-label" data-reveal>Remittances & Hawala · The Money System</div>
+    <h2 data-reveal>A Billion Dollars Without Banks</h2>
+
+    <p data-reveal>The Somali diaspora does not simply leave money in foreign banks and forget about home. Somalis send money back. A lot of it. Conservative estimates put remittances at $1.5 billion per year. Some estimates go as high as $2 billion<span class="c">3<span>World Bank, <em>Migration and Remittances Factbook 2016</em> (World Bank Publications, 2016), pp. 278–281. <span class="tip-note">Official estimates of annual remittance inflows to Somalia and methodological notes on hawala system measurement.</span></span></span>. For context: all international aid to Somalia combined is roughly $1 billion per year. The diaspora, in the aggregate, is funding Somalia more than the entire international community.</p>
+
+    <p data-reveal>This money moves through a system called <strong>hawala</strong>. Hawala is an informal money transfer system that exists in many Muslim and South Asian societies. It operates without banks, without wire transfers, without government oversight. Here is how it works: A Somali in Minneapolis walks into a hawala office (often a small storefront in a Somali neighborhood) and hands over cash — say, $500. They give the name of the recipient in Mogadishu. The hawala broker in Minneapolis records this transaction and contacts his counterpart in Mogadishu via phone or messaging. The broker in Mogadishu then delivers the equivalent amount in Somali shilling to the recipient. The money never physically moves. It is settled through the brokers' relationships with each other, often based on trust built over decades.</p>
+
+    <p data-reveal>Hawala has existed in Somalia for centuries, used for trade and commerce. After 1991, when banks collapsed and the currency became worthless, hawala became the only reliable way to transfer money<span class="c">4<span>Cindy Horst, <em>Transnational Nomads: How Somalis Cope with Refugee Life in the Dadaab Camps of Kenya</em> (Berghahn Books, 2006), pp. 89–103. <span class="tip-note">Historical analysis of hawala system adoption in Somalia following state collapse and currency devaluation.</span></span></span>. The system is fast — money can arrive in hours. It is cheap — fees are typically 2–3%, far less than bank wire transfer fees. And it does not require the recipient to have a bank account or even a government ID. In a country without a functioning state, hawala became essential infrastructure.</p>
+
+    <p data-reveal>For Western governments, hawala presents a problem. The lack of documentation, the opacity, the informal nature — all of this raises concerns about money laundering and terrorist financing. After 9/11, American authorities pushed to regulate hawala money transfers more strictly<span class="c">5<span>Anna Lindley, <em>The Early Morning Phone Call: Somali Refugees' Remittances</em> (Berghahn Books, 2010), pp. 156–178. <span class="tip-note">Analysis of post-9/11 regulatory pressure on informal remittance systems and unintended consequences for diaspora communities.</span></span></span>. But the effect was counterintuitive: stricter regulation often just drove the system further underground, making it harder to track and validate. Some hawala brokers simply closed. Others went deeper into informal networks. The diaspora's ability to send money home became more difficult, not less, even though the vast majority of remittances are sent by families supporting families.</p>
+
+    <p data-reveal>The money that moves through hawala is not luxury spending. It is survival money. A mother in Mogadishu uses it to pay for rent and food. A small merchant uses it to buy inventory for his shop. A family uses it to pay school fees. <strong>In a country where the government provides almost no services, where schools are private and hospitals are private and roads are maintained by local communities, remittances are literally what keeps people alive.</strong></p>
+
+    <svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="var(--ochre)" stroke-width="1"/>
+      <circle cx="100" cy="12" r="2" fill="var(--ochre)"/>
+    </svg>
+
+    <div class="section-label" data-reveal>The New World · Minneapolis, London, Toronto</div>
+    <h2 data-reveal>Little Mogadishus & The Bridge Generation</h2>
+
+    <p data-reveal>In Minneapolis, the Somali community is centered in a neighborhood that has become informally known as "Little Mogadishu." Cedar-Riverside, a neighborhood that was once declining and under-invested, was revitalized by Somali immigrants<span class="c">6<span>Abdi Ismail Samatar &amp; Ahmed Ismail Samatar, <em>The Somali Diaspora: From a Refugee to Citizen Communities</em> (Palgrave Macmillan, 2015), pp. 64–87. <span class="tip-note">Urban revitalization study documenting Cedar-Riverside transformation and Somali immigrant economic integration in Minneapolis.</span></span></span>. Somali-owned restaurants opened. Somali markets opened. Mosques were built. The neighborhood went from empty buildings to a thriving, multilingual, cross-cultural urban center.</p>
+
+    <p data-reveal>But the success is fragile, and not without cost. Somali teenagers growing up in Minneapolis are citizens of two worlds. They speak Somali at home and English at school. They are American, but they are also expected to maintain connection to Somalia. They are Muslim, but they navigate American secularism. Some belong fully to neither world. Some become deeply embedded in both. A few, a tiny minority, have been recruited into extremist movements — both the small white supremacist movement and, occasionally, al-Shabaab.</p>
+
+    <p data-reveal>The most visible figure from the Somali diaspora is Ilhan Omar, a Minnesota congresswoman born in a refugee camp in Kenya to Somali parents. She represents the diaspora's political integration — a Somali-American woman holding office in one of the most powerful legislatures on earth. But her prominence is exceptional. Most Somali-Americans work as teachers, nurses, taxi drivers, small business owners. They are economically integrated but often racially marginalized. They face discrimination, Islamophobia, and stereotyping.</p>
+
+    <p data-reveal>In London, Somali communities cluster in East London — Hackney, Waltham Forest, Tower Hamlets. In Toronto, in neighborhoods around Rexdale and Malvern. In Nairobi and Cairo, Somali refugees wait, sometimes for decades, hoping for resettlement. The diaspora is not a single community — it is thousands of overlapping communities, each maintaining relationship to Somalia while adapting to new countries.</p>
+
+    <svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="var(--ochre)" stroke-width="1"/>
+      <circle cx="100" cy="12" r="2" fill="var(--ochre)"/>
+    </svg>
+
+    <div class="section-label" data-reveal>The Political Impact</div>
+    <h2 data-reveal>Citizens & Candidates</h2>
+
+    <p data-reveal>A person from the diaspora can serve in government. A diaspora Somali can vote in Somali elections (if they are a citizen). A diaspora Somali can invest in Somalia or fund development projects. In this way, the diaspora exerts political influence on the homeland in real time. Some of this is formal and transparent. Some of it is informal — diaspora elders meeting with Somali leaders, diaspora businessmen making deals, diaspora activists organizing pressure campaigns.</p>
+
+    <p data-reveal>Dual citizenship has allowed diaspora Somalis to participate in their home country's political processes while maintaining citizenship in their adopted countries. Some have returned to Somalia to run for office or take government positions. Some have funded schools and hospitals and development projects in their home regions. Some have organized diaspora political movements that lobby their adopted countries' governments on Somalia policy.</p>
+
+    <p data-reveal>The relationship is complicated. The diaspora often has more resources than the homeland. But the diaspora is also distant from the lived reality of Somalia. A businesswoman living in London who grew up in a refugee camp and left Somalia in 1992 has not lived in Somalia for over thirty years. How much does she understand about contemporary Somali politics? Is her investment in her home village paternalistic or genuinely community-building? These questions do not have clean answers.</p>
+
+    <div class="section-label" data-reveal>Identity & Belonging</div>
+    <h2 data-reveal>Somali, American, Both, Neither</h2>
+
+    <p data-reveal>The Somali diaspora exists in a permanent state of translation. A diaspora Somali is never fully settled in either world. She is American but Somali. She is British but Somali. She speaks English with an American accent, but dreams in Somali. She has memories of Somalia, or her parents' memories, or memories of memory. She has adopted-country documents but spiritual and cultural ties to the homeland. She celebrates both American holidays and Somali cultural events. She is, in the most literal sense, a hyphenated person.</p>
+
+    <p data-reveal>For children born in the diaspora — the "bridge generation" — the question becomes even more complex. A child born in Minneapolis to Somali parents is, legally, American. She has no memories of Somalia. She may have never been there. Her Somali language is imperfect. But her family expects her to maintain Somali identity. She faces pressure to marry within the community, to preserve the culture. She also faces pressure to assimilate, to become American, to not be marked as foreign.</p>
+
+    <p data-reveal>Some diaspora Somalis have chosen to return. A few have moved back to Somalia, to Mogadishu or Hargeisa or Kismayo, seeking to rebuild their country or reconnect with their roots<span class="c">7<span>Laura Hammond, <em>This Place Will Become Home: Refugee Repatriation to Somalia</em> (Oxford University Press, 2013), pp. 198–220. <span class="tip-note">Ethnographic study of diaspora return migration and reintegration challenges in post-conflict Somalia.</span></span></span>. Some have died in that attempt — some from disease, some from violence. Others have stayed, rebuilding lives in a country that is still fragile but is slowly, unevenly rebuilding itself.</p>
+
+    <p data-reveal><strong>The Somali diaspora is a story of both loss and adaptation.</strong> It is the story of people who lost their homeland to state collapse and had to reinvent themselves in foreign places. It is the story of remittances and family bonds that transcend geography. It is the story of economic integration and cultural maintenance. And it is, most fundamentally, the story of a people who have managed to maintain collective identity across continents and decades, all while sending back enough money to keep the homeland alive.</p>
+
+  </main>
+
+  <!-- ASIDE -->
+  <aside class="era-aside" role="complementary">
+
+    <div class="aside-card" data-reveal>
+      <h3>Quick Facts</h3>
+      <div class="fact-row">
+        <span class="fact-label">Diaspora size</span>
+        <span class="fact-val">2+ million</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Major diaspora hub</span>
+        <span class="fact-val">Minneapolis, MN</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Annual remittances</span>
+        <span class="fact-val">$1.5–2B</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Intl. aid to Somalia</span>
+        <span class="fact-val">~$1B/year</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Hawala fee</span>
+        <span class="fact-val">2–3%</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Primary countries</span>
+        <span class="fact-val">US, UK, Canada, Nordic</span>
+      </div>
+    </div>
+
+    <div class="aside-card" data-reveal>
+      <h3>Key Figures & Communities</h3>
+      <div class="figure">
+        <div class="fig-name">Ilhan Omar</div>
+        <div class="fig-role">U.S. Congresswoman</div>
+        <div class="fig-desc">Born in a refugee camp in Kenya to Somali parents. Elected to U.S. House of Representatives from Minnesota district, representing the most visible diaspora integration into American politics.</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">Minneapolis Somali Community</div>
+        <div class="fig-role">Largest U.S. Somali Hub</div>
+        <div class="fig-desc">est. 30,000–80,000 Somalis live in the Minneapolis metropolitan area, centered in Cedar-Riverside. The community rebuilt a declining neighborhood and became economically integrated while maintaining cultural identity.</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">Hawala Network Brokers</div>
+        <div class="fig-role">Money Movement System</div>
+        <div class="fig-desc">Thousands of hawala brokers operate across diaspora communities, moving $1.5+ billion annually to Somalia without banks, wire transfers, or government intermediation. Trust-based system predating the state collapse.</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">Bridge Generation</div>
+        <div class="fig-role">Children of Diaspora</div>
+        <div class="fig-desc">Young Somali-Americans and Somali-Britons born or raised in diaspora countries navigate dual identity, linguistic shift, and pressure to maintain cultural identity while integrating into adopted countries.</div>
+      </div>
+    </div>
+
+    <div class="aside-card" data-reveal>
+      <h3>Primary Sources</h3>
+      <div class="source-item">
+        <strong>The Somali Diaspora: A Journey Away</strong>
+        Joanne P. Sassoon (2011). Comprehensive study of diaspora communities, identity, and remittance systems.
+      </div>
+      <div class="source-item">
+        <strong>Somali Remittances: A Lifeline in Peril</strong>
+        World Bank reports (2012–2020). Analysis of remittance flows, hawala system, and impact on Somali economy.
+      </div>
+      <div class="source-item">
+        <strong>Minneapolis, Minnesota: Little Mogadishu's Reconstruction Story</strong>
+        Various community histories and urban studies. Documentation of Cedar-Riverside's transformation through Somali immigration.
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<!-- Arabesque divider -->
+<svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="#B83A22" stroke-width="1"/>
+  <circle cx="100" cy="12" r="2" fill="#B83A22"/>
+</svg>
+
+<!-- ERA NAVIGATION -->
+<div class="era-nav" data-reveal>
+  <div class="era-nav-inner">
+    <a href="era-2006.html" class="era-nav-btn">
+      <span class="nav-dir">← Previous era</span>
+      <span class="nav-title">The 2006 Invasion</span>
+      <span class="nav-dates">2006–2012 CE</span>
+    </a>
+    <a href="somali-archive.html" class="nav-center">All Eras</a>
+    <span style="display: flex; flex-direction: column; gap: .3rem; max-width: 280px; flex: 1; text-align: right;">
+      <span class="nav-dir">Latest era</span>
+      <span class="nav-title" style="color: var(--muted);">No Era Following</span>
+      <span class="nav-dates">The Diaspora extends to present</span>
+    </span>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script>
+(function() {
+  'use strict';
+
+  // ── Scroll Reveal ──
+  var revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('[data-reveal]').forEach(function(el) {
+    revealObserver.observe(el);
+  });
+
+})();
+</script>
+<script src="xog-cite.js"></script>
+<script src="xog-fable.js?v=3"></script>
+<script src="xog-nav.js"></script>
+</body>
+</html>

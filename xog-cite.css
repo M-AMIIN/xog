@@ -1,0 +1,114 @@
+/* ════════════════════════════════════════════════════════════════
+   XOG — Inline Citation System
+   Design: small markers in the text, tooltip on tap/hover.
+   Source lives next to the claim, not exiled to a footnote pile.
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── The marker ── */
+.c {
+  position: relative;
+  display: inline;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58em;
+  font-weight: 400;
+  color: var(--ochre, #9B1515);
+  cursor: pointer;
+  vertical-align: super;
+  line-height: 0;
+  padding: 0.1em 0.2em;
+  margin-left: 0.05em;
+  letter-spacing: 0;
+  transition: color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.c:hover {
+  color: var(--ochre-deep, #7A1010);
+}
+
+/* Hidden source detail — read by JS */
+.c > span {
+  display: none;
+}
+
+/* ── The tooltip ── */
+.cite-tip {
+  position: fixed;
+  z-index: 200;
+  width: max-content;
+  max-width: min(360px, 90vw);
+  padding: 0.75rem 1rem;
+  background: var(--card, #EDE5D8);
+  border: 1px solid var(--border-mid, rgba(20,12,4,0.16));
+  box-shadow: 0 6px 20px rgba(20, 12, 4, 0.10), 0 1px 3px rgba(20, 12, 4, 0.06);
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 0.82rem;
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--text, #2A1E10);
+  opacity: 0;
+  transform: translateY(5px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  pointer-events: none;
+}
+.cite-tip.show {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+/* Tooltip internal styling */
+.cite-tip em {
+  font-style: italic;
+}
+.cite-tip strong {
+  font-weight: 600;
+  color: var(--text-bright, #140C04);
+}
+.cite-tip .tip-note {
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--muted, #5A4430);
+  margin-top: 0.35rem;
+  letter-spacing: 0.01em;
+  line-height: 1.4;
+}
+
+/* Small top-pointing triangle */
+.cite-tip::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 16px;
+  width: 10px;
+  height: 10px;
+  background: var(--card, #EDE5D8);
+  border-left: 1px solid var(--border-mid, rgba(20,12,4,0.16));
+  border-top: 1px solid var(--border-mid, rgba(20,12,4,0.16));
+  transform: rotate(45deg);
+}
+
+/* ── Mobile adjustments ── */
+@media (max-width: 640px) {
+  .cite-tip {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+    width: 100%;
+    max-width: 100%;
+    padding: 1rem 1.2rem 1.4rem;
+    border: none;
+    border-top: 1px solid var(--border-mid, rgba(20,12,4,0.16));
+    border-radius: 0;
+    box-shadow: 0 -8px 30px rgba(20, 12, 4, 0.12);
+    transform: translateY(100%);
+  }
+  .cite-tip.show {
+    transform: none;
+  }
+  .cite-tip::before {
+    display: none;
+  }
+}

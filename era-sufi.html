@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xog — The Sufi Brotherhoods · 1503 – Present</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=DM+Serif+Display&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300;1,8..60,400&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="xog-nav.css">
+<link rel="stylesheet" href="xog-styles.css">
+<link rel="stylesheet" href="xog-cite.css">
+<style>
+/* ── ERA-SUFI ELEVATED STYLES ─────────────────────────────── */
+:root {
+  --ochre: #B83A22;
+  --ochre-dim: rgba(184,58,34, 0.55);
+  --ochre-glow: rgba(184,58,34, 0.10);
+  --ochre-deep: #7A2616;
+  --gold: #C49A3C;
+  --gold-dim: rgba(184,58,34, 0.55);
+  --gold-glow: rgba(184,58,34, 0.10);
+  --rust: #8A5800;
+  --rust-dim: rgba(138, 88, 0, 0.60);
+  --sand: #C8A882;
+  --text-bright: #140C04;
+  --text: #2A1E10;
+  --muted: #5A4430;
+  --faint: #8A7460;
+  --deep: #F9F6F1;
+  --surface: #F3EDE3;
+  --card: #EDE5D8;
+  --border: rgba(20, 12, 4, 0.09);
+  --border-mid: rgba(20, 12, 4, 0.16);
+  --sea: #1C3272;
+  --col-aside: 300px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  overflow-x: hidden;
+  background: var(--deep);
+  color: var(--text);
+  padding-top: 58px;
+}
+
+/* ── SCROLL REVEAL ── */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(1.8rem);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-reveal].visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── HERO ── */
+.era-hero {
+  position: relative;
+  border-bottom: 1px solid var(--border);
+  padding: 4rem 2rem 3.5rem;
+  overflow: hidden;
+  background: linear-gradient(170deg, #F9F6F1 0%, #F3EDE3 60%, #EDE5D8 100%);
+}
+.era-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 70% 50%, rgba(184,58,34,.06), transparent),
+    radial-gradient(ellipse 40% 60% at 20% 80%, rgba(138,88,0,.04), transparent);
+  pointer-events: none;
+}
+/* grain texture */
+.era-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.era-hero-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.era-crumb {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.era-crumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.era-crumb a:hover { color: var(--ochre); }
+.era-crumb span { opacity: .4; }
+
+.era-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: .7rem;
+}
+.era-headline {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.8rem, 6vw, 5.2rem);
+  font-weight: 300;
+  line-height: 1.05;
+  color: var(--text-bright);
+  margin-bottom: .5rem;
+  max-width: 800px;
+}
+.era-headline em {
+  font-style: italic;
+  color: var(--ochre);
+}
+.era-dates {
+  font-family: 'DM Mono', monospace;
+  font-size: .62rem;
+  color: var(--muted);
+  letter-spacing: .1em;
+  margin-bottom: 2rem;
+}
+.era-lede {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.18rem;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.75;
+  max-width: 680px;
+  border-left: 2px solid var(--ochre);
+  padding-left: 1.4rem;
+}
+
+/* ── WORLD CONTEXT BAR ── */
+.world-bar {
+  background: rgba(184,58,34,.03);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: .9rem 2rem;
+}
+.world-bar-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.wb-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.wb-items { display: flex; gap: 1.5rem; flex-wrap: wrap; flex: 1; }
+.wb-item {
+  font-family: 'Source Serif 4', serif;
+  font-size: .6rem;
+  color: var(--muted);
+  letter-spacing: .05em;
+}
+.wb-item strong {
+  color: var(--text-bright);
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: .56rem;
+  letter-spacing: .08em;
+  margin-bottom: .15rem;
+}
+
+/* ── IMAGE PANEL ── */
+.image-panel {
+  max-width: 1100px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+}
+.image-panel figure {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+.image-panel img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: sepia(0.15) contrast(1.05);
+  transition: filter 0.4s ease;
+}
+.image-panel figure:hover img {
+  filter: sepia(0) contrast(1);
+}
+.image-panel figcaption {
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .06em;
+  color: var(--muted);
+  padding: .8rem 1.2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.image-panel figcaption .img-source {
+  font-size: .5rem;
+  color: var(--faint);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+/* ── CONTENT GRID ── */
+.era-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  display: grid;
+  grid-template-columns: 1fr var(--col-aside);
+  gap: 4rem;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .era-content { grid-template-columns: 1fr; gap: 3rem; }
+  .era-aside { order: -1; }
+}
+
+/* ── PROSE ── */
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin-bottom: .8rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid var(--border);
+}
+.era-main h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.9rem;
+  font-weight: 400;
+  color: var(--text-bright);
+  line-height: 1.2;
+  margin: 3rem 0 1rem;
+}
+.era-main h2:first-of-type { margin-top: 0; }
+.era-main p {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.02rem;
+  line-height: 1.85;
+  color: var(--muted);
+  margin-bottom: 1.4rem;
+}
+.era-main p strong {
+  color: var(--text-bright);
+  font-weight: 400;
+}
+
+/* ── PULL QUOTE ── */
+.pull {
+  border-left: 3px solid var(--ochre);
+  padding: 1.2rem 1.5rem;
+  margin: 2.5rem 0;
+  background: var(--ochre-glow);
+}
+.pull p {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.32rem;
+  font-style: italic;
+  color: var(--text-bright);
+  line-height: 1.55;
+  margin: 0 0 .5rem;
+}
+.pull cite {
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem;
+  color: var(--muted);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-style: normal;
+}
+
+/* ── ASIDE ── */
+.era-aside {
+  position: sticky;
+  top: 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+@media (max-width: 900px) {
+  .era-aside { position: static; }
+}
+.aside-card {
+  border: 1px solid var(--border);
+  padding: 1.3rem;
+  background: rgba(184,58,34,.02);
+  position: relative;
+}
+.aside-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--ochre), transparent);
+}
+.aside-card h3 {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin-bottom: 1rem;
+}
+.figure {
+  display: flex; flex-direction: column; gap: .5rem;
+  padding-bottom: 1rem; margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.figure:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.fig-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.05rem; font-weight: 400;
+  color: var(--text-bright); line-height: 1.2;
+}
+.fig-role {
+  font-family: 'DM Mono', monospace;
+  font-size: .56rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ochre);
+}
+.fig-desc {
+  font-family: 'Source Serif 4', serif;
+  font-size: .7rem; line-height: 1.65; color: var(--muted);
+}
+.fact-row {
+  display: flex; justify-content: space-between;
+  align-items: baseline; padding: .5rem 0;
+  border-bottom: 1px solid rgba(184,58,34,.06); gap: 1rem;
+}
+.fact-row:last-child { border-bottom: none; }
+.fact-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted); flex-shrink: 0;
+}
+.fact-val {
+  font-family: 'DM Serif Display', serif;
+  font-size: .95rem; color: var(--text-bright); text-align: right;
+}
+.source-item {
+  font-family: 'Source Serif 4', serif;
+  font-size: .64rem; line-height: 1.6;
+  color: var(--muted); padding: .5rem 0;
+  border-bottom: 1px solid rgba(184,58,34,.06);
+}
+.source-item:last-child { border-bottom: none; }
+.source-item strong {
+  color: var(--text-bright); display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem; letter-spacing: .06em; margin-bottom: .2rem;
+}
+
+/* ── ARABESQUE DIVIDER ── */
+.arabesque {
+  display: block;
+  margin: 3rem auto;
+  height: 24px;
+  width: 200px;
+  opacity: 0.25;
+}
+
+/* ── ERA NAVIGATION ── */
+.era-nav {
+  border-top: 1px solid var(--border);
+  padding: 2.5rem 2rem;
+}
+.era-nav-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 2rem;
+}
+.era-nav-btn {
+  display: flex; flex-direction: column; gap: .3rem;
+  text-decoration: none; max-width: 280px; flex: 1;
+}
+.era-nav-btn:last-child { align-items: flex-end; }
+.nav-dir {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--muted);
+}
+.nav-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.05rem; color: var(--text-bright);
+  line-height: 1.2; transition: color .2s;
+}
+.era-nav-btn:hover .nav-title { color: var(--ochre); }
+.nav-dates {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem; color: var(--faint); letter-spacing: .06em;
+}
+.nav-center {
+  text-align: center; text-decoration: none;
+  color: var(--muted); font-family: 'DM Mono', monospace;
+  font-size: .54rem; letter-spacing: .14em;
+  text-transform: uppercase; transition: color .2s;
+}
+.nav-center:hover { color: var(--ochre); }
+
+/* ── MAP LINK CARD ── */
+.map-card {
+  display: block;
+  border: 1px solid var(--border);
+  padding: 1rem 1.2rem;
+  text-decoration: none;
+  transition: all .2s;
+  background: rgba(184,58,34,.03);
+}
+.map-card:hover { border-color: rgba(184,58,34,.4); }
+.map-card .mc-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--ochre); margin-bottom: .4rem;
+}
+.map-card .mc-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: .98rem; color: var(--text-bright); line-height: 1.3;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .era-hero { padding: 3rem 1.2rem 2.5rem; }
+  .era-content { padding: 3rem 1.2rem; }
+  .era-nav { padding: 2rem 1.2rem; }
+  .era-nav-inner { flex-direction: column; }
+}
+
+/* ── BACKGROUND ARTIFACT ANIMATION ── */
+@keyframes artifactFloat {
+  0% { transform: rotate(12deg) translateY(0); }
+  50% { transform: rotate(15deg) translateY(-12px); }
+  100% { transform: rotate(12deg) translateY(0); }
+}
+
+/* The jamaa'a: the lodge above the lineage, scoped to itself */
+.sufijamaa{ --sjpaper:#F6F0E4; --sjedge:#E6DAC2; --sjink:#2A1E10; --sjsoft:#5A4430; --sjfaint:#8A7460; --sjochre:#B83A22; max-width:760px; margin:0 auto; padding:1rem 2rem 3.4rem; text-align:center; }
+.sufijamaa h2.sj-h2{ font-family:'DM Serif Display',serif; font-weight:300; font-size:clamp(1.7rem,3.4vw,2.4rem); color:var(--sjink); line-height:1.1; margin:.3rem 0 0; }
+.sufijamaa .sj-ring{ width:220px; height:220px; margin:1.5rem auto .3rem; display:block; }
+.sufijamaa .sj-bead{ fill:#C9B488; transition:fill .15s ease; }
+.sufijamaa .sj-bead.sj-lead{ fill:#8A5800; }
+.sufijamaa .sj-bead.lit{ fill:#FFCF6B; }
+.sufijamaa .sj-ringword{ font-family:'DM Mono',monospace; font-size:.56rem; letter-spacing:.12em; text-transform:uppercase; color:var(--sjfaint); margin-bottom:1.7rem; }
+.sufijamaa .sj-lines{ max-width:520px; margin:0 auto; text-align:left; }
+.sufijamaa .sj-line{ display:grid; grid-template-columns:88px 1fr; gap:1rem; padding:.65rem 0 1rem; border-top:1px solid var(--sjedge); opacity:0; transform:translateY(8px); animation:sjRise 1s cubic-bezier(.2,.7,.2,1) forwards; }
+.sufijamaa .sj-line:first-child{ border-top:none; }
+.sufijamaa .sj-line .sj-w{ font-family:'DM Mono',monospace; font-size:.62rem; letter-spacing:.06em; color:var(--sjochre); padding-top:.2rem; }
+.sufijamaa .sj-line p{ font-size:1.02rem; line-height:1.6; color:var(--sjink); }
+@keyframes sjRise{ to{ opacity:1; transform:none; } }
+.sufijamaa .sj-thesis{ max-width:540px; margin:1.6rem auto 0; font-style:italic; font-size:.98rem; line-height:1.7; color:var(--sjsoft); }
+.sufijamaa .sj-thesis b{ font-style:normal; font-weight:400; color:var(--sjink); }
+.sufijamaa .sj-src{ font-family:'DM Mono',monospace; font-size:.58rem; letter-spacing:.04em; color:var(--sjfaint); margin-top:1rem; }
+@media (prefers-reduced-motion: reduce){ .sufijamaa .sj-line{ opacity:1; transform:none; animation:none; } }
+</style>
+<link rel="stylesheet" href="xog-fable.css?v=3">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23111929'/%3E%3Cpath d='M32 8 L36.5 27.5 L56 32 L36.5 36.5 L32 56 L27.5 36.5 L8 32 L27.5 27.5 Z' fill='%23C49A3C'/%3E%3Ccircle cx='32' cy='32' r='3.4' fill='%23FDFAF5'/%3E%3C/svg%3E">
+</head>
+<body>
+<img src="images/fandhaal-spoon.svg" alt="" aria-hidden="true" style="position:fixed;left:-5%;top:15%;width:25vw;max-width:300px;opacity:0.05;pointer-events:none;transform:rotate(12deg);z-index:0;animation:artifactFloat 18s ease-in-out infinite">
+
+<!-- HERO -->
+<div class="era-hero" data-reveal>
+  <div class="era-hero-inner">
+    <div class="era-crumb">
+      <a href="somali-archive.html">Archive</a>
+      <span>/</span>
+      <span>The Sufi Brotherhoods</span>
+    </div>
+    <div class="era-kicker">1503 – Present · Tariqa & the Jamaa'a</div>
+    <h1 class="era-headline">The Sufi <em>Brotherhoods</em></h1>
+    <div class="era-dates">Schools · Settlements · Parallel Authority</div>
+    <p class="era-lede">Three Sufi orders — the Qadiriyya, Ahmadiyya, and Salihiyya — built a parallel infrastructure across Somalia. They established schools, agricultural settlements, and mediation systems that operated alongside clan authority. The orders were not merely spiritual: they became economic institutions, landowners, judges, and rival powers to the clan elders themselves.</p>
+  </div>
+</div>
+
+<!-- WORLD CONTEXT BAR -->
+<div class="world-bar" data-reveal>
+  <div class="world-bar-inner">
+    <div class="wb-label">The Islamic World in 1500</div>
+    <div class="wb-items">
+      <div class="wb-item"><strong>Ottoman Empire</strong>Bayezid II consolidating centralized state in Anatolia</div>
+      <div class="wb-item"><strong>Safavid Persia</strong>Ismail I establishing Twelver Shi'ism as state religion</div>
+      <div class="wb-item"><strong>Mughal India</strong>Babur founding empire, patronizing Islamic scholarship</div>
+      <div class="wb-item"><strong>Al-Azhar</strong>500+ years old, chief center of Sunni Islamic learning</div>
+      <div class="wb-item"><strong>Indian Ocean</strong>Portuguese rounding the Cape, disrupting trade networks</div>
+    </div>
+  </div>
+</div>
+
+<!-- THE JAMAA'A — the lodge above the lineage -->
+<div class="sufijamaa">
+  <div class="section-label" data-reveal>The brotherhoods</div>
+  <h2 class="sj-h2">The lodge that belonged to no clan</h2>
+  <svg class="sj-ring" id="sjring" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A ring of prayer beads, the dhikr counted one bead at a time"></svg>
+  <div class="sj-ringword">the dhikr &middot; the remembrance, counted bead by bead</div>
+  <div class="sj-lines">
+    <div class="sj-line" style="animation-delay:.2s"><div class="sj-w">a school</div><p>Children learned the Quran and Arabic on the wooden loox, the writing board scrubbed clean and used again.</p></div>
+    <div class="sj-line" style="animation-delay:1.05s"><div class="sj-w">a farm</div><p>The same families worked the fields. The lodge fed itself, and a family joined for the harvest as much as for the prayer.</p></div>
+    <div class="sj-line" style="animation-delay:1.9s"><div class="sj-w">a refuge</div><p>The sheikhs settled where two clans met, on land that belonged to neither, so a man fleeing a feud could walk in and be safe.</p></div>
+    <div class="sj-line" style="animation-delay:2.75s"><div class="sj-w">an authority</div><p>Their standing rested on written Quranic knowledge, a legitimacy no clan elder could claim, so the sheikhs judged what the elders could not.</p></div>
+  </div>
+  <p class="sj-thesis">Across a country held together by lineage, the brotherhoods built the one institution that stood above the lineage. <b>The jamaaʿa answered to God and the harvest, not to the clan.</b></p>
+  <p class="sj-src">after I.M. Lewis, Saints and Somalis, 1998</p>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="era-content">
+
+  <main class="era-main" role="main">
+
+    <div class="section-label" data-reveal>The Islamic Brotherhoods</div>
+    <h2 data-reveal>The Three Orders</h2>
+
+    <p data-reveal>The Qadiriyya arrived in Somalia in 1503 through Sheikh Abu Bakr al-Aydarus, whose teachings created the earliest Sufi communities.<a class="c">1<span><strong>I.M. Lewis</strong>, <em>Saints and Somalis: Popular Islam in a Clan-Based Society</em> (Red Sea Press, 1998), pp. 8–15<span class="tip-note">Detailed account of Qadiri establishment and theological foundations</span></span></a> The order was already centuries old — Abd al-Qadir al-Jilani had founded it in Baghdad in the twelfth century — but its spread to the Horn of Africa was slow and deliberate. The Qadiriyya taught <strong>tawassul</strong>, intercession through saints, and attracted followers by promising spiritual connection to the Prophet through living masters.</p>
+
+    <p data-reveal>The Ahmadiyya arrived later, introduced by Ali Maye Durogba of Merca. This order traced its authority to Ahmad ibn Idris al-Fasi (1760–1837), a Moroccan scholar who created a reformist branch of Sufism. The Ahmadiyya was more austere than the Qadiriyya, rejecting some of the ecstatic practices of other orders while maintaining mystical devotion.<a class="c">2<span><strong>B.G. Martin</strong>, <em>Muslim Brotherhoods in Nineteenth-Century Africa</em> (Cambridge University Press, 1976), pp. 152–176<span class="tip-note">Comprehensive treatment of Ahmadi theology and regional spread</span></span></a></p>
+
+    <p data-reveal>The Salihiyya, founded by Muhammad Salih (1854–1919) in Sudan, reached Somalia through multiple propagators and became the most controversial. The Salihiyya was explicitly reformist, rejecting <strong>bid'ah</strong> (religious innovation) and <strong>tawassul</strong> as incompatible with strict monotheism. In Somalia, the most prominent Salihiyya adherent was Muhammad Abdullah Hassan — the man history would call the Mad Mullah.<a class="c">3<span><strong>Abdi Sheik-Abdi</strong>, <em>Divine Madness: Mohammed Abdulle Hassan (1856–1920)</em> (Zed Books, 1993), pp. 45–62<span class="tip-note">Contextualizes Hassan's Salihiyya allegiance within broader Islamic reform movements</span></span></a></p>
+
+    <div class="pull" data-reveal>
+      <p>"The Islamic brotherhoods provided an organizational framework that transcended clan divisions. They offered spiritual authority backed by written Quranic knowledge — a form of legitimacy unavailable to secular clan leaders."</p>
+      <cite>I.M. Lewis, Saints and Somalis (1998)</cite>
+    </div>
+
+    <div class="section-label" data-reveal>Sheikh Uways al-Barawi</div>
+    <h2 data-reveal>1847–1909: The Uwaysiyya Founder</h2>
+
+    <p data-reveal>Sheikh Uways al-Barawi was born in Brava in 1847. He became the most influential figure of the early Qadiriyya in Somalia. After studying Islamic law in the Hijaz and Egypt, he returned to the Horn of Africa and established a new branch of the Qadiriyya called the Uwaysiyya. Unlike the order as it existed elsewhere, the Uwaysiyya emphasized settlement and community-building over peripatetic mysticism.</p>
+
+    <p data-reveal>Uways established settled communities called <strong>jamaa'a</strong> — literally "assemblies" or "communities" — throughout southern Somalia. These were not monasteries but agricultural villages where Sufi followers lived permanently, practicing Islam through work and study. The jamaa'a were his innovation, his contribution to Somali Islam. By the time of his death, settlements bearing his influence extended beyond Somalia into Mozambique and Madagascar.<a class="c">4<span><strong>François Bontinck</strong>, "Sheikh Uways b. Muhammad al-Barawi et la confrérie Qadiriyya en Afrique orientale," <em>Transafrican Journal of History</em> 5, no. 2 (1976), pp. 63–82<span class="tip-note">Archival treatment of Uways's regional influence and organizational legacy</span></span></a></p>
+
+    <p data-reveal>His assassination in 1909 was a watershed. Rival Salihiyya followers killed him — a political act justified through theological language. After his death, Muhammad Abdullah Hassan composed a triumphant gabay celebrating the removal of a dangerous innovator. But in southern Somalia, the Uwaysiyya settlements continued. Uways became a saint whose tomb at Biyoley became a pilgrimage site, a center of spiritual authority that would persist for over a century.</p>
+
+    <div class="section-label" data-reveal>The Jamaa'a Settlements</div>
+    <h2 data-reveal>Communities of Law and Land</h2>
+
+    <p data-reveal>A Sufi leader would approach a lineage head and request permission to settle land. The word used was "freely given" — but the geography was significant. Settlements were often positioned between two hostile clans, serving as buffer zones where neither group could fully dominate. They offered a neutral ground for trade and a refuge from clan violence.</p>
+
+    <p data-reveal>By the 1950s, Sufi settlements numbered over 90 throughout southern Somalia, with approximately 35,000 residents. Most clustered along the Jubba and Shebelle river valleys, where water and arable land made agricultural life sustainable.<a class="c">5<span><strong>Lee V. Cassanelli</strong>, <em>The Shaping of Somali Society: Reconstructing the History of a Pastoral People, 1600–1900</em> (University of Pennsylvania Press, 1982), pp. 187–196<span class="tip-note">Demographic and spatial analysis of settlement patterns</span></span></a> The settlements were economically productive: they cleared brush to reduce tsetse fly habitat, making surrounding pasturelands more usable. They established grain cultivation in regions previously dependent on herding.</p>
+
+    <p data-reveal>What made them distinct was their dual function: school and farm. The settlement taught Quranic recitation, Arabic language, and Islamic law. It also organized cooperative cultivation and harvesting. Children learned to read the Quran while working in fields. The integration of spiritual and economic life was the genius of the jamaa'a model. Families joined because they received both religious education and economic security.</p>
+
+    <p data-reveal>The settlements also became centers of Islamic justice. Sufi leaders served as judges for disputes brought before them. A clan elder might refer a dispute to the settlement's sheikh if the matter involved a settlement member or if the settlement's intervention was seen as more legitimate than clan adjudication. In some cases, the settlements became rival authorities to the traditional xeer system.<a class="c">6<span><strong>Virginia Luling</strong>, "The Social Structure of Southern Somali Tribes" (PhD diss., University of London, 1971), pp. 183–198<span class="tip-note">Ethnographic documentation of settlement governance structures</span></span></a></p>
+
+    <svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="var(--ochre)" stroke-width="1"/>
+      <circle cx="100" cy="12" r="2" fill="var(--ochre)"/>
+    </svg>
+
+    <div class="section-label" data-reveal>Theological Split</div>
+    <h2 data-reveal>The Salihiyya and the Rejection of Intercession</h2>
+
+    <p data-reveal>The core theological division was not minor. The Qadiriyya practiced <strong>tawassul</strong> — seeking intercession through saints. The Salihiyya explicitly rejected this as <strong>bid'ah</strong> (religious innovation) and <strong>shirk</strong> (associating partners with God). The argument was subtle in theological terms but consequential in practice: the Salihiyya claimed that the Qadiriyya were corrupting monotheism by elevating saints to intercessory status.</p>
+
+    <p data-reveal>Muhammad Salih in Sudan had created a consciously reformist movement. His followers believed Islam had been contaminated by local superstition and saint veneration. In Somalia, this theological position aligned perfectly with the political interests of warriors like Muhammad Abdullah Hassan. Declaring <strong>takfir</strong> (religious judgment) against the Qadiriyya and Sheikh Uways meant more than doctrinal correction — it meant delegitimizing a rival power structure.</p>
+
+    <p data-reveal>The theological fault line mapped directly onto geography. The Qadiriyya settlements were concentrated in river regions where they had established land claims. The Salihiyya gained traction among pastoral clans in the interior and among the military followers of the Sayyid. In many places, the orders did not coexist peacefully. They competed for followers, for resources, for spiritual authority. The competition was real and sometimes violent.<a class="c">7<span><strong>I.M. Lewis</strong>, <em>A Modern History of the Somali: Nation and State in the Horn of Africa</em>, 4th ed. (Ohio University Press, 2002), pp. 63–72<span class="tip-note">Political and theological dimensions of the Qadiri-Salihiyya divide</span></span></a></p>
+
+    <svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="var(--ochre)" stroke-width="1"/>
+      <circle cx="100" cy="12" r="2" fill="var(--ochre)"/>
+    </svg>
+
+    <div class="section-label" data-reveal>Poetry as Warfare</div>
+    <h2 data-reveal>The Sayyid and Sheikh Uways Exchange Verses</h2>
+
+    <p data-reveal>In Somali culture, poetry is a weapon. Muhammad Abdullah Hassan and Sheikh Uways did not wage physical war on each other — they waged poetic war. The Sayyid composed gabay attacking Uways for innovation and idolatry. Uways replied with verses accusing the Sayyid of murder dressed in religious language. The poetry circulated orally, memorized and transmitted by those who supported each side.</p>
+
+    <p data-reveal>After Uways's assassination in 1909, the Sayyid composed a triumphant poem celebrating his death. The oral record preserves both the Sayyid's attack and the Qadiri response. These poems are not mere rhetoric — they are theological arguments compressed into meter and transmitted through generations. They shaped how Somalis understood the difference between the orders. To this day, scholars can quote the verses.</p>
+
+    <p data-reveal>The poetry war was also a war over legitimacy. Who was the true defender of Islam? The Sayyid claimed it was those who rejected innovation. The Qadiriyya claimed it was those who maintained the mystical path. Neither side was marginal; both had followers, resources, and influence. The conflict was not resolved by theological victory but by historical events — the collapse of the Sayyid's state, the persistence of Qadiri communities despite his opposition.<a class="c">8<span><strong>Said S. Samatar</strong>, <em>Oral Poetry and Somali Nationalism: The Case of Sayyid Mahammad 'Abdille Hasan</em> (Cambridge University Press, 1982), pp. 124–135<span class="tip-note">Detailed analysis of poetry exchanges and their political meaning</span></span></a></p>
+
+    <svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="var(--ochre)" stroke-width="1"/>
+      <circle cx="100" cy="12" r="2" fill="var(--ochre)"/>
+    </svg>
+
+    <div class="section-label" data-reveal>The Northern Reformer</div>
+    <h2 data-reveal>Sheikh Madar and the Founding of Hargeisa</h2>
+
+    <p data-reveal>In the north, a Qadiriyya leader named Sheikh Madar Ahmed Shirwa (1825–1918) established settlements that transformed the landscape. Sheikh Madar founded communities at Hargeisa, Gibeley, and Borama. These settlements drew nomadic pastoralists into sedentary life. The settlement at Hargeisa became the seed from which the modern city grew.<a class="c">9<span><strong>Mohamed Haji Ingiriis</strong>, <em>The Suicidal State in Somalia: The Rise and Fall of the Siad Barre Regime, 1969–1991</em> (University Press of America, 2016), pp. 22–25<span class="tip-note">Urban origins and settlement-to-city transformation</span></span></a></p>
+
+    <p data-reveal>The conversion of pastoral populations into settled agricultural and trading communities through Sufi leadership was not accidental. The leaders understood it as religious obligation — to teach Islam through example, to create communities where Islamic law could be practiced, to offer an alternative to the perpetual insecurity of pastoral raiding.</p>
+
+    <div class="section-label" data-reveal>Modern Reckoning</div>
+    <h2 data-reveal>Legacy and Destruction</h2>
+
+    <p data-reveal>The three orders persisted through colonialism. When the Somali state attempted to modernize Islam in the twentieth century, they absorbed the theological critique of bid'ah, but they did not eliminate the orders. The orders remained embedded in the communities they had founded. The settlements continued. The tombs of saints remained pilgrimage sites.</p>
+
+    <p data-reveal>In 1991, when the Somali state collapsed, the three orders united. The Qadiriyya, Ahmadiyya, and Salihiyya formed a single coalition called <strong>Ahlu Sunna Wal Jamaa</strong> to resist al-Shabaab. The enemy was not each other but the Wahhabi-influenced ideology of a new generation of Islamists. For the first time in over a century, the theological divisions that had separated the orders seemed less important than their common interest in defending Somali Islam against external threat.</p>
+
+    <p data-reveal>But that defense came with a cost. Al-Shabaab destroyed the tombs of saints throughout southern Somalia. The tomb of Sheikh Uways at Biyoley was destroyed in 2009. The destruction of the tomb was the destruction of accumulated spiritual authority — a century of pilgrimage, prayer, and devotion deliberately erased. Other tombs followed. The Wahhabi critique of saint veneration, which the Salihiyya had voiced in theological language, was now being enacted in violence.<a class="c">10<span><strong>Stig Jarle Hansen</strong>, <em>Al-Shabaab in Somalia: The History and Ideology of a Militant Islamist Group</em> (Oxford University Press, 2013), pp. 52–58<span class="tip-note">Documentation of shrine destruction and its meaning within Islamist ideology</span></span></a></p>
+
+    <p data-reveal>Today, the settlements have largely emptied. Some persist as communities, but they no longer function as they did in the nineteenth and twentieth centuries. The jamaa'a model — combining Islamic education with agricultural production and alternative authority structures — has largely been displaced by modern state education and capitalist agriculture. Yet the legacy remains in the toponymy, in oral memory, and in the surviving tombs that have not been destroyed.</p>
+
+  </main>
+
+  <!-- ASIDE -->
+  <aside class="era-aside" role="complementary">
+
+    <div class="aside-card" data-reveal>
+      <h3>Quick Facts</h3>
+      <div class="fact-row">
+        <span class="fact-label">Qadiriyya arrival</span>
+        <span class="fact-val">1503</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Ahmadiyya founder</span>
+        <span class="fact-val">Ahmad ibn Idris (1760–1837)</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Salihiyya founder</span>
+        <span class="fact-val">Muhammad Salih (1854–1919)</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Jamaa'a settlements (1950s)</span>
+        <span class="fact-val">90+ communities</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Estimated jamaa'a population</span>
+        <span class="fact-val">~35,000 residents</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">United coalition</span>
+        <span class="fact-val">Ahlu Sunna Wal Jamaa (1991–present)</span>
+      </div>
+    </div>
+
+    <div class="aside-card" data-reveal>
+      <h3>Key Figures</h3>
+      <div class="figure">
+        <div class="fig-name">Sheikh Uways al-Barawi</div>
+        <div class="fig-role">Qadiriyya Pioneer</div>
+        <div class="fig-desc">1847–1909. Founder of the Uwaysiyya branch. Established the jamaa'a settlement model. His assassination in 1909 marked a turning point in the Qadiri-Salihiyya conflict. His tomb became a pilgrimage site.</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">Sheikh Madar Ahmed Shirwa</div>
+        <div class="fig-role">Northern Settler</div>
+        <div class="fig-desc">1825–1918. Qadiriyya leader. Founded settlements at Hargeisa, Gibeley, and Borama. His work transformed pastoralist regions into agricultural communities and urban centers.</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">Ali Maye Durogba</div>
+        <div class="fig-role">Ahmadi Propagator</div>
+        <div class="fig-desc">Based in Merca. Primary figure in establishing Ahmadiyya order in Somalia. Brought reformist branch of Sufism to Horn of Africa with emphasis on austerity and Islamic authenticity.</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">Muhammad Abdullah Hassan</div>
+        <div class="fig-role">Salihiyya Leader</div>
+        <div class="fig-desc">1856–1920. The "Mad Mullah." Most prominent Somali follower of Salihiyya. His movement combined Islamic reform with political resistance to colonialism. Declared takfir against the Qadiriyya.</div>
+      </div>
+    </div>
+
+    <div class="aside-card" data-reveal>
+      <h3>Primary Sources</h3>
+      <div class="source-item">
+        <strong>Saints and Somalis</strong>
+        I.M. Lewis (1998). Foundational text on Sufi orders in Somalia. Documents settlement structures, theological divisions, and role of saint veneration.
+      </div>
+      <div class="source-item">
+        <strong>Oral Poetry and Somali Nationalism</strong>
+        Said S. Samatar (1982). Analysis of poetry exchanges between Sayyid and Qadiri leaders. Contextualizes theological conflict within oral tradition.
+      </div>
+      <div class="source-item">
+        <strong>Muslim Brotherhoods in Nineteenth-Century Africa</strong>
+        B.G. Martin (1976). Comparative study of Qadiriyya, Ahmadiyya, and Salihiyya expansion across African regions including Somalia.
+      </div>
+      <div class="source-item">
+        <strong>The Shaping of Somali Society</strong>
+        Lee V. Cassanelli (1982). Demographic and spatial analysis of Sufi settlements. Documents settlement locations, agricultural practices, and integration into Somali economy.
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<!-- Arabesque divider -->
+<svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="#B83A22" stroke-width="1"/>
+  <circle cx="100" cy="12" r="2" fill="#B83A22"/>
+</svg>
+
+<!-- ERA NAVIGATION -->
+<div class="era-nav" data-reveal>
+  <div class="era-nav-inner">
+    <a href="era-xeer.html" class="era-nav-btn">
+      <span class="nav-dir">← Previous era</span>
+      <span class="nav-title">The Xeer</span>
+      <span class="nav-dates">Ancient – present</span>
+    </a>
+    <a href="somali-archive.html" class="nav-center">All Eras</a>
+    <a href="era-ajuran.html" class="era-nav-btn">
+      <span class="nav-dir">Next era →</span>
+      <span class="nav-title">Ajuran Sultanate</span>
+      <span class="nav-dates">1300 – 1700 CE</span>
+    </a>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script>
+(function() {
+  'use strict';
+
+  // ── Scroll Reveal ──
+  var revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('[data-reveal]').forEach(function(el) {
+    revealObserver.observe(el);
+  });
+
+})();
+</script>
+<script src="xog-cite.js"></script>
+<script>
+(function(){
+  var svg = document.getElementById('sjring'); if(!svg) return;
+  var ns='http://www.w3.org/2000/svg', N=33, cx=120, cy=120, R=96, beads=[];
+  for(var i=0;i<N;i++){
+    var a=(i/N)*2*Math.PI - Math.PI/2;
+    var c=document.createElementNS(ns,'circle');
+    c.setAttribute('cx',(cx+R*Math.cos(a)).toFixed(1));
+    c.setAttribute('cy',(cy+R*Math.sin(a)).toFixed(1));
+    c.setAttribute('r', i===0?7:4.6);
+    c.setAttribute('class','sj-bead'+(i===0?' sj-lead':''));
+    svg.appendChild(c); beads.push(c);
+  }
+  var k=0;
+  function step(){ beads.forEach(function(b,j){ b.classList.toggle('lit', j===k); }); k=(k+1)%N; }
+  step();
+  if(!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)){ setInterval(step,135); }
+})();
+</script>
+<script src="xog-fable.js?v=3"></script>
+<script src="xog-nav.js"></script>
+</body>
+</html>

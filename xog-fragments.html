@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xog — Fragments · The Workbench</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23111929'/%3E%3Cpath d='M32 8 L36.5 27.5 L56 32 L36.5 36.5 L32 56 L27.5 36.5 L8 32 L27.5 27.5 Z' fill='%23C49A3C'/%3E%3Ccircle cx='32' cy='32' r='3.4' fill='%23FDFAF5'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=DM+Serif+Display:ital@0;1&family=Instrument+Serif:ital@0;1&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="xog-nav.css?v=2">
+<style>
+:root{--bg:#FAF6EF;--bg-warm:#F0E8DA;--ink:#110E0A;--text:#2E2518;--muted:#3D3024;--faint:#4A3C28;--ochre:#B83A22;--gold:#C49A3C;--night:#111929;--rule:rgba(184,58,34,0.12);--white:#FDFAF5;--display:'DM Serif Display',Georgia,serif;--editorial:'Instrument Serif',Georgia,serif;--body:'Source Serif 4',Georgia,serif;--mono:'DM Mono','Courier New',monospace}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:clamp(15px,1.1vw,18px);scroll-behavior:smooth}
+body{font-family:var(--body);font-weight:300;line-height:1.85;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:hidden;padding-top:60px}
+a{color:inherit;text-decoration:none}
+.w{max-width:1060px;margin:0 auto;padding:0 3rem;position:relative;z-index:1}
+.xg-crumb{font-family:var(--mono);font-size:.54rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:1.2rem;display:flex;gap:.6em}
+.xg-crumb a{color:var(--ochre)}
+.hero{padding:4rem 0 1rem}
+.hero-kicker{font-family:var(--mono);font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ochre);margin-bottom:1rem;display:flex;align-items:center;gap:.8rem}
+.hero-kicker::before{content:'';width:24px;height:1.5px;background:var(--ochre)}
+h1{font-family:var(--display);font-size:clamp(2.6rem,5.5vw,4.6rem);font-weight:300;line-height:1.05;color:var(--ink);margin-bottom:1rem}
+h1 em{font-family:var(--editorial);font-style:italic;color:var(--ochre)}
+.lede{font-size:1.12rem;line-height:1.75;color:var(--muted);max-width:680px;margin-bottom:.6rem}
+.demo-note{font-family:var(--mono);font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);border:1px dashed rgba(184,58,34,0.35);display:inline-block;padding:.4rem .8rem;margin-bottom:2rem}
+.sec{font-family:var(--mono);font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ochre);margin:2.6rem 0 1.2rem;padding-top:1.6rem;border-top:1px solid var(--rule)}
+
+/* ── toolbar ── */
+.bench-bar{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;padding:.8rem 0;border-top:2px solid var(--ochre);border-bottom:1px solid var(--rule);position:sticky;top:46px;background:rgba(250,246,239,0.97);backdrop-filter:blur(10px);z-index:40}
+.bb-label{font-family:var(--mono);font-size:.52rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-right:.4rem}
+.bb{font-family:var(--mono);font-size:.52rem;letter-spacing:.08em;text-transform:uppercase;padding:.3rem .8rem;border:1px solid var(--rule);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s}
+.bb:hover{border-color:var(--ochre);color:var(--ochre)}
+.bb.on{background:var(--ochre);border-color:var(--ochre);color:var(--white)}
+.bb-count{font-family:var(--mono);font-size:.55rem;color:var(--faint);margin-left:auto}
+
+/* ── ledger rows ── */
+.frag{background:var(--white);border:1px solid var(--rule);margin:1rem 0;max-width:100%}
+.frag summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:96px 1fr auto;gap:1.2rem;align-items:center;padding:1.1rem 1.4rem}
+.frag summary::-webkit-details-marker{display:none}
+.frag summary:hover{background:var(--bg-warm)}
+.f-id{font-family:var(--mono);font-size:.55rem;color:var(--faint);letter-spacing:.08em}
+.f-title{font-family:var(--display);font-size:1.15rem;color:var(--ink);line-height:1.2}
+.f-topic{font-family:var(--mono);font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-top:.2rem}
+.f-st{font-family:var(--mono);font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;padding:.3rem .7rem;border:1px solid;white-space:nowrap;justify-self:end}
+.st-frag{border-color:var(--muted);color:var(--muted)}
+.st-thread{border-color:var(--gold);color:#8a6a20;background:rgba(196,154,60,0.08)}
+.st-est{border-color:var(--ochre);color:var(--white);background:var(--ochre)}
+.st-disp{border-color:var(--ochre);color:var(--ochre);background:rgba(184,58,34,0.07)}
+.f-body{padding:0 1.4rem 1.4rem;border-top:1px solid var(--rule)}
+.f-body p{font-size:.93rem;margin:1rem 0;max-width:740px}
+.chain{margin:.6rem 0 0}
+.chain-row{display:grid;grid-template-columns:20px 1fr;gap:.8rem;padding:.55rem 0;border-bottom:1px dashed rgba(184,58,34,0.15);font-size:.85rem;color:var(--muted)}
+.chain-row:last-child{border-bottom:none}
+.chain-dot{width:9px;height:9px;border-radius:50%;background:var(--ochre);margin-top:.45rem}
+.chain-dot.cd-want{background:transparent;border:1.5px dashed var(--ochre)}
+.chain-row b{font-family:var(--mono);font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ochre);font-weight:400}
+.f-cred{font-family:var(--mono);font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-top:1rem;padding-top:.7rem;border-top:1px solid var(--rule)}
+.f-actions{margin-top:1rem;display:flex;gap:.6rem;flex-wrap:wrap}
+.f-actions button,.f-actions a{font-family:var(--mono);font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;padding:.45rem 1rem;border:1px solid var(--ochre);color:var(--ochre);background:none;cursor:pointer;display:inline-block}
+.f-actions button:hover,.f-actions a:hover{background:var(--ochre);color:var(--white)}
+
+/* ── submission bench ── */
+.bench{background:var(--white);border:1px solid var(--rule);padding:2rem 2.2rem;max-width:780px}
+.bench .row{margin-bottom:1.2rem}
+.bench label{display:block;font-family:var(--mono);font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ochre);margin-bottom:.4rem}
+.bench input[type=text],.bench textarea,.bench select{width:100%;font-family:var(--body);font-size:.92rem;color:var(--text);background:var(--bg);border:1px solid var(--rule);padding:.65rem .8rem;outline:none}
+.bench input:focus,.bench textarea:focus,.bench select:focus{border-color:var(--ochre)}
+.bench textarea{min-height:70px;resize:vertical}
+.bench .hint{font-family:var(--mono);font-size:.5rem;letter-spacing:.06em;color:var(--faint);margin-top:.3rem}
+.bench .two{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+.drop{border:1.5px dashed rgba(184,58,34,0.35);padding:1.4rem;text-align:center;font-family:var(--mono);font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);cursor:not-allowed}
+.bench-submit{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;padding:.8rem 2rem;background:var(--ink);color:var(--white);border:1.5px solid var(--ink);cursor:pointer;transition:all .25s}
+.bench-submit:hover{background:var(--ochre);border-color:var(--ochre)}
+.bench-confirm{display:none;border-left:3px solid var(--gold);background:var(--bg-warm);padding:1.2rem 1.4rem;margin-top:1.2rem;font-size:.92rem}
+.bench-confirm b{font-family:var(--mono);font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ochre);font-weight:400;display:block;margin-bottom:.3rem}
+
+/* ── contributor ledger ── */
+.ledger{width:100%;max-width:780px;border-collapse:collapse}
+.ledger th{font-family:var(--mono);font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);text-align:left;padding:.6rem .4rem;border-bottom:2px solid var(--ochre)}
+.ledger td{font-size:.9rem;color:var(--text);padding:.7rem .4rem;border-bottom:1px solid var(--rule)}
+.ledger td.num{font-family:var(--mono);font-size:.7rem;color:var(--ochre)}
+.ledger .res td{color:var(--faint);font-style:italic}
+@media(max-width:900px){.w{padding:0 2rem}.frag summary{grid-template-columns:1fr auto}.f-id{display:none}.bench .two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="w">
+
+<section class="hero">
+  <div class="xg-crumb"><a href="somali-archive.html">Archive</a><span>/</span><span>Fragments</span></div>
+  <div class="hero-kicker">The Workbench</div>
+  <h1>History Arrives <em>in Pieces</em></h1>
+  <p class="lede">This is where the archive does its work. A piece of evidence enters as a fragment with its provenance. When a second independent source supports the same claim, an editor files them together as a thread and writes the hypothesis. At three independent sources the entry is established and moves to the Sources page. Contradictions are filed as disputes and stay visible.</p>
+  <div class="demo-note">Interface illustration &middot; intake and accounts arrive with the backend &middot; filing below is live demo data</div>
+</section>
+
+<!-- BOARD -->
+<section>
+  <div class="sec">The Board</div>
+  <div class="bench-bar">
+    <span class="bb-label">Status</span>
+    <button class="bb on" data-f="all">All</button>
+    <button class="bb" data-f="fragment">Fragments</button>
+    <button class="bb" data-f="thread">Threads</button>
+    <button class="bb" data-f="established">Established</button>
+    <button class="bb" data-f="disputed">Disputed</button>
+    <span class="bb-label" style="margin-left:1rem">Topic</span>
+    <button class="bb" data-t="all">All</button>
+    <button class="bb" data-t="adal">Adal</button>
+    <button class="bb" data-t="trade">Trade</button>
+    <button class="bb" data-t="astronomy">Astronomy</button>
+    <button class="bb" data-t="ancient">Ancient</button>
+    <span class="bb-count" id="bbCount"></span>
+  </div>
+
+  <details class="frag" data-st="established" data-tp="ancient trade">
+    <summary>
+      <span class="f-id">XOG-EST-001</span>
+      <span><span class="f-title">Punt traded with Egypt from the Somali coast</span><div class="f-topic">Ancient &middot; Trade &middot; woven from 3 sources</div></span>
+      <span class="f-st st-est">Established</span>
+    </summary>
+    <div class="f-body">
+      <p>Filed as established. Three independent lines of evidence support the claim, and the entry now lives on the <a href="files/xog-punt-not-a-mystery.html" style="color:var(--ochre);text-decoration:underline">Punt source page</a>. The chain remains here so the weave can be re-walked.</p>
+      <div class="chain">
+        <div class="chain-row"><span class="chain-dot"></span><span><b>Source 1 &middot; iconographic</b> &mdash; Deir el-Bahri reliefs, c. 1470 BCE: goods, stilt houses, fauna, coastline.</span></div>
+        <div class="chain-row"><span class="chain-dot"></span><span><b>Source 2 &middot; textual</b> &mdash; Egyptian records across two millennia: Sahure, Hatshepsut, Ramesses III. Trade in every documented contact.</span></div>
+        <div class="chain-row"><span class="chain-dot"></span><span><b>Source 3 &middot; physical</b> &mdash; isotope analysis of mummified baboons (Dominy et al., 2020) tracing origins to the Horn corridor.</span></div>
+      </div>
+      <div class="f-cred">Filed by: this archive &middot; status reached: 2026</div>
+    </div>
+  </details>
+
+  <details class="frag" data-st="disputed" data-tp="ancient">
+    <summary>
+      <span class="f-id">XOG-DSP-001</span>
+      <span><span class="f-title">The exact location of Punt's core territory</span><div class="f-topic">Ancient &middot; two readings on the board</div></span>
+      <span class="f-st st-disp">Disputed</span>
+    </summary>
+    <div class="f-body">
+      <p>Established that Punt traded from the Red Sea and Gulf of Aden world; disputed where its core stood. The archive's map draws both readings rather than choosing quietly.</p>
+      <div class="chain">
+        <div class="chain-row"><span class="chain-dot"></span><span><b>Reading A</b> &mdash; African core: the Horn coast and hinterland, supported by the relief landscape and the baboon isotopes.</span></div>
+        <div class="chain-row"><span class="chain-dot"></span><span><b>Reading B</b> &mdash; a reach extending to the Arabian shore, argued from trade-goods distribution.</span></div>
+        <div class="chain-row"><span class="chain-dot cd-want"></span><span><b>Sought</b> &mdash; excavation evidence from either shore naming Puntite settlement.</span></div>
+      </div>
+      <div class="f-actions"><a href="xog-map.html">See both drawn on the map →</a></div>
+      <div class="f-cred">Filed by: this archive &middot; both readings remain on the board</div>
+    </div>
+  </details>
+
+  <details class="frag" data-st="thread" data-tp="trade">
+    <summary>
+      <span class="f-id">XOG-THR-004</span>
+      <span><span class="f-title">Continuous monetised trade across the western Indian Ocean</span><div class="f-topic">Trade &middot; Ajuran &middot; 2 of 3 sources</div></span>
+      <span class="f-st st-thread">Thread &middot; 2/3</span>
+    </summary>
+    <div class="f-body">
+      <p>Hypothesis: the Somali coast ran continuous monetised trade from antiquity through the Ajuran period. Two independent sources twist; the third that would weave it is named below.</p>
+      <div class="chain">
+        <div class="chain-row"><span class="chain-dot"></span><span><b>Source 1 &middot; textual</b> &mdash; the Periplus, 1st c. CE: the same coast exporting port by port.</span></div>
+        <div class="chain-row"><span class="chain-dot"></span><span><b>Source 2 &middot; numismatic</b> &mdash; Benadir-minted coins reported from Mozambique to Sri Lanka.</span></div>
+        <div class="chain-row"><span class="chain-dot cd-want"></span><span><b>Sought</b> &mdash; a catalogued excavation report placing Benadir coinage in a dated stratum.</span></div>
+      </div>
+      <div class="f-cred">Filed by: this archive &middot; hypothesis written: 2026</div>
+    </div>
+  </details>
+
+  <details class="frag" data-st="fragment" data-tp="adal">
+    <summary>
+      <span class="f-id">XOG-FRG-002</span>
+      <span><span class="f-title">The missing second half of the Futuh al-Habasha</span><div class="f-topic">Adal &middot; Manuscripts &middot; 1 source</div></span>
+      <span class="f-st st-frag">Fragment</span>
+    </summary>
+    <div class="f-body">
+      <p>The surviving Futuh ends at 1537, six years before the campaign did. Burton reported hearing that the remainder existed in Mocha or Hudaydah. One source, held as a fragment.</p>
+      <div class="chain">
+        <div class="chain-row"><span class="chain-dot"></span><span><b>Source 1 &middot; report</b> &mdash; Richard Burton, 19th c., unverified hearsay of a Yemeni copy.</span></div>
+        <div class="chain-row"><span class="chain-dot cd-want"></span><span><b>Sought</b> &mdash; any entry in a Yemeni manuscript catalogue; any traveller's inventory from Mocha or Hudaydah.</span></div>
+      </div>
+      <div class="f-cred">Filed by: this archive &middot; the find of the century if it weaves</div>
+    </div>
+  </details>
+
+  <details class="frag" data-st="fragment" data-tp="astronomy">
+    <summary>
+      <span class="f-id">XOG-FRG-003</span>
+      <span><span class="f-title">The full regional name-lists of the 28 stations</span><div class="f-topic">Astronomy &middot; Oral knowledge &middot; 1 source</div></span>
+      <span class="f-st st-frag">Fragment</span>
+    </summary>
+    <div class="f-body">
+      <p>Galaal recorded that station names varied across the seven weather districts and preserved only part of the set. The remainder may live in elders' memories now. Each recorded name, with district and reciter, files as its own fragment.</p>
+      <div class="chain">
+        <div class="chain-row"><span class="chain-dot"></span><span><b>Source 1 &middot; ethnographic</b> &mdash; Galaal 1968, partial lists, seven districts named.</span></div>
+        <div class="chain-row"><span class="chain-dot cd-want"></span><span><b>Sought</b> &mdash; station names recorded from a named reciter, with district.</span></div>
+      </div>
+      <div class="f-actions"><a href="files/xog-somali-astronomy.html">The sky page →</a></div>
+      <div class="f-cred">Filed by: this archive &middot; time-critical: the carriers are old</div>
+    </div>
+  </details>
+</section>
+
+<!-- SUBMISSION BENCH -->
+<section>
+  <div class="sec">File a Fragment</div>
+  <form class="bench" id="bench" onsubmit="return false">
+    <div class="row">
+      <label for="bObj">The object</label>
+      <div class="drop">Upload arrives with the backend &middot; scan, photograph, or recording</div>
+      <div class="hint">Until then, describe or cite it below.</div>
+    </div>
+    <div class="row">
+      <label for="bCite">Citation or description of the object</label>
+      <textarea id="bCite" placeholder="e.g. Arabic manuscript, 14 folios, describing a merchant voyage from Mogadishu to Cambay. Seen at..."></textarea>
+    </div>
+    <div class="two">
+      <div class="row">
+        <label for="bWhere">Where it lives</label>
+        <input type="text" id="bWhere" placeholder="Holding archive, book, collection, or person">
+      </div>
+      <div class="row">
+        <label for="bWho">Who made it, and when</label>
+        <input type="text" id="bWho" placeholder="Author and date, or &quot;not known&quot;">
+      </div>
+    </div>
+    <div class="row">
+      <label for="bClaim">What it claims &middot; one sentence, nothing beyond the object</label>
+      <input type="text" id="bClaim" placeholder="e.g. A Mogadishu merchant ran a fixed seasonal route to Gujarat in the 1330s.">
+    </div>
+    <div class="two">
+      <div class="row">
+        <label for="bTopic">Topic</label>
+        <select id="bTopic">
+          <option>Adal</option><option>Ajuran</option><option>Benadir</option><option>Astronomy</option>
+          <option>Poetry</option><option>Trade</option><option>Law &middot; xeer</option><option>Colonial records</option><option>Other</option>
+        </select>
+      </div>
+      <div class="row">
+        <label for="bName">Your name or handle &middot; credited permanently</label>
+        <input type="text" id="bName" placeholder="Name as it should appear in the ledger">
+      </div>
+    </div>
+    <button class="bench-submit" id="benchGo">File to the editorial queue</button>
+    <div class="bench-confirm" id="benchOk">
+      <b>Filed &middot; illustration</b>
+      In the working version this lands in the editorial queue, receives an XOG-FRG number, and appears on the board after review. Your name stays on it through every status it reaches.
+    </div>
+  </form>
+</section>
+
+<!-- LEDGER -->
+<section>
+  <div class="sec">Contributor Ledger</div>
+  <table class="ledger">
+    <thead><tr><th>Contributor</th><th>Fragments</th><th>Threads</th><th>Established</th></tr></thead>
+    <tbody>
+      <tr><td>Miin &middot; founding editor</td><td class="num">5</td><td class="num">1</td><td class="num">1</td></tr>
+      <tr class="res"><td>Reserved for the first invited researcher</td><td class="num">&middot;</td><td class="num">&middot;</td><td class="num">&middot;</td></tr>
+      <tr class="res"><td>Reserved</td><td class="num">&middot;</td><td class="num">&middot;</td><td class="num">&middot;</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:1.2rem;max-width:720px">The ledger is the contract: a fragment carries its finder's name through every status it reaches. The board enforces the rest: no anonymous claims, no objects without provenance, no conclusions ahead of the evidence.</p>
+</section>
+
+</div>
+
+<script>
+(function () {
+  var st = 'all', tp = 'all';
+  var frags = document.querySelectorAll('.frag');
+  function apply() {
+    var n = 0;
+    frags.forEach(function (f) {
+      var okS = st === 'all' || f.getAttribute('data-st') === st;
+      var okT = tp === 'all' || (f.getAttribute('data-tp') || '').split(' ').indexOf(tp) > -1;
+      f.style.display = (okS && okT) ? '' : 'none';
+      if (okS && okT) n++;
+    });
+    document.getElementById('bbCount').textContent = n + ' on the board';
+  }
+  document.querySelectorAll('.bb[data-f]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('.bb[data-f]').forEach(function (x) { x.classList.remove('on'); });
+      b.classList.add('on'); st = b.getAttribute('data-f'); apply();
+    });
+  });
+  document.querySelectorAll('.bb[data-t]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('.bb[data-t]').forEach(function (x) { x.classList.remove('on'); });
+      b.classList.add('on'); tp = b.getAttribute('data-t'); apply();
+    });
+  });
+  apply();
+  document.getElementById('benchGo').addEventListener('click', function () {
+    document.getElementById('benchOk').style.display = 'block';
+  });
+})();
+</script>
+<script src="xog-nav.js?v=2"></script>
+</body>
+</html>

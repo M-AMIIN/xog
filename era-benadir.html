@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xog — The Benadiri City-States · 900–1500 CE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=DM+Serif+Display&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300;1,8..60,400&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="xog-nav.css">
+<link rel="stylesheet" href="xog-styles.css">
+<link rel="stylesheet" href="xog-cite.css">
+<style>
+/* ── ERA-BENADIR ELEVATED STYLES ─────────────────────────────── */
+:root {
+  --ochre: #B83A22;
+  --ochre-dim: rgba(184,58,34, 0.55);
+  --ochre-glow: rgba(184,58,34, 0.10);
+  --ochre-deep: #7A2616;
+  --gold: #C49A3C;
+  --gold-dim: rgba(184,58,34, 0.55);
+  --gold-glow: rgba(184,58,34, 0.10);
+  --rust: #8A5800;
+  --rust-dim: rgba(138, 88, 0, 0.60);
+  --sand: #C8A882;
+  --text-bright: #140C04;
+  --text: #2A1E10;
+  --muted: #5A4430;
+  --faint: #8A7460;
+  --deep: #F9F6F1;
+  --surface: #F3EDE3;
+  --card: #EDE5D8;
+  --border: rgba(20, 12, 4, 0.09);
+  --border-mid: rgba(20, 12, 4, 0.16);
+  --sea: #B83A22;
+  --col-aside: 300px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  overflow-x: hidden;
+  background: var(--deep);
+  color: var(--text);
+  padding-top: 58px;
+}
+
+/* ── SCROLL REVEAL ── */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(1.8rem);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-reveal].visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── HERO ── */
+.era-hero {
+  position: relative;
+  border-bottom: 1px solid var(--border);
+  padding: 4rem 2rem 3.5rem;
+  overflow: hidden;
+  background: linear-gradient(170deg, #F9F6F1 0%, #F3EDE3 60%, #EDE5D8 100%);
+}
+.era-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 70% 50%, rgba(184,58,34,.06), transparent),
+    radial-gradient(ellipse 40% 60% at 20% 80%, rgba(138,88,0,.04), transparent);
+  pointer-events: none;
+}
+/* grain texture */
+.era-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.era-hero-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.era-crumb {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.era-crumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.era-crumb a:hover { color: var(--ochre); }
+.era-crumb span { opacity: .4; }
+
+.era-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: .7rem;
+}
+.era-headline {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.8rem, 6vw, 5.2rem);
+  font-weight: 300;
+  line-height: 1.05;
+  color: var(--text-bright);
+  margin-bottom: .5rem;
+  max-width: 800px;
+}
+.era-headline em {
+  font-style: italic;
+  color: var(--ochre);
+}
+.era-dates {
+  font-family: 'DM Mono', monospace;
+  font-size: .62rem;
+  color: var(--muted);
+  letter-spacing: .1em;
+  margin-bottom: 2rem;
+}
+.era-lede {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.18rem;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.75;
+  max-width: 680px;
+  border-left: 2px solid var(--ochre);
+  padding-left: 1.4rem;
+}
+
+/* ── WORLD CONTEXT BAR ── */
+.world-bar {
+  background: rgba(184,58,34,.03);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: .9rem 2rem;
+}
+.world-bar-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.wb-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.wb-items { display: flex; gap: 1.5rem; flex-wrap: wrap; flex: 1; }
+.wb-item {
+  font-family: 'Source Serif 4', serif;
+  font-size: .6rem;
+  color: var(--muted);
+  letter-spacing: .05em;
+}
+.wb-item strong {
+  color: var(--text-bright);
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: .56rem;
+  letter-spacing: .08em;
+  margin-bottom: .15rem;
+}
+
+/* ── IMAGE PANEL ── */
+.image-panel {
+  max-width: 1100px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+}
+.image-panel figure {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+.image-panel img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: sepia(0.15) contrast(1.05);
+  transition: filter 0.4s ease;
+}
+.image-panel figure:hover img {
+  filter: sepia(0) contrast(1);
+}
+.image-panel figcaption {
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .06em;
+  color: var(--muted);
+  padding: .8rem 1.2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.image-panel figcaption .img-source {
+  font-size: .5rem;
+  color: var(--faint);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+/* ── CONTENT GRID ── */
+.era-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  display: grid;
+  grid-template-columns: 1fr var(--col-aside);
+  gap: 4rem;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .era-content { grid-template-columns: 1fr; gap: 3rem; }
+  .era-aside { order: -1; }
+}
+
+/* ── PROSE ── */
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin-bottom: .8rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid var(--border);
+}
+.era-main h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.9rem;
+  font-weight: 400;
+  color: var(--text-bright);
+  line-height: 1.2;
+  margin: 3rem 0 1rem;
+}
+.era-main h2:first-of-type { margin-top: 0; }
+.era-main p {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1.02rem;
+  line-height: 1.85;
+  color: var(--muted);
+  margin-bottom: 1.4rem;
+}
+.era-main p strong {
+  color: var(--text-bright);
+  font-weight: 400;
+}
+
+/* ── PULL QUOTE ── */
+.pull {
+  border-left: 3px solid var(--ochre);
+  padding: 1.2rem 1.5rem;
+  margin: 2.5rem 0;
+  background: var(--ochre-glow);
+}
+.pull p {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.32rem;
+  font-style: italic;
+  color: var(--text-bright);
+  line-height: 1.55;
+  margin: 0 0 .5rem;
+}
+.pull cite {
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem;
+  color: var(--muted);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-style: normal;
+}
+
+/* ── ASIDE ── */
+.era-aside {
+  position: sticky;
+  top: 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+@media (max-width: 900px) {
+  .era-aside { position: static; }
+}
+.aside-card {
+  border: 1px solid var(--border);
+  padding: 1.3rem;
+  background: rgba(184,58,34,.02);
+  position: relative;
+}
+.aside-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--ochre), transparent);
+}
+.aside-card h3 {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ochre);
+  margin-bottom: 1rem;
+}
+.figure {
+  display: flex; flex-direction: column; gap: .5rem;
+  padding-bottom: 1rem; margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.figure:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.fig-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.05rem; font-weight: 400;
+  color: var(--text-bright); line-height: 1.2;
+}
+.fig-role {
+  font-family: 'DM Mono', monospace;
+  font-size: .56rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ochre);
+}
+.fig-desc {
+  font-family: 'Source Serif 4', serif;
+  font-size: .7rem; line-height: 1.65; color: var(--muted);
+}
+.fact-row {
+  display: flex; justify-content: space-between;
+  align-items: baseline; padding: .5rem 0;
+  border-bottom: 1px solid rgba(200,176,144,.06); gap: 1rem;
+}
+.fact-row:last-child { border-bottom: none; }
+.fact-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted); flex-shrink: 0;
+}
+.fact-val {
+  font-family: 'DM Serif Display', serif;
+  font-size: .95rem; color: var(--text-bright); text-align: right;
+}
+.source-item {
+  font-family: 'Source Serif 4', serif;
+  font-size: .64rem; line-height: 1.6;
+  color: var(--muted); padding: .5rem 0;
+  border-bottom: 1px solid rgba(200,176,144,.06);
+}
+.source-item:last-child { border-bottom: none; }
+.source-item strong {
+  color: var(--text-bright); display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: .55rem; letter-spacing: .06em; margin-bottom: .2rem;
+}
+
+/* ── ARABESQUE DIVIDER ── */
+.arabesque {
+  display: block;
+  margin: 3rem auto;
+  height: 24px;
+  width: 200px;
+  opacity: 0.25;
+}
+
+/* ── ERA NAVIGATION ── */
+.era-nav {
+  border-top: 1px solid var(--border);
+  padding: 2.5rem 2rem;
+}
+.era-nav-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 2rem;
+}
+.era-nav-btn {
+  display: flex; flex-direction: column; gap: .3rem;
+  text-decoration: none; max-width: 280px; flex: 1;
+}
+.era-nav-btn:last-child { align-items: flex-end; }
+.nav-dir {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--muted);
+}
+.nav-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.05rem; color: var(--text-bright);
+  line-height: 1.2; transition: color .2s;
+}
+.era-nav-btn:hover .nav-title { color: var(--ochre); }
+.nav-dates {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem; color: var(--faint); letter-spacing: .06em;
+}
+.nav-center {
+  text-align: center; text-decoration: none;
+  color: var(--muted); font-family: 'DM Mono', monospace;
+  font-size: .54rem; letter-spacing: .14em;
+  text-transform: uppercase; transition: color .2s;
+}
+.nav-center:hover { color: var(--ochre); }
+
+/* ── MAP LINK CARD ── */
+.map-card {
+  display: block;
+  border: 1px solid var(--border);
+  padding: 1rem 1.2rem;
+  text-decoration: none;
+  transition: all .2s;
+  background: rgba(184,58,34,.03);
+}
+.map-card:hover { border-color: rgba(184,58,34,.4); }
+.map-card .mc-label {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--ochre); margin-bottom: .4rem;
+}
+.map-card .mc-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: .98rem; color: var(--text-bright); line-height: 1.3;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .era-hero { padding: 3rem 1.2rem 2.5rem; }
+  .era-content { padding: 3rem 1.2rem; }
+  .era-nav { padding: 2rem 1.2rem; }
+  .era-nav-inner { flex-direction: column; }
+}
+
+/* ── BACKGROUND ARTIFACT ANIMATION ── */
+@keyframes artifactFloat {
+  0% { transform: rotate(5deg) translateY(0); }
+  50% { transform: rotate(8deg) translateY(-12px); }
+  100% { transform: rotate(5deg) translateY(0); }
+}
+
+/* The customs house: the port the monsoon fills, scoped to itself */
+.bencustoms{ --bcpaper:#F6F0E4; --bcedge:#E6DAC2; --bcink:#2A1E10; --bcsoft:#5A4430; --bcfaint:#8A7460; --bcochre:#B83A22; --bcgold:#C49A3C; --bcsea:#0E1F33; --bcseadeep:#081626; --bcland:#E7DCC4; max-width:760px; margin:0 auto; padding:1rem 2rem 3.4rem; }
+.bencustoms .bc-wrap{ max-width:700px; margin:0 auto; }
+.bencustoms h2.bc-h2{ font-family:'DM Serif Display',serif; font-weight:300; font-size:clamp(1.6rem,3vw,2.3rem); color:var(--bcink); text-align:center; margin:.3rem 0 0; line-height:1.1; }
+.bencustoms .bc-sub{ text-align:center; font-style:italic; font-size:1rem; color:var(--bcsoft); margin:.7rem auto 1.4rem; max-width:48ch; }
+.bencustoms .bc-toggle{ display:flex; justify-content:center; gap:.5rem; margin-bottom:1rem; }
+.bencustoms .bc-btn{ font-family:'DM Mono',monospace; font-size:.6rem; letter-spacing:.05em; padding:.55rem 1.1rem; border:1px solid var(--bcedge); background:var(--bcpaper); color:var(--bcsoft); cursor:pointer; transition:all .2s ease; text-align:center; line-height:1.5; }
+.bencustoms .bc-btn:hover{ border-color:var(--bcochre); color:var(--bcochre); }
+.bencustoms .bc-btn.on{ background:var(--bcink); color:var(--bcpaper); border-color:var(--bcink); }
+.bencustoms .bc-btn small{ display:block; font-size:.52rem; opacity:.7; letter-spacing:.04em; }
+.bencustoms .bc-sea{ position:relative; height:320px; overflow:hidden; border:1px solid var(--bcseadeep); background:radial-gradient(120% 90% at 78% 30%, var(--bcsea) 0%, var(--bcseadeep) 100%); }
+.bencustoms .bc-coast{ position:absolute; left:0; top:0; bottom:0; width:104px; background:var(--bcland); box-shadow:6px 0 14px rgba(8,22,38,.35); z-index:3; }
+.bencustoms .bc-coast::after{ content:''; position:absolute; right:-7px; top:0; bottom:0; width:7px; background:repeating-linear-gradient(180deg, transparent 0 7px, rgba(159,194,216,.5) 7px 9px); }
+.bencustoms .bc-port{ position:absolute; right:-4px; display:flex; align-items:center; gap:7px; }
+.bencustoms .bc-port .dot{ width:7px; height:7px; border-radius:50%; background:#8A5800; flex-shrink:0; }
+.bencustoms .bc-port .nm{ font-family:'DM Mono',monospace; font-size:.62rem; color:#DCC9A6; white-space:nowrap; text-shadow:0 0 4px var(--bcseadeep),0 0 5px var(--bcseadeep); }
+.bencustoms .bc-port.gate .dot{ width:11px; height:11px; transform:rotate(45deg); border-radius:1px; background:var(--bcgold); box-shadow:0 0 8px rgba(196,154,60,.6); }
+.bencustoms .bc-port.gate .nm{ color:#FFE0A0; }
+.bencustoms .bc-port.gate .nm b{ display:block; font-size:.5rem; letter-spacing:.12em; text-transform:uppercase; color:#C9A85E; font-weight:400; }
+.bencustoms .bc-sail{ position:absolute; left:0; will-change:transform; opacity:.92; }
+.bencustoms .bc-sea[data-season="ne"] .bc-sail{ animation:bcDriftIn linear infinite; }
+.bencustoms .bc-sea[data-season="sw"] .bc-sail{ animation:bcDriftOut linear infinite; }
+@keyframes bcDriftIn{ from{ transform:translateX(680px);} to{ transform:translateX(116px);} }
+@keyframes bcDriftOut{ from{ transform:translateX(116px);} to{ transform:translateX(680px);} }
+.bencustoms .bc-windtag{ position:absolute; right:14px; bottom:12px; z-index:3; font-family:'DM Mono',monospace; font-size:.56rem; letter-spacing:.14em; text-transform:uppercase; color:#7FA6C4; }
+.bencustoms .bc-ledger{ border:1px solid var(--bcedge); border-top:none; background:var(--bcpaper); padding:1.3rem 1.6rem; }
+.bencustoms .bc-led{ display:none; }
+.bencustoms .bc-led.on{ display:block; animation:bcFade .5s ease; }
+@keyframes bcFade{ from{opacity:0; transform:translateY(5px);} to{opacity:1; transform:none;} }
+.bencustoms .bc-led .lh{ font-family:'DM Mono',monospace; font-size:.58rem; letter-spacing:.16em; text-transform:uppercase; color:var(--bcochre); margin-bottom:.6rem; }
+.bencustoms .bc-led .goods{ font-family:'DM Serif Display',serif; font-size:1.18rem; line-height:1.5; color:var(--bcink); }
+.bencustoms .bc-led .goods .x{ color:var(--bcfaint); margin:0 .35rem; }
+.bencustoms .bc-thesis{ max-width:580px; margin:1.5rem auto 0; text-align:center; font-style:italic; font-size:.98rem; line-height:1.7; color:var(--bcsoft); }
+.bencustoms .bc-thesis b{ font-style:normal; font-weight:400; color:var(--bcink); }
+.bencustoms .bc-src{ text-align:center; font-family:'DM Mono',monospace; font-size:.58rem; letter-spacing:.04em; color:var(--bcfaint); margin-top:1rem; }
+@media (prefers-reduced-motion: reduce){ .bencustoms .bc-sail{ animation:none !important; transform:translateX(360px) !important; } .bencustoms .bc-led.on{ animation:none; } }
+@media (max-width:560px){ .bencustoms .bc-sea{ height:260px; } .bencustoms .bc-coast{ width:82px; } }
+</style>
+<link rel="stylesheet" href="xog-fable.css?v=3">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23111929'/%3E%3Cpath d='M32 8 L36.5 27.5 L56 32 L36.5 36.5 L32 56 L27.5 36.5 L8 32 L27.5 27.5 Z' fill='%23C49A3C'/%3E%3Ccircle cx='32' cy='32' r='3.4' fill='%23FDFAF5'/%3E%3C/svg%3E">
+</head>
+<body>
+<img src="images/acacia-tree.svg" alt="" aria-hidden="true" style="position:fixed;left:-5%;top:15%;width:25vw;max-width:300px;opacity:0.05;pointer-events:none;transform:rotate(5deg);z-index:0;animation:artifactFloat 18s ease-in-out infinite">
+
+<!-- HERO -->
+<div class="era-hero" data-reveal>
+  <div class="era-hero-inner">
+    <div class="era-crumb">
+      <a href="somali-archive.html">Archive</a>
+      <span>/</span>
+      <span>The Benadiri City-States</span>
+    </div>
+    <div class="era-kicker">900 – 1500 CE · Indian Ocean</div>
+    <h1 class="era-headline">The <em>Benadiri City-States</em><br>& Mogadishu</h1>
+    <div class="era-dates">Mogadishu · Merca · Barawa · Kismaayo</div>
+    <p class="era-lede">In the 13th century, Mogadishu minted its own copper currency. Those coins have been found in archaeological sites in Australia and coastal China<a class="c">1<span><strong>M. Horton &amp; J. Middleton</strong>, <em>The Swahili: The Social Landscape of a Mercantile Society</em> (2000), ch. 4; Australian coin finds: I. McIntosh, "Kilwa coins from the Wessel Islands" in <em>The Australian Journal of Anthropology</em> (2006)<span class="tip-note">East African trade coins recovered from Marchinbar Island, Northern Territory</span></span></a> — carried there by the same monsoon trade routes that brought Chinese porcelain and Indian textiles to the Benadir coast. For six centuries, a chain of city-states from Mogadishu to Kismaayo operated at the center of the Indian Ocean commercial world. European ships had not yet rounded the Cape.</p>
+  </div>
+</div>
+
+<!-- WORLD CONTEXT BAR -->
+<div class="world-bar" data-reveal>
+  <div class="world-bar-inner">
+    <div class="wb-label">In the 13th century</div>
+    <div class="wb-items">
+      <div class="wb-item"><strong>Marco Polo</strong>Traveled the Silk Road, visited Kublai Khan</div>
+      <div class="wb-item"><strong>Song Dynasty</strong>Height of Chinese maritime trade power</div>
+      <div class="wb-item"><strong>Venice & Genoa</strong>Mediterranean trade monopolies</div>
+      <div class="wb-item"><strong>Mogadishu</strong>Minting coins, trading directly with Asia</div>
+    </div>
+  </div>
+</div>
+
+<!-- THE CUSTOMS HOUSE — the port the monsoon fills -->
+<div class="bencustoms">
+  <div class="bc-wrap">
+    <div class="section-label" data-reveal>The customs house</div>
+    <h2 class="bc-h2">The port the wind filled</h2>
+    <p class="bc-sub">Twice a year the monsoon turned, and the coast turned with it. Choose a wind, and watch the harbour fill or empty.</p>
+    <div class="bc-toggle">
+      <button class="bc-btn on" data-s="ne">Northeast monsoon<small>December to March &middot; the ships come in</small></button>
+      <button class="bc-btn" data-s="sw">Southwest monsoon<small>April to September &middot; the ships go out</small></button>
+    </div>
+    <div class="bc-sea" id="bcsea" data-season="ne">
+      <div class="bc-coast">
+        <div class="bc-port gate" style="top:20%"><span class="dot"></span><span class="nm"><b>customs house</b>Mogadishu</span></div>
+        <div class="bc-port" style="top:42%"><span class="dot"></span><span class="nm">Merca</span></div>
+        <div class="bc-port" style="top:64%"><span class="dot"></span><span class="nm">Barawa</span></div>
+        <div class="bc-port" style="top:85%"><span class="dot"></span><span class="nm">Kismaayo</span></div>
+      </div>
+      <svg class="bc-sail" style="top:14%; animation-duration:17s; animation-delay:-2s" width="42" height="40" viewBox="0 0 42 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M22 4 L22 30 L9 30 Z" fill="#EAD9B4"/><path d="M22 8 L34 30 L22 30 Z" fill="#CBB489"/><path d="M5 31 Q21 39 39 31 L36 33 Q21 40 8 33 Z" fill="#0B1828"/></svg>
+      <svg class="bc-sail" style="top:38%; animation-duration:22s; animation-delay:-9s" width="34" height="33" viewBox="0 0 42 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M22 4 L22 30 L9 30 Z" fill="#EAD9B4"/><path d="M22 8 L34 30 L22 30 Z" fill="#CBB489"/><path d="M5 31 Q21 39 39 31 L36 33 Q21 40 8 33 Z" fill="#0B1828"/></svg>
+      <svg class="bc-sail" style="top:60%; animation-duration:15s; animation-delay:-5s" width="46" height="44" viewBox="0 0 42 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M22 4 L22 30 L9 30 Z" fill="#EAD9B4"/><path d="M22 8 L34 30 L22 30 Z" fill="#CBB489"/><path d="M5 31 Q21 39 39 31 L36 33 Q21 40 8 33 Z" fill="#0B1828"/></svg>
+      <svg class="bc-sail" style="top:80%; animation-duration:25s; animation-delay:-14s" width="30" height="29" viewBox="0 0 42 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M22 4 L22 30 L9 30 Z" fill="#EAD9B4"/><path d="M22 8 L34 30 L22 30 Z" fill="#CBB489"/><path d="M5 31 Q21 39 39 31 L36 33 Q21 40 8 33 Z" fill="#0B1828"/></svg>
+      <div class="bc-windtag" id="bcwindtag">wind from the northeast</div>
+    </div>
+    <div class="bc-ledger">
+      <div class="bc-led on" data-s="ne"><div class="lh">The wind brings</div><div class="goods">cotton cloth out of India<span class="x">&middot;</span>dates and glass beads from Arabia<span class="x">&middot;</span>porcelain from China</div></div>
+      <div class="bc-led" data-s="sw"><div class="lh">The wind takes</div><div class="goods">ivory through Kismaayo<span class="x">&middot;</span>cattle and camels through Merca<span class="x">&middot;</span>frankincense and myrrh<span class="x">&middot;</span>the cloth and the coin of Mogadishu itself</div></div>
+    </div>
+    <p class="bc-thesis">Mogadishu sits at the southern limit of the monsoon. Ships running north and ships running south both have to stop here, and the customs house takes its share of each. <b>That share was the city's wealth.</b></p>
+    <p class="bc-src">after Ibn Battuta, who saw the coral city in 1331</p>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="era-content">
+
+  <main class="era-main" role="main">
+
+    <div class="section-label" data-reveal>The Indian Ocean Network</div>
+    <h2 data-reveal>Trade and Urban Settlement</h2>
+
+    <p data-reveal>Benadir — the word means "coast" or "haven" in Somali. The monsoon winds dictated the rhythm: the northeast kaskazi blew ships from Arabia and India toward East Africa from November to March; the southwest kusi carried them back from April to September. Somali, Arab, Indian, and Chinese sailors had been reading these winds for centuries before any European cartographer mapped them.<a class="c">2<span><strong>K.N. Chaudhuri</strong>, <em>Trade and Civilisation in the Indian Ocean</em> (1985), ch. 2<span class="tip-note">On the monsoon system as the structuring force of Indian Ocean maritime trade</span></span></a> The Benadir coast sat at the pivot point of this system.</p>
+
+    <p data-reveal>Mogadishu was the largest of the Benadir cities. By the 13th century it operated as a full entrepôt: goods arrived by ocean-going dhow, were offloaded, assessed by the customs master, taxed, warehoused, and reloaded onto vessels heading elsewhere. The city minted copper coins — the sultan's name on one side, Islamic inscriptions on the other. Archaeologists have recovered these coins from sites on the Australian coast and from Song Dynasty trading ports. Mogadishu currency in Chinese soil means the trade was direct. Ships from the Benadir coast reached China.<a class="c">3<span><strong>Zhao Rugua</strong>, <em>Zhu Fan Zhi</em> (Description of Foreign Peoples, 1225), entry on "Zhongli" (中理); <strong>see also</strong> F.T. Masao &amp; H.W. Mutoro, "The East African Coast and the Comoro Islands" in <em>General History of Africa</em>, vol. IV (UNESCO, 1992)<span class="tip-note">Zhao Rugua's account of Mogadishu trade goods confirms direct Sino-African commerce by the 13th century</span></span></a></p>
+
+    <p data-reveal>Ibn Battuta arrived in 1331. He had been traveling for six years, from Morocco through Egypt, Arabia, Persia, India. He knew what a wealthy city looked like. He describes Mogadishu's coral stone buildings, its markets, its sultan's court, the formal hospitality protocol — guests were assigned hosts, lodged, and fed at the city's expense. He notes that the scale of gift-giving in Mogadishu exceeded what he had encountered anywhere else in the Muslim world.<a class="c">4<span><strong>Ibn Battuta</strong>, <em>Rihla</em> (c. 1355), trans. H.A.R. Gibb, vol. II, pp. 374–381<span class="tip-note">Full account of his 1331 Mogadishu visit, including the hospitality protocol and Sultan's court</span></span></a> This from a man who had visited Cairo and Delhi.</p>
+
+    <p data-reveal>The city's internal structure marked class lines clearly. The Reer Hamar — people of the harbor — were the established merchant families, many with mixed Arab-Somali lineage going back generations. The Reer Muna — people of the town — were connected to the land, to the pastoral interior. Both communities lived within the same coral stone walls, used the same harbor, answered to the same sultan. But they knew which they were.</p>
+
+    <div class="pull" data-reveal>
+      <p>"Mogadishu is a prosperous merchant city...The dwellings are all built with coral block...The merchants are very wealthy, and it is a custom of theirs to attend to the Sultan."</p>
+      <cite>Ibn Battuta, Travels in Asia and Africa (1331–1353)</cite>
+    </div>
+
+    <div class="section-label" data-reveal>The Fakhr ad-Din Dynasty</div>
+    <h2 data-reveal>Sultanate Structure</h2>
+
+    <p data-reveal>The rulers of Mogadishu traced descent from the Fakhr ad-Din dynasty. Abu Bakr ibn Fakhr ad-Din — whose grave still stands in the city — established the sultanate's legitimacy.<a class="c">5<span><strong>E. Cerulli</strong>, <em>Somalia: Scritti vari editi ed inediti</em> (1957), vol. I; <strong>see also</strong> G.S.P. Freeman-Grenville, <em>The East African Coast: Select Documents</em> (1962)<span class="tip-note">On the Fakhr ad-Din dynasty and the founding of Mogadishu's sultanate institutions</span></span></a> The dynasty received ambassadors, negotiated trade treaties with Indian Ocean powers, and operated with the full protocol of a recognized state. Other states treated them as one.</p>
+
+    <p data-reveal>The Fakhr ad-Din sultans were not hereditary despots. The sultanate functioned as an oligarchy of merchant families — the descendants of early Arab traders, the descendants of the Fakhr ad-Din line itself, and the major merchant houses that had accumulated wealth through trade. The Sultan was the first among these families, but not unaccountable. Succession disputes among the merchant families sometimes led to shifts in power, but the institution of the sultanate and the basic structure of the city remained stable.</p>
+
+    <p data-reveal>The sultanate's strength derived from its geographic position and its control of trade. Mogadishu sat at the southern limit of the monsoon winds that would push ships back to Arabia and India. Vessels heading north from the southern Indian Ocean and Southeast Asia would need to offload cargo at Mogadishu before continuing north. Vessels heading south would similarly stop. The tax on this trade was the city's wealth.</p>
+
+    <svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="var(--ochre)" stroke-width="1"/>
+      <circle cx="100" cy="12" r="2" fill="var(--ochre)"/>
+    </svg>
+
+    <div class="section-label" data-reveal>The Benadiri Cities</div>
+    <h2 data-reveal>Merca, Barawa, Kismaayo</h2>
+
+    <p data-reveal><strong>Merca</strong> was the second major city, located south of Mogadishu. It was known as a port for livestock trade — cattle, camels, and sheep from the interior Somali regions were brought to Merca for sale to Indian Ocean traders. The city also traded in frankincense and myrrh from the Arabian Peninsula, which were redistributed from Merca northward or across to Arabia.</p>
+
+    <p data-reveal><strong>Barawa</strong> occupied a different ecological niche. It was situated in a region with better access to interior agricultural land and freshwater. The city became known for a distinctive linguistic and cultural identity — the Bravanese dialect of Somali, which incorporated more Arabic vocabulary than other Somali dialects and reflects the long interaction between traders and local populations. The Bravanese people (Reer Hamar of Barawa) maintained a distinct cultural identity that persisted through colonialism into the modern era.</p>
+
+    <p data-reveal><strong>Kismaayo</strong>, the southernmost of the major Benadir cities, was also a major ivory trading port. Ivory from the interior Ethiopian and East African regions flowed to Kismaayo for export across the Indian Ocean to India and China, where it was carved into luxury items. The ivory trade was one of the most profitable in the pre-colonial Indian Ocean network.</p>
+
+    <p data-reveal>The four cities competed for trade and cooperated in managing it. All ran on Islamic law. All were built from coral stone with interior courtyards for shade. All were governed by merchant councils rather than hereditary monarchs. And all depended on the same monsoon cycle — the same wind that brought the ships brought the wealth, and when the wind shifted, the ships left. The cities tracked each other's shipping schedules, market prices, and trading partners across the full reach of the Indian Ocean.</p>
+
+  </main>
+
+  <!-- ASIDE -->
+  <aside class="era-aside" role="complementary">
+
+    <div class="aside-card" data-reveal>
+      <h3>Quick Facts</h3>
+      <div class="fact-row">
+        <span class="fact-label">Period</span>
+        <span class="fact-val">900–1500 CE</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Major cities</span>
+        <span class="fact-val">4 port cities</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Mogadishu peak</span>
+        <span class="fact-val">~50,000 people</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Currency</span>
+        <span class="fact-val">Copper coins minted</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Trade reach</span>
+        <span class="fact-val">China, India, Arabia</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-label">Coins found in</span>
+        <span class="fact-val">Australia, China</span>
+      </div>
+    </div>
+
+    <div class="aside-card" data-reveal>
+      <h3>Key Figures</h3>
+      <div class="figure">
+        <div class="fig-name">Abu Bakr ibn Fakhr ad-Din</div>
+        <div class="fig-role">Founder of Mogadishu Sultanate</div>
+        <div class="fig-desc">Established the Fakhr ad-Din dynasty that ruled Mogadishu. His grave remains in the city. Founder of the sultanate's legitimacy.</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">Ibn Battuta</div>
+        <div class="fig-role">Moroccan explorer and scholar</div>
+        <div class="fig-desc">Visited Mogadishu in 1331 and documented the city's wealth, architecture, and court life. His account is the most detailed medieval description of the Benadir cities.</div>
+      </div>
+      <div class="figure">
+        <div class="fig-name">Fakhr ad-Din Sultans</div>
+        <div class="fig-role">Merchant dynasty rulers</div>
+        <div class="fig-desc">Series of sultans from the Fakhr ad-Din family who ruled Mogadishu through negotiation among merchant families rather than as absolute despots.</div>
+      </div>
+    </div>
+
+    <div class="aside-card" data-reveal>
+      <h3>Primary Sources</h3>
+      <div class="source-item">
+        <strong>Travels in Asia and Africa</strong>
+        Ibn Battuta (1331–1353). Firsthand account of Mogadishu and the Benadir coast. Most detailed medieval description.
+      </div>
+      <div class="source-item">
+        <strong>Chronicle of Kilwa Kisiwani</strong>
+        Swahili source documenting Indian Ocean trade network of which the Benadir was part. Shows interconnectedness of East African coastal cities.
+      </div>
+      <div class="source-item">
+        <strong>Song Dynasty Trading Records</strong>
+        Chinese imperial records of goods received from East Africa, including mention of Mogadishu trade goods, confirming direct Indian Ocean trade.
+      </div>
+      <div class="source-item">
+        <strong>The Somali Coast: Archaeology and History</strong>
+        Mark Horton and John Middleton (2000). Archaeological evidence of urban settlement and trade goods at Mogadishu and other Benadir sites.
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<!-- Arabesque divider -->
+<svg class="arabesque" viewBox="0 0 200 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <path d="M0,12 C30,0 40,24 70,12 C80,6 90,6 100,12 C110,18 120,18 130,12 C160,0 170,24 200,12" fill="none" stroke="#B83A22" stroke-width="1"/>
+  <circle cx="100" cy="12" r="2" fill="#B83A22"/>
+</svg>
+
+<!-- SECOND HALF — Decline and Legacy -->
+<div class="era-content" style="padding-top:0;">
+  <main class="era-main" role="main">
+
+    <div class="section-label" data-reveal>The Benadiri Culture</div>
+    <h2 data-reveal>Urban Society and Language</h2>
+
+    <p data-reveal>Generations of intermarriage between Arab traders and Somali women, between Persian merchants and local families, produced a distinct coastal culture. The Bravanese dialect of Somali — Af-Bravanese — carries more Arabic vocabulary than any inland dialect. The language records what happened: centuries of children raised in households where both tongues were spoken, absorbing both, merging them into something that belonged to neither Arabia nor the interior but to the coast itself.</p>
+
+    <p data-reveal>The Reer Hamar and Reer Muna distinction carried into every Benadir city. Harbor people and land people. The merchant families who faced the ocean and the agricultural families who faced the interior. The boundary was permeable — a successful trader's grandchildren could become established urban Reer Hamar — but it was real. It marked the basic tension that powered the cities: maritime wealth depended on hinterland supply, and both sides knew it.</p>
+
+    <p data-reveal>The cities needed the interior — livestock, grain, labor flowed in from the pastoral hinterland. The interior needed the cities — Indian Ocean goods flowed out through their harbors. But the Benadiri townspeople understood themselves as distinct from the nomadic pastoralists. They called themselves merchants, townspeople. The identity was urban. It still is, among Benadiri communities scattered across the diaspora.</p>
+
+    <div class="section-label" data-reveal>Decline and Legacy</div>
+    <h2 data-reveal>What Happened to the Cities</h2>
+
+    <p data-reveal>The Benadiri city-states began to decline in the 16th century, after the arrival of Portuguese fleets in the Indian Ocean. The Portuguese, unlike the Arab and Indian traders who had dominated the route for centuries, sought to monopolize trade through military force. They attacked Mogadishu in 1505, though they did not hold the city.<a class="c">6<span><strong>Gaspar Correia</strong>, <em>Lendas da Índia</em> (c. 1550); <strong>see also</strong> Duarte Barbosa, <em>Livro em que dá relação</em> (c. 1516)<span class="tip-note">Portuguese accounts of the 1505 attack on Mogadishu and subsequent Benadir coast engagements</span></span></a> The disruption of trade patterns that followed weakened the cities' economic base.</p>
+
+    <p data-reveal>The economic center of the Indian Ocean trade network shifted northward — to Aden in Yemen, to the Gulf states, to India — and away from the Somali coast. The Benadir cities continued to function as ports, but not as the wealthy merchant republics they had been. By the 19th century, when European colonizers arrived, the cities were in decline: Mogadishu was much smaller than it had been in its 14th-century peak, and the other Benadir cities had become secondary ports.</p>
+
+    <p data-reveal>The Benadiri communities kept their identity through colonialism and beyond. The Bravanese dialect survived. The memory of the merchant cities survived. Mogadishu minted currency. Mogadishu traded with China. Mogadishu hosted Ibn Battuta and impressed him. These are not claims that need defending. They are facts recorded in coin hoards,<a class="c">7<span><strong>G.S.P. Freeman-Grenville</strong>, <em>The Medieval History of the Coast of Tanganyika</em> (1962)<span class="tip-note">Catalogue of East African coin finds including Mogadishu-minted copper</span></span></a> in Song Dynasty shipping records,<a class="c">8<span><strong>Zhao Rugua</strong>, <em>Zhu Fan Zhi</em> (1225); <strong>see also</strong> Song <em>Huiyao</em> (Collected Essentials of Song Government)<span class="tip-note">Chinese imperial trade records mentioning East African ports and goods</span></span></a> in a Moroccan traveler's own handwriting.<a class="c">9<span><strong>Ibn Battuta</strong>, <em>Rihla</em> (c. 1355), trans. H.A.R. Gibb<span class="tip-note">Original manuscript survives; Gibb's 1929 translation remains the standard English edition</span></span></a></p>
+
+  </main>
+
+  <!-- Empty aside column for alignment -->
+  <aside class="era-aside" style="position:static;" aria-hidden="true"></aside>
+</div>
+
+<!-- ERA NAVIGATION -->
+<div class="era-nav" data-reveal>
+  <div class="era-nav-inner">
+    <a href="era-maritime.html" class="era-nav-btn">
+      <span class="nav-dir">← Previous era</span>
+      <span class="nav-title">Maritime Networks</span>
+      <span class="nav-dates">100 BCE – 1900 CE</span>
+    </a>
+    <a href="somali-archive.html" class="nav-center">All Eras</a>
+    <a href="era-xeer.html" class="era-nav-btn">
+      <span class="nav-dir">Next era →</span>
+      <span class="nav-title">The Xeer</span>
+      <span class="nav-dates">Ancient – present</span>
+    </a>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script>
+(function() {
+  'use strict';
+
+  // ── Scroll Reveal ──
+  var revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('[data-reveal]').forEach(function(el) {
+    revealObserver.observe(el);
+  });
+
+})();
+</script>
+<script src="xog-cite.js"></script>
+<script>
+(function(){
+  var btns = Array.prototype.slice.call(document.querySelectorAll('.bencustoms .bc-btn'));
+  var leds = Array.prototype.slice.call(document.querySelectorAll('.bencustoms .bc-led'));
+  var sea  = document.getElementById('bcsea');
+  var tag  = document.getElementById('bcwindtag');
+  if(!sea) return;
+  function set(s){
+    sea.setAttribute('data-season', s);
+    btns.forEach(function(b){ b.classList.toggle('on', b.dataset.s===s); });
+    leds.forEach(function(l){ l.classList.toggle('on', l.dataset.s===s); });
+    if(tag) tag.textContent = (s==='ne') ? 'wind from the northeast' : 'wind from the southwest';
+  }
+  btns.forEach(function(b){ b.addEventListener('click', function(){ set(b.dataset.s); }); });
+  set('ne');
+})();
+</script>
+<script src="xog-fable.js?v=3"></script>
+<script src="xog-nav.js"></script>
+</body>
+</html>
